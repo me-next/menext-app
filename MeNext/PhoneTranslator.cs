@@ -1,5 +1,10 @@
 ﻿using System.Text;
 
+/**
+ * People who have successfully worked in this project:
+ * 
+ * Daniel Centore
+ */
 namespace Core
 {
 	public static class PhonewordTranslator
