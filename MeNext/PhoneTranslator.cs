@@ -4,6 +4,7 @@
  * People who have successfully worked in this project:
  * 
  * Daniel Centore
+ * Sam Saks-Fithian
  */
 namespace Core
 {

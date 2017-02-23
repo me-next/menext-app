@@ -111,6 +111,9 @@
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\MeNextLogo1-87.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\MeNextLogo1-120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\MeNextLogo1_180.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
