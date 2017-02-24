@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.danielcentore.menext">
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="24" />
-	<uses-permission android:name="android.permission.CALL_PHONE" />
-	<application android:label="MeNext" android:icon="@drawable/icon" android:theme="@android:style/Theme.Material"></application>
+	<application android:label="MeNext" android:icon="@drawable/icon"></application>
 </manifest>

@@ -14,17 +14,13 @@ namespace MeNext.Layout
 			homeScreen.Title = "Home";
 			Children.Add(homeScreen);
 
-			var libraryScreen = new NavigationPage(new PlaceholderScreen());
-			libraryScreen.Title = "Library";
-			Children.Add(libraryScreen);
-
 			var playingScreen = new NavigationPage(new PlaceholderScreen());
 			playingScreen.Title = "Playing";
 			Children.Add(playingScreen);
 
-			var searchScreen = new NavigationPage(new PlaceholderScreen());
-			searchScreen.Title = "Search";
-			Children.Add(searchScreen);
+			var libraryScreen = new NavigationPage(new PlaceholderScreen());
+			libraryScreen.Title = "Library";
+			Children.Add(libraryScreen);
 
 			var queueScreen = new NavigationPage(new PlaceholderScreen());
 			queueScreen.Title = "Queue";
