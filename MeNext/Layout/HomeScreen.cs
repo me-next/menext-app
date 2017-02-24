@@ -9,6 +9,7 @@ namespace MeNext
 		public HomeScreen()
 		{
 			this.Title = "Home";
+			NavigationPage.SetHasNavigationBar(this, false);
 			Content = new StackLayout
 			{
 				Children = {

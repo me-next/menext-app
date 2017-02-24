@@ -9,6 +9,7 @@ namespace MeNext
 		public PlaceholderScreen()
 		{
 			this.Title = "Placeholder";
+			NavigationPage.SetHasNavigationBar(this, false);
 			Content = new StackLayout
 			{
 				Children = {
