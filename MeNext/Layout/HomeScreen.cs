@@ -12,8 +12,9 @@ namespace MeNext
 			NavigationPage.SetHasNavigationBar(this, false);
 			Content = new StackLayout
 			{
+				Padding = LayoutConsts.DEFAULT_PADDING,
 				Children = {
-					new Label { Text = "Hello ContentPage" }
+					new Label { Text = "HomePage!" }
 				}
 			};
 		}

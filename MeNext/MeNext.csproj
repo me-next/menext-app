@@ -38,6 +38,7 @@
     <Compile Include="Layout\MainPage.cs" />
     <Compile Include="Layout\HomeScreen.cs" />
     <Compile Include="Layout\PlaceholderScreen.cs" />
+    <Compile Include="Layout\LayoutConsts.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
