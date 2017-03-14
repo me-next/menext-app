@@ -1,0 +1,3 @@
+[submodule "music-service"]
+	path = music-service
+	url = https://github.com/me-next/music-service
