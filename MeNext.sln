@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.iOS", "iOS\MeNext.iO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.Droid", "Droid\MeNext.Droid.csproj", "{01AD4898-4237-42F4-902A-F439D7BE9375}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MusicService", "music-service\MusicService\MusicService.shproj", "{2EC65026-97B2-4ACF-A489-275796F7748D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ExampleMusicService", "music-service\ExampleMusicService\ExampleMusicService.shproj", "{B01D6F70-FAF7-4070-82AC-7B0F9AEA3FA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
