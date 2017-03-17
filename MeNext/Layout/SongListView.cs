@@ -2,10 +2,13 @@
 
 using Xamarin.Forms;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MeNext
 {
-	// Song is a POD class for song information
+	// Song is a POD class for song information.
+	// TODO: maybe move this out of this file? Create a more legitimate version? Use the implementation
+	// from menext/music-service?
 	public class Song
 	{
 		public Song(string name)
@@ -36,15 +39,15 @@ namespace MeNext
 		}
 	};
 
-	// SongFactory controls how the song gets rendered for the SongList.
+	// SongCellFactory controls how the song gets rendered for the SongList.
 	// Add buttons, click events etc. in here. 
-	public abstract class SongFactory
+	public abstract class SongCellFactory
 	{
 		public abstract ViewCell BuildView();
 	};
 
-	// renders a basic view cell
-	public class DefaultSongFactory : SongFactory
+	// DefaultSongCellFactory renders a basic view cell that only shows the song name. 
+	public class BasicSongCellFactory : SongCellFactory
 	{
 		public override ViewCell BuildView()
 		{
@@ -58,68 +61,48 @@ namespace MeNext
 				{
 					Padding = new Thickness(0, 5),
 					Orientation = StackOrientation.Horizontal,
-					Children =
-								{
-									nameLabel,
-								}
+					Children = { nameLabel }
 				},
 			};
 		}
 	};
 
-	// SongList manages presenting a list of songs. 
-	// Down the road we will extend this to include drag and drop
-	// 
-	// TODO: provide custom model to make managing straight forwards
-	public class SongList : ListView
+	// SongListModel is the model that backs the SongListView.
+	// A controller updates this list. The view observes the model and updates as needed
+	// This doesn't provide any priority-queue functionality, since the truth is always the server.
+	public class SongListModel : ObservableCollection<Song>
 	{
-		public SongList(List<Song> songs, SongFactory factory)
+		public SongListModel(List<Song> songs) : base(songs)
 		{
+		}
+
+		// TODO: implement update from client
+		// TODO: have this take the concrete impl of the music-service results stuff
+	};
+
+	// SongListView displays a collection of songs. This is the "view". 
+	// The SongCellFactory set in the constructor provides significant control of the way the list behaves. 
+	public class SongListView : ListView
+	{
+		// TODO: include drag and drop endpoints for a drag-n-drop controller
+
+		// TODO: create other constructors or expose setters?
+
+		public SongListView(SongListModel songs, SongCellFactory factory)
+		{
+			// use the default factory
 			SetItemTemplateWithFactory(factory);
 
-			// TODO: look into using an observable list for this
-			this.songs = new List<Song>();
+			// set the model
+			this.songs = songs;
 			this.ItemsSource = this.songs;
 
-			foreach (Song song in songs)
-			{
-				this.songs.Add(song);
-			}
-
-			// add tap'd handler
-			this.ItemTapped += OnItemTapped;
-		}
-
-		public SongList(List<Song> songs)
-		{
-			// use the default factory
-			SetItemTemplateWithFactory(new DefaultSongFactory());
-
-			this.songs = new List<Song>();
-			this.ItemsSource = this.songs;
-
-			foreach (Song song in songs)
-			{
-				this.songs.Add(song);
-			}
-
-			// add tap'd handler
-			this.ItemTapped += OnItemTapped;
-		}
-
-		// construct an empty song list with the default song factory
-		public SongList()
-		{
-			// use the default factory
-			SetItemTemplateWithFactory(new DefaultSongFactory());
-
-			// set default song list
-			this.songs = new List<Song>();
+			// add tap handler
 			this.ItemTapped += OnItemTapped;
 		}
 
 		// set the ListView's ItemTemplate to use the provided SongFactory
-		private void SetItemTemplateWithFactory(SongFactory factory)
+		private void SetItemTemplateWithFactory(SongCellFactory factory)
 		{
 			this.ItemTemplate = new DataTemplate(() =>
 			{
@@ -127,8 +110,7 @@ namespace MeNext
 			});
 		}
 
-		// TODO: make this a custom list object
-		private List<Song> songs
+		private SongListModel songs
 		{
 			// not sure that we need a "get"
 			get;

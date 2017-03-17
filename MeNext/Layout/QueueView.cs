@@ -9,6 +9,7 @@ namespace MeNext
 	{
 		public QueueView()
 		{
+			// TODO: clean up this testing code
 			this.Title = "Queue Placeholder";
 
 			List<Song> songs = new List<Song>
@@ -18,16 +19,29 @@ namespace MeNext
 			};
 
 			NavigationPage.SetHasNavigationBar(this, false);
-			var songList = new SongList(songs);
+			var model = new SongListModel(songs);
+			var songList = new SongListView(model, new BasicSongCellFactory());
 			songList.OnSongSelected += (song) =>
 			{
 				System.Diagnostics.Debug.WriteLine("selected song: " + song.Name);
+			};
+
+			int songCounter = 0;
+			var addButton = new Button { Text = "addSong" };
+			addButton.Clicked += (sender, e) =>
+			{
+				var song = new Song("song" + songCounter);
+				model.Add(song);
+				songCounter++;
+
+				System.Diagnostics.Debug.WriteLine("adding song: " + song.Name);
 			};
 
 			Content = new StackLayout
 			{
 				Padding = LayoutConsts.DEFAULT_PADDING,
 				Children = {
+					addButton,
 					new Label { Text = "queue holder" },
 					songList,
 				}
