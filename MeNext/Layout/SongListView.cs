@@ -22,7 +22,6 @@ namespace MeNext
 			this.Artist = artist;
 		}
 
-		// should we provide getters on these?
 		public string Name 
 		{ 
 			get; 
@@ -39,14 +38,18 @@ namespace MeNext
 		}
 	};
 
-	// SongCellFactory controls how the song gets rendered for the SongList.
-	// Add buttons, click events etc. in here. 
+	/// <summary>
+	/// SongCellFactory controls how the song gets rendered for the SongList.
+	/// Add buttons, click events etc. in here. 
+	/// </summary>
 	public abstract class SongCellFactory
 	{
 		public abstract ViewCell BuildView();
 	};
 
-	// DefaultSongCellFactory renders a basic view cell that only shows the song name. 
+	/// <summary>
+	/// DefaultSongCellFactory renders a basic view cell that only shows the song name. 
+	/// </summary>
 	public class BasicSongCellFactory : SongCellFactory
 	{
 		public override ViewCell BuildView()
@@ -67,9 +70,11 @@ namespace MeNext
 		}
 	};
 
-	// SongListModel is the model that backs the SongListView.
-	// A controller updates this list. The view observes the model and updates as needed
-	// This doesn't provide any priority-queue functionality, since the truth is always the server.
+	/// <summary>
+	/// SongListModel is the model that backs the SongListView.
+	/// A controller updates this list. The view observes the model and updates as needed
+	/// This doesn't provide any priority-queue functionality, since the truth is always the server.
+	/// </summary>
 	public class SongListModel : ObservableCollection<Song>
 	{
 		public SongListModel(List<Song> songs) : base(songs)
@@ -80,8 +85,10 @@ namespace MeNext
 		// TODO: have this take the concrete impl of the music-service results stuff
 	};
 
-	// SongListView displays a collection of songs. This is the "view". 
-	// The SongCellFactory set in the constructor provides significant control of the way the list behaves. 
+	/// <summary>
+	/// SongListView displays a collection of songs. This is the "view". 
+	/// The SongCellFactory set in the constructor provides significant control of the way the list behaves. 
+	/// </summary>
 	public class SongListView : ListView
 	{
 		// TODO: include drag and drop endpoints for a drag-n-drop controller
@@ -94,14 +101,17 @@ namespace MeNext
 			SetItemTemplateWithFactory(factory);
 
 			// set the model
-			this.songs = songs;
-			this.ItemsSource = this.songs;
+			this.Songs = songs;
+			this.ItemsSource = this.Songs;
 
 			// add tap handler
 			this.ItemTapped += OnItemTapped;
 		}
 
-		// set the ListView's ItemTemplate to use the provided SongFactory
+		/// <summary>
+		/// set the ListView's ItemTemplate to use the provided SongFactory
+		/// </summary>
+		/// <param name="factory">Factory.</param>
 		private void SetItemTemplateWithFactory(SongCellFactory factory)
 		{
 			this.ItemTemplate = new DataTemplate(() =>
@@ -110,22 +120,29 @@ namespace MeNext
 			});
 		}
 
-		private SongListModel songs
+		private SongListModel Songs
 		{
-			// not sure that we need a "get"
 			get;
 
 			// set should clear all of the existing songs
 			set;
 		}
 
-		// delegate for when a song is clicked
+		/// <summary>
+		/// delegate for when a song is clicked
+		/// </summary>
 		public delegate void SongClickedEvent(Song song);
 
-		// called when a song is tapped on once
+		/// <summary>
+		/// called when a song is tapped on once
+		/// </summary>
 		public event SongClickedEvent OnSongSelected;
 
-		// wrapper around OnItemTapped that pulls out just the selected song
+		/// <summary>
+		/// wrapper around OnItemTapped that pulls out just the selected song
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">E.</param>
 		private void OnItemTapped(object sender, ItemTappedEventArgs e)
 		{
 			var song = (Song)e.Item;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 
@@ -23,7 +24,7 @@ namespace MeNext
 			var songList = new SongListView(model, new BasicSongCellFactory());
 			songList.OnSongSelected += (song) =>
 			{
-				System.Diagnostics.Debug.WriteLine("selected song: " + song.Name);
+				Debug.WriteLine("selected song: " + song.Name);
 			};
 
 			int songCounter = 0;
@@ -34,7 +35,7 @@ namespace MeNext
 				model.Add(song);
 				songCounter++;
 
-				System.Diagnostics.Debug.WriteLine("adding song: " + song.Name);
+				Debug.WriteLine("adding song: " + song.Name);
 			};
 
 			Content = new StackLayout
