@@ -39,6 +39,8 @@
     <Compile Include="Layout\HomeScreen.cs" />
     <Compile Include="Layout\PlaceholderScreen.cs" />
     <Compile Include="Layout\LayoutConsts.cs" />
+    <Compile Include="Layout\QueueView.cs" />
+    <Compile Include="Layout\SongListView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
