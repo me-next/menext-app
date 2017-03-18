@@ -51,6 +51,8 @@
     <Compile Include="Playing\Results\EndEventResult.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Playing\Results\LeaveEventResult.cs" />
+    <Compile Include="Layout\QueueView.cs" />
+    <Compile Include="Layout\SongListView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

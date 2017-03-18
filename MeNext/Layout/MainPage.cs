@@ -34,9 +34,10 @@ namespace MeNext.Layout
 			libraryScreen.Title = "Library";
 			Children.Add(libraryScreen);
 
-			var queueScreen = new NavigationPage(new PlaceholderScreen());
+			var queueScreen = new NavigationPage(new QueueView());
 			queueScreen.Title = "Queue";
 			Children.Add(queueScreen);
+
 		}
 	}
 }
