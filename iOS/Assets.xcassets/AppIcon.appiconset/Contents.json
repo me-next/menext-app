@@ -1,28 +1,31 @@
 {
   "images": [
     {
+      "filename": "MeNextLogo-29.png",
       "size": "29x29",
       "scale": "1x",
       "idiom": "iphone"
     },
     {
+      "filename": "MeNextLogo-58.png",
       "size": "29x29",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "MeNextLogo1-87.png",
+      "filename": "MeNextLogo-87.png",
       "size": "29x29",
       "scale": "3x",
       "idiom": "iphone"
     },
     {
+      "filename": "MeNextLogo-80.png",
       "size": "40x40",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "MeNextLogo1-120.png",
+      "filename": "MeNextLogo-120.png",
       "size": "40x40",
       "scale": "3x",
       "idiom": "iphone"
@@ -33,18 +36,19 @@
       "idiom": "iphone"
     },
     {
+      "filename": "MeNextLogo-114.png",
       "size": "57x57",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "MeNextLogo1-120.png",
+      "filename": "MeNextLogo-120.png",
       "size": "60x60",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "MeNextLogo1_180.png",
+      "filename": "MeNextLogo-180.png",
       "size": "60x60",
       "scale": "3x",
       "idiom": "iphone"
@@ -65,6 +69,7 @@
       "idiom": "ipad"
     },
     {
+      "filename": "MeNextLogo-80.png",
       "size": "40x40",
       "scale": "2x",
       "idiom": "ipad"
@@ -80,6 +85,7 @@
       "idiom": "ipad"
     },
     {
+      "filename": "MeNextLogo-167.png",
       "size": "83.5x83.5",
       "scale": "2x",
       "idiom": "ipad"
@@ -95,11 +101,13 @@
       "idiom": "ipad"
     },
     {
+      "filename": "MeNextLogo-76.png",
       "size": "76x76",
       "scale": "1x",
       "idiom": "ipad"
     },
     {
+      "filename": "MeNextLogo-152.png",
       "size": "76x76",
       "scale": "2x",
       "idiom": "ipad"
@@ -120,19 +128,21 @@
     },
     {
       "role": "companionSettings",
+      "filename": "MeNextLogo-58.png",
       "size": "29x29",
       "scale": "2x",
       "idiom": "watch"
     },
     {
       "role": "companionSettings",
-      "filename": "MeNextLogo1-87.png",
+      "filename": "MeNextLogo-87.png",
       "size": "29x29",
       "scale": "3x",
       "idiom": "watch"
     },
     {
       "role": "appLauncher",
+      "filename": "MeNextLogo-80.png",
       "size": "40x40",
       "subtype": "38mm",
       "scale": "2x",
@@ -185,11 +195,13 @@
       "idiom": "mac"
     },
     {
+      "filename": "MeNextLogo-256.png",
       "size": "128x128",
       "scale": "2x",
       "idiom": "mac"
     },
     {
+      "filename": "MeNextLogo-256.png",
       "size": "256x256",
       "scale": "1x",
       "idiom": "mac"
