@@ -39,6 +39,9 @@
     <Compile Include="Layout\HomeScreen.cs" />
     <Compile Include="Layout\PlaceholderScreen.cs" />
     <Compile Include="Layout\LayoutConsts.cs" />
+    <Compile Include="Layout\PlayingScreen.cs" />
+    <Compile Include="Layout\JoinEvent.cs" />
+    <Compile Include="Layout\HostEvent.cs" />
     <Compile Include="Playing\MainController.cs" />
     <Compile Include="Playing\PlayController.cs" />
     <Compile Include="Playing\TaskMessages\StartPollMessage.cs" />
