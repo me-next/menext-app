@@ -18,9 +18,9 @@ namespace MeNext.Layout
 			playingScreen.Title = "Playing";
 			Children.Add(playingScreen);
 
-			var libraryScreen = new NavigationPage(new PlaceholderScreen());
-			libraryScreen.Title = "Library";
-			Children.Add(libraryScreen);
+			var searchScreen = new NavigationPage(new SearchView());
+			searchScreen.Title = "Search";
+			Children.Add(searchScreen);
 
 			var queueScreen = new NavigationPage(new QueueView());
 			queueScreen.Title = "Queue";
