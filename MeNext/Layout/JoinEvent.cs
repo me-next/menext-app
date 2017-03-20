@@ -8,13 +8,17 @@ namespace MeNext
 	{
 		public JoinEvent()
 		{
-			Content = new StackLayout
+			var layout = new StackLayout
 			{
 				Children = {
-					new Label { Text = "Hello ContentPage" }
+					new Label { Text = "Join Event" }
 				}
+
 			};
+			layout.Children.Add(new Entry { Text = "Event Name/Id Code" });
+			var joinCommand = new Command((obj) => Navigation.PopAsync());
+			layout.Children.Add(new Button { Text = "Join!", Command = joinCommand });
+			Content = layout;
 		}
 	}
 }
-

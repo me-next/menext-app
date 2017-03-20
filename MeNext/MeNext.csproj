@@ -40,6 +40,9 @@
     <Compile Include="Layout\PlaceholderScreen.cs" />
     <Compile Include="Layout\LayoutConsts.cs" />
     <Compile Include="Playing\MusicController.cs" />
+    <Compile Include="Layout\PlayingScreen.cs" />
+    <Compile Include="Layout\JoinEvent.cs" />
+    <Compile Include="Layout\HostEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
