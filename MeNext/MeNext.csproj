@@ -43,6 +43,20 @@
     <Compile Include="Layout\PlayingScreen.cs" />
     <Compile Include="Layout\JoinEvent.cs" />
     <Compile Include="Layout\HostEvent.cs" />
+    <Compile Include="Playing\MainController.cs" />
+    <Compile Include="Playing\PlayController.cs" />
+    <Compile Include="Playing\TaskMessages\StartPollMessage.cs" />
+    <Compile Include="Playing\TaskMessages\StopPollMessage.cs" />
+    <Compile Include="Playing\TaskMessages\StatusMessage.cs" />
+    <Compile Include="Playing\Poller.cs" />
+    <Compile Include="Playing\TaskMessages\CancelledMessage.cs" />
+    <Compile Include="Playing\Results\JoinEventResult.cs" />
+    <Compile Include="Playing\Results\CreateEventResult.cs" />
+    <Compile Include="Playing\Results\EndEventResult.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Playing\Results\LeaveEventResult.cs" />
+    <Compile Include="Layout\QueueView.cs" />
+    <Compile Include="Layout\SongListView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
@@ -61,6 +75,8 @@
   <ItemGroup>
     <Folder Include="Layout\" />
     <Folder Include="Playing\" />
+    <Folder Include="Playing\TaskMessages\" />
+    <Folder Include="Playing\Results\" />
   </ItemGroup>
   <Import Project="..\music-service\ExampleMusicService\ExampleMusicService.projitems" Label="Shared" Condition="Exists('..\music-service\ExampleMusicService\ExampleMusicService.projitems')" />
   <Import Project="..\music-service\MusicService\MusicService.projitems" Label="Shared" Condition="Exists('..\music-service\MusicService\MusicService.projitems')" />

@@ -7,6 +7,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Xamarin.Forms;
 
 namespace MeNext.Droid
 {
@@ -15,6 +16,9 @@ namespace MeNext.Droid
 	{
 		protected override void OnCreate(Bundle bundle)
 		{
+			InitPolling();
+
+			// Boilerplate UI stuff
 			TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar;
 
@@ -23,6 +27,24 @@ namespace MeNext.Droid
 			global::Xamarin.Forms.Forms.Init(this, bundle);
 
 			LoadApplication(new App());
+		}
+
+		/// <summary>
+		/// Subscribes to the polling start and stop messages
+		/// </summary>
+		private void InitPolling()
+		{
+			MessagingCenter.Subscribe<StartPollMessage>(this, "StartPollMessage", message =>
+			{
+				var intent = new Intent(this, typeof(PollingService));
+				StartService(intent);
+			});
+
+			MessagingCenter.Subscribe<StopPollMessage>(this, "StopPollMessage", message =>
+			{
+				var intent = new Intent(this, typeof(PollingService));
+				StopService(intent);
+			});
 		}
 	}
 }

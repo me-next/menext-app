@@ -1,13 +1,25 @@
 ﻿using System;
-
+using MeNext.MusicService;
 using Xamarin.Forms;
 
 namespace MeNext.Layout
 {
+	/// <summary>
+	/// The main tabbed page layout with stuff on it
+	/// </summary>
 	public class MainPage : TabbedPage
 	{
+		public IMusicService MusicService { get; set; }
+		public MainController MainController { get; set; }
+
 		public MainPage()
 		{
+			// Backend stuff
+			MusicService = new SampleMusicService.SampleMusicService();
+			MainController = new MainController(MusicService);
+			MainController.RequestJoinEvent("testevent");		// TODO: Remove when we have UI for this
+
+			// UI Stuff
 			this.Title = "MeNext";
 
 			var homeScreen = new NavigationPage(new HomeScreen());
@@ -25,10 +37,11 @@ namespace MeNext.Layout
 			//libraryScreen.Icon = "libraryScreenIcon.png";  If we make this icon
 			Children.Add(libraryScreen);
 
-			var queueScreen = new NavigationPage(new PlaceholderScreen());
+			var queueScreen = new NavigationPage(new QueueView());
 			queueScreen.Title = "Queue";
 			//queueScreen.Icon = "queueScreenIcon.png";
 			Children.Add(queueScreen);
+
 		}
 	}
 }
