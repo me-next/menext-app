@@ -17,7 +17,7 @@ namespace MeNext
 			// TODO: clean up this testing code
 			this.Title = "Search";
 			NavigationPage.SetHasNavigationBar(this, false);
-
+			Song selectedSong = null;
 
 			resultsLabel = new Label
 			{
@@ -26,11 +26,37 @@ namespace MeNext
 				//FontSize = 25
 			};
 
+			Button playNextButton = new Button { Text = "Add to PlayNext", HorizontalOptions = LayoutOptions.StartAndExpand };
+			playNextButton.Clicked += (sender, e) =>
+			{
+				if (selectedSong == null) return;
+				//TODO: add song to actual playnext queue
+				Debug.WriteLine("adding song to play next: " + song.Name);
+			};
+			Button suggestionButton = new Button { Text = "Add to Suggestions", HorizontalOptions = LayoutOptions.EndAndExpand };
+			suggestionButton.Clicked += (sender, e) =>
+			{
+				if (selectedSong == null) return;
+				//TODO: add song to actual suggestion queue
+				Debug.WriteLine("adding song to suggestions: " + song.Name);
+			};
+			StackLayout queueButtons = new StackLayout
+			{
+				Padding = LayoutConsts.DEFAULT_PADDING,
+				Orientation = StackOrientation.Horizontal,
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				Children = {
+					playNextButton,
+					suggestionButton
+				}
+			};
+
+			//var model = new SongListModel(new List<Song>());
 			songList = new SongListView(new SongListModel(new List<Song>()), new BasicSongCellFactory());
 			songList.OnSongSelected += (song) =>
 			{
 				Debug.WriteLine("selected song: " + song.Name);
-				//TODO: popup add to play/suggestion queue based on permissions
+				selectedSong = song;
 			};
 
 			searchBar = new SearchBar
@@ -44,6 +70,7 @@ namespace MeNext
 			{
 				Padding = LayoutConsts.DEFAULT_PADDING,
 				Children = {
+					queueButtons,
 					searchBar,
 					resultsLabel,
 					songList,
