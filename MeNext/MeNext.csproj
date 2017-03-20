@@ -53,7 +53,6 @@
     <Compile Include="Playing\Results\LeaveEventResult.cs" />
     <Compile Include="Layout\QueueView.cs" />
     <Compile Include="Layout\SongListView.cs" />
-    <Compile Include="Layout\SearchView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
