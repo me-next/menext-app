@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MeNext.MusicService;
+using com.danielcentore.MusicService;
 
 namespace MeNext
 {
