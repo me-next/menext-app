@@ -31,14 +31,14 @@ namespace MeNext
 			{
 				if (selectedSong == null) return;
 				//TODO: add song to actual playnext queue
-				Debug.WriteLine("adding song to play next: " + song.Name);
+				//Debug.WriteLine("adding song to play next: " + song.Name);
 			};
 			Button suggestionButton = new Button { Text = "Add to Suggestions", HorizontalOptions = LayoutOptions.EndAndExpand };
 			suggestionButton.Clicked += (sender, e) =>
 			{
 				if (selectedSong == null) return;
 				//TODO: add song to actual suggestion queue
-				Debug.WriteLine("adding song to suggestions: " + song.Name);
+				//Debug.WriteLine("adding song to suggestions: " + song.Name);
 			};
 			StackLayout queueButtons = new StackLayout
 			{
