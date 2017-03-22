@@ -28,7 +28,7 @@ namespace MeNext
 			// TODO: Fix this warning?
 			await Task.Run(async () =>
 			{
-				var api = new BackendAPI("http://192.168.8.242:8080");
+				var api = new API("http://192.168.8.242:8080");
 				long i = 0;
 				for (;;)
 				{
