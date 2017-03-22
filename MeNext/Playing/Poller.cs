@@ -28,6 +28,7 @@ namespace MeNext
             // TODO: Fix this warning?
             await Task.Run(async () =>
             {
+                var api = new API("http://192.168.8.242:8080");
                 long i = 0;
                 for (;;) {
                     ++i;
@@ -36,9 +37,11 @@ namespace MeNext
                     await Task.Delay(MS_PER_POLL);
 
                     // TODO: Obtain a real status message
+                    var response = await api.SayHello();
+
                     var message = new StatusMessage
                     {
-                        TestingText = "Test: " + i,
+                        TestingText = "Test: " + response,
                         EventActive = true,
                         ChangeId = i
                     };
