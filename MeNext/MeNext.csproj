@@ -55,14 +55,14 @@
     <Compile Include="Playing\Results\LeaveEventResult.cs" />
     <Compile Include="Layout\QueueView.cs" />
     <Compile Include="Layout\SongListView.cs" />
-    <Compile Include="net\API.cs" />
+    <Compile Include="Net\API.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
     <Folder Include="Playing\" />
     <Folder Include="Playing\TaskMessages\" />
     <Folder Include="Playing\Results\" />
-    <Folder Include="net\" />
+    <Folder Include="Net\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
