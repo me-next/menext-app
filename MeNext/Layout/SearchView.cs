@@ -23,17 +23,30 @@ namespace MeNext
                 Text = ""
             };
 
-            Button playNextButton = new Button { Text = "Add to PlayNext", HorizontalOptions = LayoutOptions.StartAndExpand };
+            Button playNextButton = new Button 
+            { 
+                Text = "Add to PlayNext", 
+                HorizontalOptions = LayoutOptions.StartAndExpand 
+            };
             playNextButton.Clicked += (sender, e) =>
             {
-                if (selectedSong == null) { return; }
+                if (selectedSong == null) { 
+                    return; 
+                }
                 //TODO: add song to actual playnext queue
                 Debug.WriteLine("adding song to play next: " + selectedSong.Name);
             };
-            Button suggestionButton = new Button { Text = "Add to Suggestions", HorizontalOptions = LayoutOptions.EndAndExpand };
+
+            Button suggestionButton = new Button 
+            { 
+                Text = "Add to Suggestions", 
+                HorizontalOptions = LayoutOptions.EndAndExpand 
+            };
             suggestionButton.Clicked += (sender, e) =>
             {
-                if (selectedSong == null) { return; }
+                if (selectedSong == null) { 
+                    return; 
+                }
                 //TODO: add song to actual suggestion queue
                 Debug.WriteLine("adding song to suggestions: " + selectedSong.Name);
             };
@@ -76,6 +89,10 @@ namespace MeNext
             };
         }
 
+        /// <summary>
+        /// The function to handle when the text in the search bar changes
+        /// Takes in the text value from the search bar, searches with the music service, and updates the SongViewModel
+        /// </summary>
         public void TextChanged(string text)
         {
             //TODO: get songs from music service

@@ -82,6 +82,11 @@ namespace MeNext
         {
         }
 
+        /// <summary>
+        /// Allows the addition of multiple songs to the observable model at once
+        /// Functionally the same as looping through newSongs and calling the normal Add function on each
+        ///   except that the NotifyCollectionChangedEvent triggers only once, instead of for each item
+        /// </summary>
         public void AddMultiple(List<Song> newSongs)
         {
             this.CheckReentrancy();
