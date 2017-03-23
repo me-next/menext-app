@@ -53,9 +53,9 @@ namespace MeNext
 
             StackLayout queueButtons = new StackLayout
             {
-                Padding = LayoutConsts.DEFAULT_PADDING,
+                Padding = 3,
                 Orientation = StackOrientation.Horizontal,
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                //VerticalOptions = LayoutOptions.FillAndExpand,
                 Children = {
                     playNextButton,
                     suggestionButton

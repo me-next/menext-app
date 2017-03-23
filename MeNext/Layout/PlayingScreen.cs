@@ -8,8 +8,10 @@ namespace MeNext
     {
         public PlayingScreen()
         {
+            NavigationPage.SetHasNavigationBar(this, false);
             Content = new StackLayout
             {
+                Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
                     new Label { Text = "Now Playing" }
                 }
