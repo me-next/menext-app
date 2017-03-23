@@ -56,6 +56,7 @@
     <Compile Include="Layout\QueueView.cs" />
     <Compile Include="Layout\SongListView.cs" />
     <Compile Include="Net\API.cs" />
+    <Compile Include="Layout\SearchView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />

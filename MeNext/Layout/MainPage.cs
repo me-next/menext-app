@@ -37,6 +37,11 @@ namespace MeNext.Layout
             //libraryScreen.Icon = "libraryScreenIcon.png";  If we make this icon
             Children.Add(libraryScreen);
 
+            var searchScreen = new NavigationPage(new SearchView());
+            searchScreen.Title = "Search";
+            //searchScreen.Icon = "searchScreenIcon.png";  If we make this icon
+            Children.Add(searchScreen);
+
             var queueScreen = new NavigationPage(new QueueView());
             queueScreen.Title = "Queue";
             //queueScreen.Icon = "queueScreenIcon.png";

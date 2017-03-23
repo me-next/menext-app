@@ -3,6 +3,7 @@
 using Xamarin.Forms;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace MeNext
 {
@@ -79,6 +80,15 @@ namespace MeNext
     {
         public SongListModel(List<Song> songs) : base(songs)
         {
+        }
+
+        public void AddMultiple(List<Song> newSongs)
+        {
+            this.CheckReentrancy();
+            foreach (var song in newSongs) {
+                this.Items.Add(song);
+            }
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         // TODO: implement update from client
