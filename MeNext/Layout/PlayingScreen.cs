@@ -8,12 +8,17 @@ namespace MeNext
 	{
 		public PlayingScreen()
 		{
-			Content = new StackLayout
+			var layout = new StackLayout
 			{
 				Children = {
 					new Label { Text = "Now Playing" }
 				}
 			};
+			layout.Children.Add(new Button { Text = "<<" });//, Command = hostCommand });
+			layout.Children.Add(new Button { Text = "Play"});//, Command = hostCommand });
+			layout.Children.Add(new Button { Text = ">>"});//, Command = hostCommand });
+			Content = layout;
+
 		}
 	}
 }
