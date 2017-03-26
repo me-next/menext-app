@@ -33,7 +33,7 @@ namespace MeNext
         /// <returns>The pull.</returns>
         public async Task<string> Pull(string uid, string eid, UInt64 changeID)
         {
-            var uri = new Uri(string.Format("/{0}/{1}/pull/{2}", uid, eid, changeID));
+            var uri = new Uri(string.Format("/pull/{0}/{1}/{2}", uid, eid, changeID));
             return await FireRequest(uri);
 
         }
@@ -42,10 +42,11 @@ namespace MeNext
         /// Try to create the party. 
         /// </summary>
         /// <returns> The party.</returns>
-        public async Task<string> CreateParty(string id, string name)
+        public Task<string> CreateParty(string id, string name) 
         {
-            var uri = new Uri(string.Format("/createParty/{0}/{1}", id, name));
-            return await FireRequest(uri);
+            var uri = new Uri(string.Format("{0}/createParty/{1}/{2}", 
+                                            this.ServerIP, id, name));
+            return FireRequest(uri);
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace MeNext
         {
             var result = "";
             try {
+                
                 var response = await Client.GetAsync(uri);
                 if (response.IsSuccessStatusCode) {
                     result = await response.Content.ReadAsStringAsync();

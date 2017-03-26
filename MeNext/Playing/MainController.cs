@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using MeNext.MusicService;
 using Xamarin.Forms;
 
+using Newtonsoft.Json;
+
 namespace MeNext
 {
     /// <summary>
@@ -15,6 +17,7 @@ namespace MeNext
     {
         private IMusicService musicService;
         private PlayController playController;
+        private API api;
 
         /// <summary>
         /// Used for cancelling polling. We should generally just stop polling instead.
@@ -62,6 +65,10 @@ namespace MeNext
 
             this.musicService.AddPlayStatusListener(this);
             this.playController = new PlayController(this.musicService);
+
+            this.api = new API("http://menext.danielcentore.com:8080");
+            this.UserKey = "potato";
+            this.UserName = "bob";
         }
 
         /// <summary>
@@ -86,11 +93,22 @@ namespace MeNext
         /// <param name="slug">The event name.</param>
         public CreateEventResult RequestCreateEvent(string slug)
         {
-            Debug.Assert(!this.InEvent);
             // TODO Send stuff to server, wait for response, and use real response below
+            var rtask = api.CreateParty(this.UserKey, this.UserName);
+            rtask.Wait();
+            string json = rtask.Result; 
+
+            Debug.WriteLine("json:", json);
+
+            if (json.Contains("error")) {
+                return CreateEventResult.FAIL_GENERIC;
+            }
 
 
-            _ConfigureForEvent("potato", true, slug);
+            var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+
+
+            _ConfigureForEvent(this.UserKey, true, result.EventID);
             return CreateEventResult.SUCCESS;
         }
 
