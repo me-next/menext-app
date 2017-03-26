@@ -31,8 +31,8 @@ namespace MeNext
         }
         void HostCommand(MainController mc)
         {
-            var returnval = mc.RequestCreateEvent("EventName");
-            if (returnval.ToString() == "SUCCESS") 
+            JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent("EventName"));
+            if (joinEvent.EventResult.ToString() == "SUCCESS") 
             {
                 Navigation.PopAsync();
             }
