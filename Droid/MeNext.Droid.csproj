@@ -88,6 +88,10 @@
       <Project>{64DA42D4-2FF5-4D2C-B686-B3E67FD2B1B2}</Project>
       <Name>MeNext</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MusicService\MusicService.csproj">
+      <Project>{39433743-3793-40F6-92E5-5504AAFDD1AC}</Project>
+      <Name>MusicService</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />

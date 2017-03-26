@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using MeNext.MusicService;
+using MeNext.Spotify.iOS;
 using UIKit;
 using Xamarin.Forms;
 
@@ -15,13 +17,18 @@ namespace MeNext.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            // Begin polling
             InitPolling();
 
-            // Boilerplate UI stuff
+            // Initialise Spotify
+            // This is not actually an error.
+            // Building does some witchcraft to resolve the dependency stuff.
+            IMusicService im = new SpotifyMusicService();
 
+            // Boilerplate
             global::Xamarin.Forms.Forms.Init();
 
-            LoadApplication(new App());
+            LoadApplication(new App(im));
 
             return base.FinishedLaunching(app, options);
         }

@@ -9,15 +9,12 @@ namespace MeNext.Layout
     /// </summary>
     public class MainPage : TabbedPage
     {
-        public IMusicService MusicService { get; set; }
         public MainController MainController { get; set; }
 
-        public MainPage()
+        public MainPage(MainController mainController)
         {
             // Backend stuff
-            MusicService = new SampleMusicService.SampleMusicService();
-            MainController = new MainController(MusicService);
-            MainController.RequestJoinEvent("testevent");       // TODO: Remove when we have UI for this
+            this.MainController = mainController;
 
             // UI Stuff
             this.Title = "MeNext";
