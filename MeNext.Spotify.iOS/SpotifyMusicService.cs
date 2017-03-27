@@ -1,27 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Foundation;
 using MeNext.MusicService;
 using MeNext.Spotify.iOS.Auth;
+using MeNext.Spotify.iOS.Playback;
+using SafariServices;
+using UIKit;
 
 namespace MeNext.Spotify.iOS
 {
-    /// <summary>
-    /// Interfaces with the 
-    /// </summary>
-    public class SpotifyMusicService : IMusicService
+    // TODO Document
+    // Based heavily on https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
+    // and https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
+    public class SpotifyMusicService : NSObject, IMusicService
     {
+        StreamingDelegate sd;
+
         public SpotifyMusicService()
         {
+            sd = new StreamingDelegate();
+
             SPTAuth auth = SPTAuth.DefaultInstance;
+
+            // ClientID and RedirectURL come from http://developer.spotify.com/my-applications
+            // TODO Move out of the service
             auth.ClientID = "b79f545d6c24407aa6bed17af62275d6";
-            auth.RedirectURL = new Foundation.NSUrl("menext-spotify://callback");
-            auth.SessionUserDefaultsKey = @"current session";
+
+            // SPTAuthStreamingScope = Audio playing
             auth.RequestedScopes = new NSObject[] { SpotifyConstants.SPTAuthStreamingScope };
 
+            // Callback
+            // TODO: Move out of the service
+            auth.RedirectURL = new Foundation.NSUrl("menext-spotify://callback");
+
+            // Enables SPTAuth to automatically store the session object for future use.
+            auth.SessionUserDefaultsKey = @"SpotifySession";
+
+            // TODO: Use a token swap service
+            //auth.TokenSwapURL;
+            //auth.TokenRefreshURL;
+
+            // TODO remove
             Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
+
+            var lc = new LoginController();
+            lc.login();
         }
 
+        public new bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
+        {
+            Debug.WriteLine("Got a URL: " + url.ToString());
+
+            SPTAuth auth = SPTAuth.DefaultInstance;
+
+            // This is the callback that's triggerred when auth is completed (or fails).
+            SPTAuthCallback authCallback = (NSError error, SPTSession session) =>
+            {
+                if (error != null) {
+                    Debug.WriteLine("*** Auth error: " + error.Description);
+                } else {
+                    auth.Session = session;
+                }
+
+                Debug.WriteLine("Posting the notif");
+                NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
+            };
+
+            // Handle the callback from the authentication service
+            if (auth.CanHandleURL(url)) {
+                Debug.WriteLine("Handling it");
+                auth.HandleAuthCallbackWithTriggeredAuthURL(url, authCallback);
+                return true;
+            }
+
+            return false;
+        }
+
+        //public void startAuthenticationFlow()
+        //{
+        //    var spotifyAuthenticationViewController = SPTAuthViewController.AuthenticationViewController;
+        //    spotifyAuthenticationViewController.Delegate = new AuthViewDelegate(this);
+        //    spotifyAuthenticationViewController.ModalPresentationStyle = UIModalPresentationStyle.OverCurrentContext;
+        //    spotifyAuthenticationViewController.DefinesPresentationContext = true;
+        //    this.PresentViewController(spotifyAuthenticationViewController, false, null);
+        //}
+
+
+        // =========================== //
         public bool CanPlay
         {
             get

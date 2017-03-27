@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Foundation;
@@ -15,22 +16,36 @@ namespace MeNext.iOS
     {
         private PollingTask pollingTask;
 
+
+        SpotifyMusicService sms;
+
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            // Begin polling
-            InitPolling();
+            //// Begin polling
+            //InitPolling();
 
             // Initialise Spotify
             // This is not actually an error.
             // Building does some witchcraft to resolve the dependency stuff.
-            IMusicService im = new SpotifyMusicService();
+
 
             // Boilerplate
             global::Xamarin.Forms.Forms.Init();
 
-            LoadApplication(new App(im));
+            LoadApplication(new App(this.sms));
+
+            this.sms = new SpotifyMusicService();
 
             return base.FinishedLaunching(app, options);
+        }
+
+        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+        {
+            Debug.WriteLine("AD Got URL: " + url);
+            if (this.sms == null) {
+                return false;
+            }
+            return this.sms.OpenUrl(application, url, sourceApplication, annotation);
         }
 
         /// <summary>

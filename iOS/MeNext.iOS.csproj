@@ -107,6 +107,10 @@
       <Project>{6A3D63E2-1637-4D32-B5CF-C1D3AB507C10}</Project>
       <Name>MeNext.Spotify.iOS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MeNext.Spotify.iOS.Playback\MeNext.Spotify.iOS.Playback.csproj">
+      <Project>{EC328C8D-ACAA-4AD6-9089-7BD4F23D52D8}</Project>
+      <Name>MeNext.Spotify.iOS.Playback</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\Contents.json" />
