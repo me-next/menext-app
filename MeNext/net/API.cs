@@ -42,11 +42,22 @@ namespace MeNext
         /// Try to create the party. 
         /// </summary>
         /// <returns> The party.</returns>
-        public Task<string> CreateParty(string id, string name) 
+        public async Task<string> CreateParty(string id, string name) 
         {
             var uri = new Uri(string.Format("{0}/createParty/{1}/{2}", 
                                             this.ServerIP, id, name));
-            return FireRequest(uri);
+            return await FireRequest(uri);
+        }
+
+        /// <summary>
+        /// Try to join a party. 
+        /// </summary>
+        /// <returns> The party.</returns>
+        public async Task<string> JoinParty(string id, string name)
+        {
+            var uri = new Uri(string.Format("{0}/joinParty/{1}/{2}",
+                                            this.ServerIP, id, name));
+            return await FireRequest(uri);
         }
 
         /// <summary>
@@ -57,15 +68,12 @@ namespace MeNext
         private async Task<string> FireRequest(Uri uri)
         {
             var result = "";
-            try {
                 
                 var response = await Client.GetAsync(uri);
                 if (response.IsSuccessStatusCode) {
                     result = await response.Content.ReadAsStringAsync();
                 }
-            } catch (Exception e) {
-                Debug.WriteLine("error on net request:" + e.Message);
-            }
+       
 
             return result;
         }

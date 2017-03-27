@@ -78,11 +78,18 @@ namespace MeNext
         /// <param name="slug">The event name.</param>
         public JoinEventResult RequestJoinEvent(string slug)
         {
-            Debug.Assert(!this.InEvent);
-            // TODO Send stuff to server, wait for response, and use real response below
+           var task = Task.Run(async () =>
+            {
+                return await api.JoinParty(this.UserKey, this.UserName);
+            });
+            var json = task.Result;
+            Debug.WriteLine("json: " + json);
 
+            if(task.IsFaulted) {
+                Debug.WriteLine("oh nose! error:" + task.Exception.ToString());
+            }
 
-            _ConfigureForEvent("potato", false, slug);
+            _ConfigureForEvent(this.UserKey, true, slug);
             return JoinEventResult.SUCCESS;
         }
 
@@ -93,22 +100,19 @@ namespace MeNext
         /// <param name="slug">The event name.</param>
         public CreateEventResult RequestCreateEvent(string slug)
         {
-            // TODO Send stuff to server, wait for response, and use real response below
-            var rtask = api.CreateParty(this.UserKey, this.UserName);
-            rtask.Wait();
-            string json = rtask.Result; 
+            var task = Task.Run(async () =>
+            {
+                return await api.CreateParty(this.UserKey, this.UserName);
+            });
+            var json = task.Result;
+            Debug.WriteLine("json: " + json);
 
-            Debug.WriteLine("json:", json);
-
+            // TODO: real error check
             if (json.Contains("error")) {
                 return CreateEventResult.FAIL_GENERIC;
             }
 
-
-            var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
-
-
-            _ConfigureForEvent(this.UserKey, true, result.EventID);
+            _ConfigureForEvent(this.UserKey, true, slug);
             return CreateEventResult.SUCCESS;
         }
 
@@ -352,8 +356,8 @@ namespace MeNext
                     return;
 
                 // Print the debug text
-                if (message.TestingText != null)
-                    Debug.WriteLine("DEBUG TEXT: " + message.TestingText);
+                if (message.TestingText != null) {
+                }
 
                 // If the event is ended, we should leave and return to the homepage.
                 if (!message.EventActive)

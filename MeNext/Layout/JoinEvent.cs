@@ -19,5 +19,7 @@ namespace MeNext
 			});
 			Content = layout;
 		}
+
+
 	}
 }
