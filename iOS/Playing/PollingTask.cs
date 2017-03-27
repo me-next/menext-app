@@ -18,7 +18,7 @@ namespace MeNext.iOS
         /// Begins polling
         /// </summary>
         /// <returns>The async.</returns>
-        public async Task StartAsync()
+        public async Task StartAsync(MainController mainContoller)
         {
             cancelToken = new CancellationTokenSource();
 
@@ -26,7 +26,7 @@ namespace MeNext.iOS
 
             try {
                 // Invoke shared code
-                var poller = new Poller();
+                var poller = new Poller(mainContoller);
                 await poller.PollForever(cancelToken.Token);
             } catch (OperationCanceledException) {
             } finally {

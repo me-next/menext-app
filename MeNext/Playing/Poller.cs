@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace MeNext
 {
     public class Poller
     {
+        public MainController mainController;
         private const int MS_PER_POLL = 200;
 
+        public Poller(MainController mainController)
+        {
+            // TODO: the android side passes null in here...
+            this.mainController = mainController;
+        }
         /// <summary>
         /// Polls the server until we stop polling
         /// 
@@ -38,6 +45,8 @@ namespace MeNext
 
                     // TODO: Obtain a real status message
                     var response = await api.SayHello();
+
+                    mainController.Poll();
 
                     var message = new StatusMessage
                     {

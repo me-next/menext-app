@@ -54,6 +54,11 @@ namespace MeNext
         public string UserKey { get; private set; }
 
         /// <summary>
+        /// The change identifier.
+        /// </summary>
+        private UInt64 changeID; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.MusicController"/> class.
         /// </summary>
         /// <param name="musicService">The music service we should be interfacing with</param>
@@ -69,6 +74,8 @@ namespace MeNext
             this.api = new API("http://menext.danielcentore.com:8080");
             this.UserKey = "potato";
             this.UserName = "bob";
+
+            this.changeID = 0;
         }
 
         /// <summary>
@@ -82,13 +89,16 @@ namespace MeNext
             {
                 return await api.JoinParty(this.UserKey, this.UserName);
             });
+
             var json = task.Result;
             Debug.WriteLine("json: " + json);
 
             if(task.IsFaulted) {
                 Debug.WriteLine("oh nose! error:" + task.Exception.ToString());
+                return JoinEventResult.FAIL_GENERIC;
             }
 
+            Debug.WriteLine("joined event" + slug);
             _ConfigureForEvent(this.UserKey, true, slug);
             return JoinEventResult.SUCCESS;
         }
@@ -108,11 +118,15 @@ namespace MeNext
             Debug.WriteLine("json: " + json);
 
             // TODO: real error check
-            if (json.Contains("error")) {
+            if (task.IsFaulted) {
+                Debug.WriteLine("failed to join event!" + task.Exception.ToString());
                 return CreateEventResult.FAIL_GENERIC;
             }
 
-            _ConfigureForEvent(this.UserKey, true, slug);
+            var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+
+
+            _ConfigureForEvent(this.UserKey, true, result.EventID);
             return CreateEventResult.SUCCESS;
         }
 
@@ -232,7 +246,16 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestAddToSuggestions(ISong song)
         {
-            Debug.Assert(this.InEvent);
+            var task = Task.Run(async () =>
+            {
+                return await api.SuggestAddSong(this.UserKey, this.EventSlug, song.UniqueId);
+            });
+            var json = task.Result;
+            Debug.WriteLine("json: " + json);
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("failed to add song!" + task.Exception.ToString());
+            }
         }
 
         /// <summary>
@@ -343,6 +366,29 @@ namespace MeNext
             Debug.Assert(this.InEvent);
             var message = new StopPollMessage();
             MessagingCenter.Send(message, "StopPollMessage");
+        }
+
+        /// <summary>
+        /// Poll this instance. The main controller tracks the change ID. 
+        /// </summary>
+        public void Poll()
+        {
+            var task = Task.Run(async () =>
+            {
+                return await api.Pull(this.UserKey, this.EventSlug, this.changeID);
+            });
+
+            var json = task.Result;
+
+            if (json.Length != 0) {
+                Debug.WriteLine("pull json: " + json);
+            }
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("failed to pull!" + task.Exception.ToString());
+            }
+
+            // TODO: parse the pull
         }
 
         /// <summary>

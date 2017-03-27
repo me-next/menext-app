@@ -7,10 +7,10 @@ namespace MeNext
 {
     public partial class App : Application
     {
-        public App()
+        public App(MainController mainController)
         {
             InitializeComponent();
-            MainPage = new MainPage();
+            MainPage = new MainPage(mainController);
         }
 
         protected override void OnStart()

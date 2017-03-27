@@ -1,16 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+
 
 using Foundation;
 using UIKit;
 using Xamarin.Forms;
+using MeNext;
+using MeNext.MusicService;
 
 namespace MeNext.iOS
 {
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        public AppDelegate()
+        {
+            Debug.WriteLine("in app delegate constructor");
+
+            // create common music service objects
+            // these will go through the PollingTask to the Poller
+            musicService = new SampleMusicService.SampleMusicService();
+            mainController = new MainController(this.musicService);
+        }
+
+        private IMusicService musicService;
+        private MainController mainController;
+
         private PollingTask pollingTask;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -21,7 +38,7 @@ namespace MeNext.iOS
 
             global::Xamarin.Forms.Forms.Init();
 
-            LoadApplication(new App());
+            LoadApplication(new App(mainController));
 
             return base.FinishedLaunching(app, options);
         }
@@ -34,7 +51,7 @@ namespace MeNext.iOS
             MessagingCenter.Subscribe<StartPollMessage>(this, "StartPollMessage", async message =>
             {
                 pollingTask = new PollingTask();
-                await pollingTask.StartAsync();
+                await pollingTask.StartAsync(mainController);
             });
 
             MessagingCenter.Subscribe<StopPollMessage>(this, "StopPollMessage", message =>

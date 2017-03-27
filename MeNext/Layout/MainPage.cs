@@ -12,12 +12,12 @@ namespace MeNext.Layout
         public IMusicService MusicService { get; set; }
         public MainController mainController { get; set; }
 
-        public MainPage()
+        public MainPage(MainController mainController)
         {
             // Backend stuff
-            MusicService = new SampleMusicService.SampleMusicService();
-            mainController = new MainController(MusicService);
-            mainController.RequestJoinEvent("testevent");       // TODO: Remove when we have UI for this
+            //MusicService = new SampleMusicService.SampleMusicService();
+            this.mainController = mainController;
+            //mainController.RequestJoinEvent("testevent");       // TODO: Remove when we have UI for this
 
             // UI Stuff
             this.Title = "MeNext";

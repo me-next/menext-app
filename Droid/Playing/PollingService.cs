@@ -31,7 +31,8 @@ namespace MeNext.Droid
             {
                 try {
                     // Invoke shared code
-                    var poller = new Poller();
+                    // TODO: get the music service from the main app
+                    var poller = new Poller(null);
                     poller.PollForever(cancelToken.Token).Wait();
                 } catch (System.OperationCanceledException) {
                 } finally {
