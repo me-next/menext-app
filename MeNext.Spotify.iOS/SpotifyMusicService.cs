@@ -1,13 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using Foundation;
 using MeNext.MusicService;
+using MeNext.Spotify.iOS.Auth;
 
 namespace MeNext.Spotify.iOS
 {
+    /// <summary>
+    /// Interfaces with the 
+    /// </summary>
     public class SpotifyMusicService : IMusicService
     {
         public SpotifyMusicService()
         {
+            SPTAuth auth = SPTAuth.DefaultInstance;
+            auth.ClientID = "b79f545d6c24407aa6bed17af62275d6";
+            auth.RedirectURL = new Foundation.NSUrl("menext-spotify://callback");
+            auth.SessionUserDefaultsKey = @"current session";
+            auth.RequestedScopes = new NSObject[] { SpotifyConstants.SPTAuthStreamingScope };
+
+            Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
         }
 
         public bool CanPlay
@@ -110,7 +122,8 @@ namespace MeNext.Spotify.iOS
 
         public void AddPlayStatusListener(ISongPlayListener listener)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            // TODO
         }
 
         public IAlbum GetAlbum(string uid)

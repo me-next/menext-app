@@ -19,7 +19,7 @@ namespace MeNext.Layout
             // UI Stuff
             this.Title = "MeNext";
 
-            var homeScreen = new NavigationPage(new HomeScreen());
+            var homeScreen = new NavigationPage(new HomeScreen(this.MainController));
             homeScreen.Title = "Home";
             //homeScreen.Icon = "homeScreenIcon.png";  If we make this icon
             Children.Add(homeScreen);

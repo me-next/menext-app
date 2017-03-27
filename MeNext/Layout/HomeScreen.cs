@@ -6,7 +6,7 @@ namespace MeNext
 {
     public class HomeScreen : ContentPage
     {
-        public HomeScreen()
+        public HomeScreen(MainController mainController)
         {
             this.Title = "Home";
             NavigationPage.SetHasNavigationBar(this, false);
@@ -23,9 +23,20 @@ namespace MeNext
             var hostCommand = new Command(() => Navigation.PushAsync(hostPage));
             layout.Children.Add(new Button { Text = "Host Event", Command = hostCommand });  //On Click opens HostEventScreen
             layout.Children.Add(new Button { Text = "Join Event", Command = joinCommand });  //OnClick open JoinEventScreen
+
+            // == TODO Delete this testing stuff == //
+            var testCommand = new Command(() =>
+            {
+                var musicService = mainController.musicService;
+            });
+            layout.Children.Add(new Button
+            {
+                Text = "TESTING STUFF",
+                Command = testCommand
+            });
+            // == End Testing stuff == //
+
             Content = layout;
         }
     }
 }
-
-

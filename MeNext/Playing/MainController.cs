@@ -13,7 +13,7 @@ namespace MeNext
     /// </summary>
     public class MainController : ISongPlayListener
     {
-        private IMusicService musicService;
+        public IMusicService musicService;   // // TODO Make this private. It is only public for kludgy testing.
         private PlayController playController;
 
         /// <summary>
