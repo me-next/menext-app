@@ -6,7 +6,7 @@ namespace MeNext
 {
     public class HomeScreen : ContentPage
     {
-        public HomeScreen()
+        public HomeScreen(MainController mc)
         {
             this.Title = "Home";
             NavigationPage.SetHasNavigationBar(this, false);
@@ -18,7 +18,7 @@ namespace MeNext
                 }
             };
             var joinPage = new JoinEvent();
-            var hostPage = new HostEvent();
+            var hostPage = new HostEvent(mc);
             var joinCommand = new Command(() => Navigation.PushAsync(joinPage));
             var hostCommand = new Command(() => Navigation.PushAsync(hostPage));
             layout.Children.Add(new Button { Text = "Host Event", Command = hostCommand });  //On Click opens HostEventScreen

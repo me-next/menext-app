@@ -10,19 +10,18 @@ namespace MeNext.Layout
     public class MainPage : TabbedPage
     {
         public IMusicService MusicService { get; set; }
-        public MainController MainController { get; set; }
+        public MainController mainController { get; set; }
 
-        public MainPage()
+        public MainPage(MainController mainController)
         {
             // Backend stuff
-            MusicService = new SampleMusicService.SampleMusicService();
-            MainController = new MainController(MusicService);
-            MainController.RequestJoinEvent("testevent");       // TODO: Remove when we have UI for this
+            //MusicService = new SampleMusicService.SampleMusicService();
+            this.mainController = mainController;
+            //mainController.RequestJoinEvent("testevent");       // TODO: Remove when we have UI for this
 
             // UI Stuff
             this.Title = "MeNext";
-
-            var homeScreen = new NavigationPage(new HomeScreen());
+            var homeScreen = new NavigationPage(new HomeScreen(mainController));
             homeScreen.Title = "Home";
             //homeScreen.Icon = "homeScreenIcon.png";  If we make this icon
             Children.Add(homeScreen);
