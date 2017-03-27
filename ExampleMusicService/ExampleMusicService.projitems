@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{B01D6F70-FAF7-4070-82AC-7B0F9AEA3FA0}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>MeNext.SampleMusicService</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)SampleAlbum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleArtist.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleMusicService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SamplePlaylist.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleSong.cs" />
+  </ItemGroup>
+</Project>
