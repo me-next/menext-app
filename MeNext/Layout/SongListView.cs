@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System;
 
 namespace MeNext
 {
@@ -76,7 +77,7 @@ namespace MeNext
     /// A controller updates this list. The view observes the model and updates as needed
     /// This doesn't provide any priority-queue functionality, since the truth is always the server.
     /// </summary>
-    public class SongListModel : ObservableCollection<Song>
+    public class SongListModel : ObservableCollection<Song>, IPullUpdateObserver
     {
         public SongListModel(List<Song> songs) : base(songs)
         {
@@ -96,9 +97,30 @@ namespace MeNext
             this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
+        /// <summary>
+        /// Sets all items in the model. This is useful when updating the model with a new pull. This is the same as 
+        /// AddMultiple, but with a clear
+        /// </summary>
+        /// <param name="newSongs">New songs.</param>
+        public void SetAll(List<Song> newSongs)
+        {
+            this.CheckReentrancy();
+            this.Items.Clear();
+            foreach (var song in newSongs) {
+                this.Items.Add(song);
+            }
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        public virtual void onNewPullData(PullResponse data)
+        {
+            throw new NotImplementedException();
+        }
+
         // TODO: implement update from client
         // TODO: have this take the concrete impl of the music-service results stuff
     };
+
 
     /// <summary>
     /// SongListView displays a collection of songs. This is the "view". 

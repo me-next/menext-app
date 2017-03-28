@@ -10,6 +10,15 @@ using Newtonsoft.Json;
 
 namespace MeNext
 {
+
+    /// <summary>
+    /// Pull update observer gets data from pulls.
+    /// </summary>
+    public interface IPullUpdateObserver
+    {
+        void onNewPullData(PullResponse data);
+    }
+
     /// <summary>
     /// The main controller the UI interfaces with to communicate with the backend and music player
     /// </summary>
@@ -56,7 +65,12 @@ namespace MeNext
         /// <summary>
         /// The change identifier.
         /// </summary>
-        private UInt64 changeID; 
+        private UInt64 changeID;
+
+        /// <summary>
+        /// The pull observers.
+        /// </summary>
+        private List<IPullUpdateObserver> PullObservers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.MusicController"/> class.
@@ -76,6 +90,8 @@ namespace MeNext
             this.UserName = "bob";
 
             this.changeID = 0;
+
+            this.PullObservers = new List<IPullUpdateObserver>();
         }
 
         /// <summary>
@@ -370,6 +386,8 @@ namespace MeNext
 
         /// <summary>
         /// Poll this instance. The main controller tracks the change ID. 
+        /// 
+        /// The deserialized server response is sent to observers, who are responsible for acting on the info. 
         /// </summary>
         public void Poll()
         {
@@ -380,15 +398,45 @@ namespace MeNext
 
             var json = task.Result;
 
-            if (json.Length != 0) {
-                Debug.WriteLine("pull json: " + json);
+            // if there is no data, continue on
+            if (json.Length == 0) {
+                return;
             }
 
             if (task.IsFaulted) {
                 Debug.WriteLine("failed to pull!" + task.Exception.ToString());
             }
 
-            // TODO: parse the pull
+            // try to parse the pull
+            Debug.WriteLine("pull json: " + json + ". " + json.Length);
+
+            var result = JsonConvert.DeserializeObject<PullResponse>(json);
+
+            // update ourself
+            this.changeID = result.Change;
+
+            UpdatePullObservers(result);
+        }
+
+        /// <summary>
+        /// Updates the pull observers.
+        /// </summary>
+        /// <param name="data">Data retrieved from the pull.</param>
+        private void UpdatePullObservers(PullResponse data)
+        {
+            foreach (var observer in this.PullObservers) {
+                observer.onNewPullData(data);
+            }
+        }
+
+        /// <summary>
+        /// Registers an observer on the pull.
+        /// </summary>
+        /// <param name="observer">Observer.</param>
+        public void RegisterObserver(IPullUpdateObserver observer)
+        {
+            // TODO: membership checking
+            PullObservers.Add(observer);
         }
 
         /// <summary>

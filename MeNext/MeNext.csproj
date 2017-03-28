@@ -59,6 +59,7 @@
     <Compile Include="Layout\SearchView.cs" />
     <Compile Include="Net\JoinEvent.cs" />
     <Compile Include="Playing\Responses\CreateEventResponse.cs" />
+    <Compile Include="Playing\Responses\PullResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
