@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using MeNext.MusicService;
 using Newtonsoft.Json;
 
@@ -59,13 +60,10 @@ namespace MeNext.Spotify
                 sids.Enqueue(split[2]);
             }
 
+            var result = new List<ISpotifyMetadata>();
             if (typeof(T) == typeof(SpotifySong)) {
                 var songs = SpotifySong.ObtainSongs(this, sids);
-                var result = new List<ISpotifyMetadata>();
-                foreach (var song in songs) {
-                    result.Add(song);
-                }
-                return result;
+                result.AddRange(songs);
             } else if (typeof(T) == typeof(SpotifyAlbum)) {
                 // TODO
             } else if (typeof(T) == typeof(SpotifyArtist)) {
@@ -75,8 +73,39 @@ namespace MeNext.Spotify
             } else {
                 throw new Exception("Invalid type T: " + typeof(T).Name);
             }
+            return result;
+        }
 
-            return null;
+        internal List<Q> ObtainThings<T, Q>(Queue<string> sids, int resultsPerQuery, string endpoint) where T : IResultWithList<Q>
+        {
+            var result = new List<Q>();
+
+            // While there are things which need obtaining
+            while (sids.Count > 0) {
+                // Compile a list of MAX_RESULTS_PER_QUERY of their ids 
+                var ids = "";
+                for (int i = 0; i < resultsPerQuery && sids.Count > 0; ++i) {
+                    var sid = sids.Dequeue();
+                    ids += sid + ",";
+                }
+                ids = ids.Substring(0, ids.Length - 1);
+
+                // Get the json result
+                string endUri = string.Format("/{0}?ids={1}", endpoint, ids);
+
+                var task = Task.Run(async () =>
+                {
+                    return await webApi.GetJson(endUri);
+                });
+
+                var json = task.Result;
+                var jsonResult = JsonConvert.DeserializeObject<T>(json);
+
+                // Add the deserialised object to the list of deserialised objects
+                result.AddRange(jsonResult.Items);
+            }
+
+            return result;
         }
 
         private Q GetOne<T, Q>(string uid) where T : ISpotifyMetadata, Q

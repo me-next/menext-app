@@ -12,6 +12,7 @@ namespace MeNext.Spotify
     public class SpotifySong : ISong, ISpotifyMetadata
     {
         private const int MAX_RESULTS_PER_QUERY = 50;
+        private const string ENDPOINT_MULTIPLE = "tracks";
 
         private MetadataFactory factory;
         private string uid;
@@ -21,18 +22,6 @@ namespace MeNext.Spotify
         private double duration;
         private List<string> artistUids;
         private string albumUid;
-
-        //internal SpotifySong(MetadataFactory factory, string uid, string name, int trackNumber, int diskNumber, double duration, List<string> artistUids, string albumUid)
-        //{
-        //    this.factory = factory;
-        //    this.uid = uid;
-        //    this.name = name;
-        //    this.trackNumber = trackNumber;
-        //    this.diskNumber = diskNumber;
-        //    this.duration = duration;
-        //    this.artistUids = artistUids;
-        //    this.albumUid = albumUid;
-        //}
 
         internal SpotifySong(MetadataFactory factory, TrackResult result)
         {
@@ -106,35 +95,13 @@ namespace MeNext.Spotify
             }
         }
 
-        internal static List<SpotifySong> ObtainSongs(MetadataFactory factory, Queue<string> sids)// where T : ISpotifyMetadata
+        internal static List<SpotifySong> ObtainSongs(MetadataFactory factory, Queue<string> sids)
         {
-            //Debug.Assert(typeof(T) == typeof(SpotifySong));
-
-            WebApi webApi = factory.webApi;
-
             var result = new List<SpotifySong>();
+            var items = factory.ObtainThings<TracksResult, TrackResult>(sids, MAX_RESULTS_PER_QUERY, ENDPOINT_MULTIPLE);
 
-            while (sids.Count > 0) {
-                var ids = "";
-                for (int i = 0; i < MAX_RESULTS_PER_QUERY && sids.Count > 0; ++i) {
-                    var sid = sids.Dequeue();
-                    ids += sid + ",";
-                }
-                ids = ids.Substring(0, ids.Length - 1);
-
-                string endUri = string.Format("/tracks?ids={0}", ids);
-
-                var task = Task.Run(async () =>
-                {
-                    return await webApi.GetJson(endUri);
-                });
-
-                var json = task.Result;
-                var tracksResult = JsonConvert.DeserializeObject<TracksResult>(json);
-
-                foreach (var trackResult in tracksResult.tracks) {
-                    result.Add(new SpotifySong(factory, trackResult));
-                }
+            foreach (var item in items) {
+                result.Add(new SpotifySong(factory, item));
             }
 
             return result;

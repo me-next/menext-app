@@ -41,6 +41,7 @@
     <Compile Include="SpotifyMetadata\JsonResults\PartialArtistResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\ImageResult.cs" />
     <Compile Include="SpotifyMetadata\Tools\Util.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\IResultWithList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SpotifyMetadata\" />
