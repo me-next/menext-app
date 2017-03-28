@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Xamarin.Forms;
 
@@ -8,15 +8,17 @@ namespace MeNext
     {
         public PlayingScreen()
         {
-            NavigationPage.SetHasNavigationBar(this, false);
-            Content = new StackLayout
+            var layout = new StackLayout
             {
-                Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
                     new Label { Text = "Now Playing" }
                 }
             };
+            layout.Children.Add(new Button { Text = "<<" });//, Command = hostCommand });
+            layout.Children.Add(new Button { Text = "Play" });//, Command = hostCommand });
+            layout.Children.Add(new Button { Text = ">>" });//, Command = hostCommand });
+            Content = layout;
+
         }
     }
 }
-

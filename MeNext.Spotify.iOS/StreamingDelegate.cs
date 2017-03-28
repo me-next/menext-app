@@ -45,8 +45,6 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidLogin(SPTAudioStreamingController audioStreaming)
         {
-            Debug.WriteLine("Is Player Good 2? " + (this.Player != null));
-
             this.Player.PlaySpotifyURI("spotify:track:40pEs6TZQUjoyb7YLNCLbo", 0, 0, (NSError error1) =>
                        {
                            if (error1 != null) {

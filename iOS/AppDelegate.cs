@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
+
 using Foundation;
-using MeNext.MusicService;
 using MeNext.Spotify.iOS;
 using UIKit;
 using Xamarin.Forms;
@@ -14,41 +14,41 @@ namespace MeNext.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        private SpotifyMusicService musicService;
+        private MainController mainController;
         private PollingTask pollingTask;
 
+        public AppDelegate()
+        {
+            Debug.WriteLine("in app delegate constructor");
 
-        SpotifyMusicService sms;
+            // create common music service objects
+            // these will go through the PollingTask to the Poller
+            //musicService = new SampleMusicService.SampleMusicService();
+            musicService = new SpotifyMusicService();
+            mainController = new MainController(this.musicService);
+        }
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            //// Begin polling
-            //InitPolling();
-
-            // Initialise Spotify
-            // This is not actually an error.
-            // Building does some witchcraft to resolve the dependency stuff.
-
+            // Begin polling
+            InitPolling();
 
             // Boilerplate
             global::Xamarin.Forms.Forms.Init();
 
-            LoadApplication(new App(this.sms));
-
-            this.sms = new SpotifyMusicService();
-
-            // TODO: A button to relogin (in case the spotify user logged in as someone else)
-            //this.sms.Login();
+            LoadApplication(new App(mainController));
 
             return base.FinishedLaunching(app, options);
         }
 
         public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
         {
-            Debug.WriteLine("AD Got URL: " + url);
-            if (this.sms == null) {
+            if (this.musicService == null) {
                 return false;
             }
-            return this.sms.OpenUrl(application, url, sourceApplication, annotation);
+            // TODO: Untie this from Spotify and make it platform neutral?
+            return new SpotifySetup().OpenUrl(application, url, sourceApplication, annotation);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace MeNext.iOS
             MessagingCenter.Subscribe<StartPollMessage>(this, "StartPollMessage", async message =>
             {
                 pollingTask = new PollingTask();
-                await pollingTask.StartAsync();
+                await pollingTask.StartAsync(mainController);
             });
 
             MessagingCenter.Subscribe<StopPollMessage>(this, "StopPollMessage", message =>

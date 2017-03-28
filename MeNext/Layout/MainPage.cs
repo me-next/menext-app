@@ -9,17 +9,18 @@ namespace MeNext.Layout
     /// </summary>
     public class MainPage : TabbedPage
     {
-        public MainController MainController { get; set; }
+        public IMusicService MusicService { get; set; }
+        public MainController mainController { get; set; }
 
         public MainPage(MainController mainController)
         {
-            // Backend stuff
-            this.MainController = mainController;
+            //MusicService = new SampleMusicService.SampleMusicService();
+            this.mainController = mainController;
+            //mainController.RequestJoinEvent("testevent");       // TODO: Remove when we have UI for this
 
             // UI Stuff
             this.Title = "MeNext";
-
-            var homeScreen = new NavigationPage(new HomeScreen(this.MainController));
+            var homeScreen = new NavigationPage(new HomeScreen(mainController));
             homeScreen.Title = "Home";
             //homeScreen.Icon = "homeScreenIcon.png";  If we make this icon
             Children.Add(homeScreen);
@@ -39,7 +40,7 @@ namespace MeNext.Layout
             //searchScreen.Icon = "searchScreenIcon.png";  If we make this icon
             Children.Add(searchScreen);
 
-            var queueScreen = new NavigationPage(new QueueView());
+            var queueScreen = new NavigationPage(new QueueView(mainController));
             queueScreen.Title = "Queue";
             //queueScreen.Icon = "queueScreenIcon.png";
             Children.Add(queueScreen);

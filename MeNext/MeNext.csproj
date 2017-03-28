@@ -57,6 +57,9 @@
     <Compile Include="Layout\SongListView.cs" />
     <Compile Include="Net\API.cs" />
     <Compile Include="Layout\SearchView.cs" />
+    <Compile Include="Net\JoinEvent.cs" />
+    <Compile Include="Playing\Responses\CreateEventResponse.cs" />
+    <Compile Include="Playing\Responses\PullResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
@@ -64,6 +67,7 @@
     <Folder Include="Playing\TaskMessages\" />
     <Folder Include="Playing\Results\" />
     <Folder Include="Net\" />
+    <Folder Include="Playing\Responses\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
@@ -74,6 +78,9 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.2.3.3.193\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\portable-net45+win8+wpa81+wp8\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

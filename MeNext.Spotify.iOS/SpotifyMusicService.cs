@@ -23,7 +23,7 @@ namespace MeNext.Spotify.iOS
 
         public SpotifyMusicService()
         {
-            sd = SpotifySetup.CreateStreamingDelegate();
+            sd = new SpotifySetup().CreateStreamingDelegate();
         }
 
         /// <summary>

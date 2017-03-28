@@ -10,10 +10,25 @@ namespace MeNext.Spotify.iOS
     {
         public SpotifySetup()
         {
-
         }
 
-        public static StreamingDelegate CreateStreamingDelegate()
+        // TODO: Allow us to login from another location
+        public static void Login()
+        {
+            SPTAuth auth = SPTAuth.DefaultInstance;
+
+            if (SPTAuth.SupportsApplicationAuthentication) {
+                // Auth using Spotify app
+                Debug.WriteLine("Auth using spotify app");
+                UIApplication.SharedApplication.OpenUrl(auth.SpotifyAppAuthenticationURL);
+            } else {
+                // App using web view
+                Debug.WriteLine("ERR: Cannot auth using spotify app");
+                // TODO: Use web auth vi           }
+            }
+        }
+
+        public StreamingDelegate CreateStreamingDelegate()
         {
             var sd = new StreamingDelegate();
 
@@ -40,51 +55,32 @@ namespace MeNext.Spotify.iOS
             // TODO remove
             Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
 
-            // Uncomment to auto login (if the user doesn't already have a session)
-            //if (auth.Session == null || !auth.Session.IsValid) {
-            //    Login();
-            //}
-            return sd;
-        }
-
-        // TODO: Allow us to login from another location
-        public static void Login()
-        {
-            SPTAuth auth = SPTAuth.DefaultInstance;
-
-            if (SPTAuth.SupportsApplicationAuthentication) {
-                // Auth using Spotify app
-                Debug.WriteLine("Auth using spotify app");
-                UIApplication.SharedApplication.OpenUrl(auth.SpotifyAppAuthenticationURL);
-            } else {
-                // App using web view
-                Debug.WriteLine("ERR: Cannot auth using spotify app");
-                // TODO: Use web auth vi        }
+            // If we have a valid session, notify that the session was updated so player gets setup
+            if (auth.Session != null && auth.Session.IsValid) {
+                NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
             }
+            return sd;
         }
 
         public bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
         {
-            Debug.WriteLine("Got a URL: " + url.ToString());
-
             SPTAuth auth = SPTAuth.DefaultInstance;
 
             // This is the callback that's triggerred when auth is completed (or fails).
             SPTAuthCallback authCallback = (NSError error, SPTSession session) =>
             {
                 if (error != null) {
+                    // TODO: Do something?
                     Debug.WriteLine("*** Auth error: " + error.Description);
                 } else {
                     auth.Session = session;
                 }
 
-                Debug.WriteLine("Posting the notif");
                 NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
             };
 
             // Handle the callback from the authentication service
             if (auth.CanHandleURL(url)) {
-                Debug.WriteLine("Handling it");
                 auth.HandleAuthCallbackWithTriggeredAuthURL(url, authCallback);
                 return true;
             }

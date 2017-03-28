@@ -8,16 +8,9 @@ namespace MeNext
 {
     public partial class App : Application
     {
-        public App(IMusicService musicService)
+        public App(MainController mainController)
         {
             InitializeComponent();
-
-            // TODO: Remove once Droid is implemented
-            if (musicService == null) {
-                musicService = new SampleMusicService.SampleMusicService();
-            }
-
-            var mainController = new MainController(musicService);
             MainPage = new MainPage(mainController);
         }
 

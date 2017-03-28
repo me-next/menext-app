@@ -6,8 +6,10 @@ namespace MeNext
 {
     public class HomeScreen : ContentPage
     {
-        public HomeScreen(MainController mainController)
+        public HomeScreen(MainController mc)
         {
+            var musicService = mc.musicService;
+
             this.Title = "Home";
             NavigationPage.SetHasNavigationBar(this, false);
             var layout = new StackLayout()
@@ -18,23 +20,21 @@ namespace MeNext
                 }
             };
             var joinPage = new JoinEvent();
-            var hostPage = new HostEvent();
+            var hostPage = new HostEvent(mc);
             var joinCommand = new Command(() => Navigation.PushAsync(joinPage));
             var hostCommand = new Command(() => Navigation.PushAsync(hostPage));
             layout.Children.Add(new Button { Text = "Host Event", Command = hostCommand });  //On Click opens HostEventScreen
             layout.Children.Add(new Button { Text = "Join Event", Command = joinCommand });  //OnClick open JoinEventScreen
 
-            // == TODO Delete this testing stuff == //
-            var testCommand = new Command(() =>
+            var loginCommand = new Command(() =>
             {
-                var musicService = mainController.musicService;
+                musicService.Login();
             });
             layout.Children.Add(new Button
             {
-                Text = "TESTING STUFF",
-                Command = testCommand
+                Text = (musicService.LoggedIn ? "Re-" : "") + "Login with Spotify",
+                Command = loginCommand
             });
-            // == End Testing stuff == //
 
             Content = layout;
         }
