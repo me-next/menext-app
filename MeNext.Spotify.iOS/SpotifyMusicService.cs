@@ -185,16 +185,21 @@ namespace MeNext.Spotify.iOS
 
         public void PlaySong(ISong song, double position = 0)
         {
-            sd.Player.PlaySpotifyURI(song.UniqueId, 0, position, (NSError error1) =>
+            if (this.CanPlayNow) {
+                sd.Player.PlaySpotifyURI(song.UniqueId, 0, position, (NSError error1) =>
                        {
                            if (error1 != null) {
+
                                this.playingSong = null;
                                // TODO Handle error
                                Debug.WriteLine("Err Playing: " + error1.DebugDescription);
                            } else {
+
                                this.playingSong = song;
+
                            }
                        });
+            }
         }
 
         public IResultList<IAlbum> SearchAlbum(string query)
