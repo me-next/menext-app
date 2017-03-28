@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace MeNext
@@ -50,6 +51,17 @@ namespace MeNext
             {
                 Text = "Play Something Random",
                 Command = playSomethingElse
+            });
+
+            var testCommand = new Command(() =>
+            {
+                var song = musicService.GetSong("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
+                Debug.WriteLine(song.Name);
+            });
+            layout.Children.Add(new Button
+            {
+                Text = "Test Button",
+                Command = testCommand
             });
 
             Content = layout;

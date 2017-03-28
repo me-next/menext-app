@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using MeNext.MusicService;
 
-namespace MeNext.Spotify.iOS
+namespace MeNext.Spotify
 {
-    public class SpotifyAlbum : IAlbum
+    public class SpotifyAlbum : IAlbum, ISpotifyMetadata
     {
         private string spotifyUri;
 
-        public SpotifyAlbum(string spotifyUri)
+        internal SpotifyAlbum(string spotifyUri)
         {
             this.spotifyUri = spotifyUri;
         }
@@ -28,11 +28,11 @@ namespace MeNext.Spotify.iOS
             {
                 // TODO
                 var result = new List<ISong>();
-                result.Add(new SpotifySong("spotify:track:2Ml0l8YWJLQhPrRDLpQaDM"));
-                result.Add(new SpotifySong("spotify:track:1BwaPm2VjiOenzjW1TOZuW"));
-                result.Add(new SpotifySong("spotify:track:5USZyz6dnBEn1oLsKcAKQy"));
-                result.Add(new SpotifySong("spotify:track:0mBL2JwjNYKtdFacHxvtJt"));
-                result.Add(new SpotifySong("spotify:track:4EveU9Zb50mjgi5avDNqlK"));
+                //result.Add(new SpotifySong("spotify:track:2Ml0l8YWJLQhPrRDLpQaDM"));
+                //result.Add(new SpotifySong("spotify:track:1BwaPm2VjiOenzjW1TOZuW"));
+                //result.Add(new SpotifySong("spotify:track:5USZyz6dnBEn1oLsKcAKQy"));
+                //result.Add(new SpotifySong("spotify:track:0mBL2JwjNYKtdFacHxvtJt"));
+                //result.Add(new SpotifySong("spotify:track:4EveU9Zb50mjgi5avDNqlK"));
                 return result;
             }
         }

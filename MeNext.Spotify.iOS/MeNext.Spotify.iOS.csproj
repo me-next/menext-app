@@ -44,22 +44,24 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SpotifyAPI">
+      <HintPath>..\packages\SpotifyAPI-NET.2.13.1\lib\SpotifyAPI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="SpotifyMetadata\" />
     <Folder Include="SpotifyResults\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpotifyMusicService.cs" />
+    <Compile Include="SpotifyMusicServiceIos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamingDelegate.cs" />
     <Compile Include="StreamingPlaybackDelegate.cs" />
-    <Compile Include="SpotifyMetadata\SpotifySong.cs" />
-    <Compile Include="SpotifyMetadata\SpotifyAlbum.cs" />
-    <Compile Include="SpotifyMetadata\SpotifyArtist.cs" />
-    <Compile Include="SpotifyMetadata\SpotifyPlaylist.cs" />
-    <Compile Include="SpotifySetup.cs" />
+    <Compile Include="SpotifyAuth.cs" />
     <Compile Include="SpotifyResults\SpotifySimpleResultList.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +77,13 @@
       <Project>{39433743-3793-40F6-92E5-5504AAFDD1AC}</Project>
       <Name>MusicService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MeNext.Spotify\MeNext.Spotify.csproj">
+      <Project>{FA839F74-9C98-40DB-894A-8F7A9B6D43DB}</Project>
+      <Name>MeNext.Spotify</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

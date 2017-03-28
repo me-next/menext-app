@@ -13,17 +13,13 @@ namespace MeNext.Spotify.iOS
 
         public StreamingDelegate()
         {
-            Debug.WriteLine("Registering observer");
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
             {
-                Debug.WriteLine("Got notif");
                 var auth = SPTAuth.DefaultInstance;
 
                 if (this.Player == null) {
                     NSError error = null;
                     this.Player = SPTAudioStreamingController.SharedInstance();
-
-                    Debug.WriteLine("Is Player Good? " + (this.Player != null));
 
                     // TODO Caching needs to be enabled here?
                     //bool success = this.player.StartWithClientId(auth.ClientID, out error);

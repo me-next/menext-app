@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using MeNext.MusicService;
 
-namespace MeNext.Spotify.iOS
+namespace MeNext.Spotify
 {
-    public class SpotifyArtist : IArtist
+    public class SpotifyArtist : IArtist, ISpotifyMetadata
     {
         private string spotifyUri;
 
-        public SpotifyArtist(string spotifyUri)
+        internal SpotifyArtist(string spotifyUri)
         {
             this.spotifyUri = spotifyUri;
         }

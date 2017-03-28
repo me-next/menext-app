@@ -9,6 +9,8 @@ namespace MeNext
 {
     public class API
     {
+        private const string BASE_URI = "https://api.spotify.com/v1";
+
         private string ServerIP { get; set; }
         private HttpClient Client { get; set; }
 
