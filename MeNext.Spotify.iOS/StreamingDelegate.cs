@@ -45,12 +45,13 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidLogin(SPTAudioStreamingController audioStreaming)
         {
-            this.Player.PlaySpotifyURI("spotify:track:40pEs6TZQUjoyb7YLNCLbo", 0, 0, (NSError error1) =>
-                       {
-                           if (error1 != null) {
-                               Debug.WriteLine("Err Playing: " + error1.DebugDescription);
-                           }
-                       });
+            // TODO: Stop doing this
+            //this.Player.PlaySpotifyURI("spotify:track:0imYRG0WKxUOOcqBu3VX10", 0, 0, (NSError error1) =>
+            //           {
+            //               if (error1 != null) {
+            //                   Debug.WriteLine("Err Playing: " + error1.DebugDescription);
+            //               }
+            //           });
             this.Player.SetVolume(1, (arg0) => { });
             AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
             AVAudioSession.SharedInstance().SetActive(true);

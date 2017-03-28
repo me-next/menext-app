@@ -12,9 +12,13 @@ namespace MeNext.Spotify.iOS
         {
         }
 
-        // TODO: Allow us to login from another location
         public static void Login()
         {
+            if (!SPTAuth.SpotifyApplicationIsInstalled) {
+                // TODO: Error message?
+                return;
+            }
+
             SPTAuth auth = SPTAuth.DefaultInstance;
 
             if (SPTAuth.SupportsApplicationAuthentication) {
@@ -53,7 +57,7 @@ namespace MeNext.Spotify.iOS
             //auth.TokenRefreshURL;
 
             // TODO remove
-            Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
+            // Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
 
             // If we have a valid session, notify that the session was updated so player gets setup
             if (auth.Session != null && auth.Session.IsValid) {

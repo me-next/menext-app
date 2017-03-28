@@ -60,6 +60,7 @@
     <Compile Include="Net\JoinEvent.cs" />
     <Compile Include="Playing\Responses\CreateEventResponse.cs" />
     <Compile Include="Playing\Responses\PullResponse.cs" />
+    <Compile Include="Layout\TestingScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />

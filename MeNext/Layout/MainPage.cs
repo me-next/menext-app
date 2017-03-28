@@ -20,10 +20,16 @@ namespace MeNext.Layout
 
             // UI Stuff
             this.Title = "MeNext";
+
             var homeScreen = new NavigationPage(new HomeScreen(mainController));
             homeScreen.Title = "Home";
             //homeScreen.Icon = "homeScreenIcon.png";  If we make this icon
             Children.Add(homeScreen);
+
+            var testScreen = new NavigationPage(new TestingScreen(mainController));
+            testScreen.Title = "Testing";
+            //testScreen.Icon = "homeScreenIcon.png";  If we make this icon
+            Children.Add(testScreen);
 
             var playingScreen = new NavigationPage(new PlayingScreen());
             playingScreen.Title = "Playing";

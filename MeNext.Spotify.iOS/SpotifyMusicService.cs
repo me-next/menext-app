@@ -77,7 +77,8 @@ namespace MeNext.Spotify.iOS
 
             set
             {
-                if (this.CanPlayNow) {
+                if (this.CanPlayNow && this.sd.Player.PlaybackState.IsPlaying != value) {
+                    // TODO Handle error
                     this.sd.Player.SetIsPlaying(value, (NSError arg0) => { });
                 }
             }
@@ -96,6 +97,7 @@ namespace MeNext.Spotify.iOS
             set
             {
                 if (this.CanPlayNow) {
+                    // TODO Handle error
                     this.sd.Player.SeekTo(value, (NSError arg0) => { });
                 }
             }
@@ -187,6 +189,7 @@ namespace MeNext.Spotify.iOS
                        {
                            if (error1 != null) {
                                this.playingSong = null;
+                               // TODO Handle error
                                Debug.WriteLine("Err Playing: " + error1.DebugDescription);
                            } else {
                                this.playingSong = song;
