@@ -36,8 +36,7 @@
     <Compile Include="IPlaylist.cs" />
     <Compile Include="IResultList.cs" />
     <Compile Include="ISong.cs" />
-    <Compile Include="ISongPlayListener.cs" />
-    <Compile Include="IUniqueId.cs" />
+    <Compile Include="IMusicServiceListener.cs" />
     <Compile Include="PageErrorType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

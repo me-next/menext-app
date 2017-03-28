@@ -47,13 +47,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="SpotifyMetadata\" />
+    <Folder Include="SpotifyResults\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SpotifyMusicService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LoginController.cs" />
     <Compile Include="StreamingDelegate.cs" />
     <Compile Include="StreamingPlaybackDelegate.cs" />
+    <Compile Include="SpotifyMetadata\SpotifySong.cs" />
+    <Compile Include="SpotifyMetadata\SpotifyAlbum.cs" />
+    <Compile Include="SpotifyMetadata\SpotifyArtist.cs" />
+    <Compile Include="SpotifyMetadata\SpotifyPlaylist.cs" />
+    <Compile Include="SpotifySetup.cs" />
+    <Compile Include="SpotifyResults\SpotifySimpleResultList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeNext.Spotify.iOS.Auth\MeNext.Spotify.iOS.Auth.csproj">

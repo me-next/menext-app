@@ -13,86 +13,38 @@ namespace MeNext.Spotify.iOS
     // TODO Document
     // Based heavily on https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
     // and https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
-    public class SpotifyMusicService : NSObject, IMusicService
+    public class SpotifyMusicService : IMusicService
     {
-        StreamingDelegate sd;
+        private readonly List<IMusicServiceListener> listeners = new List<IMusicServiceListener>();
+
+        private StreamingDelegate sd;
+
+        private ISong playingSong;
 
         public SpotifyMusicService()
         {
-            sd = new StreamingDelegate();
-
-            SPTAuth auth = SPTAuth.DefaultInstance;
-
-            // ClientID and RedirectURL come from http://developer.spotify.com/my-applications
-            // TODO Move out of the service
-            auth.ClientID = "b79f545d6c24407aa6bed17af62275d6";
-
-            // SPTAuthStreamingScope = Audio playing
-            auth.RequestedScopes = new NSObject[] { SpotifyConstants.SPTAuthStreamingScope };
-
-            // Callback
-            // TODO: Move out of the service
-            auth.RedirectURL = new Foundation.NSUrl("menext-spotify://callback");
-
-            // Enables SPTAuth to automatically store the session object for future use.
-            auth.SessionUserDefaultsKey = @"SpotifySession";
-
-            // TODO: Use a token swap service
-            //auth.TokenSwapURL;
-            //auth.TokenRefreshURL;
-
-            // TODO remove
-            Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
-
-            var lc = new LoginController();
-            lc.login();
+            sd = SpotifySetup.CreateStreamingDelegate();
         }
 
-        public new bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
+        /// <summary>
+        /// Checks if we are capable of playing at this very moment
+        /// </summary>
+        /// <value><c>true</c> if can play now; otherwise, <c>false</c>.</value>
+        private bool CanPlayNow
         {
-            Debug.WriteLine("Got a URL: " + url.ToString());
-
-            SPTAuth auth = SPTAuth.DefaultInstance;
-
-            // This is the callback that's triggerred when auth is completed (or fails).
-            SPTAuthCallback authCallback = (NSError error, SPTSession session) =>
+            get
             {
-                if (error != null) {
-                    Debug.WriteLine("*** Auth error: " + error.Description);
-                } else {
-                    auth.Session = session;
-                }
-
-                Debug.WriteLine("Posting the notif");
-                NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
-            };
-
-            // Handle the callback from the authentication service
-            if (auth.CanHandleURL(url)) {
-                Debug.WriteLine("Handling it");
-                auth.HandleAuthCallbackWithTriggeredAuthURL(url, authCallback);
-                return true;
+                return LoggedIn;
             }
-
-            return false;
         }
-
-        //public void startAuthenticationFlow()
-        //{
-        //    var spotifyAuthenticationViewController = SPTAuthViewController.AuthenticationViewController;
-        //    spotifyAuthenticationViewController.Delegate = new AuthViewDelegate(this);
-        //    spotifyAuthenticationViewController.ModalPresentationStyle = UIModalPresentationStyle.OverCurrentContext;
-        //    spotifyAuthenticationViewController.DefinesPresentationContext = true;
-        //    this.PresentViewController(spotifyAuthenticationViewController, false, null);
-        //}
-
 
         // =========================== //
         public bool CanPlay
         {
             get
             {
-                throw new NotImplementedException();
+                // TODO: Check if the user has premium
+                return LoggedIn;
             }
         }
 
@@ -100,15 +52,8 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                throw new NotImplementedException();
-            }
-        }
-
-        public bool HasUserLibrary
-        {
-            get
-            {
-                throw new NotImplementedException();
+                // Any user can search (in principle)
+                return true;
             }
         }
 
@@ -116,7 +61,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                throw new NotImplementedException();
+                return "Spotify";
             }
         }
 
@@ -124,12 +69,17 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.CanPlayNow) {
+                    return this.sd.Player.PlaybackState.IsPlaying;
+                }
+                return false;
             }
 
             set
             {
-                throw new NotImplementedException();
+                if (this.CanPlayNow) {
+                    this.sd.Player.SetIsPlaying(value, (NSError arg0) => { });
+                }
             }
         }
 
@@ -137,12 +87,17 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.CanPlayNow) {
+                    return this.sd.Player.PlaybackState.Position;
+                }
+                return 0.0;
             }
 
             set
             {
-                throw new NotImplementedException();
+                if (this.CanPlayNow) {
+                    this.sd.Player.SeekTo(value, (NSError arg0) => { });
+                }
             }
         }
 
@@ -150,7 +105,16 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                throw new NotImplementedException();
+                return playingSong;
+            }
+        }
+
+        public bool HasUserLibrary
+        {
+            get
+            {
+                // TODO: Implement user library
+                return false;
             }
         }
 
@@ -158,6 +122,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
+                // TODO: Implement user library
                 throw new NotImplementedException();
             }
         }
@@ -166,6 +131,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
+                // TODO: Implement user library
                 throw new NotImplementedException();
             }
         }
@@ -174,6 +140,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
+                // TODO: Implement user library
                 throw new NotImplementedException();
             }
         }
@@ -182,69 +149,120 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
+                // TODO: Implement user library
                 throw new NotImplementedException();
             }
         }
 
-        public void AddPlayStatusListener(ISongPlayListener listener)
+        public bool LoggedIn
         {
-            //throw new NotImplementedException();
-            // TODO
+            get
+            {
+                return (this.sd.Player != null && this.sd.Player.LoggedIn);
+            }
         }
-
         public IAlbum GetAlbum(string uid)
         {
-            throw new NotImplementedException();
+            return new SpotifyAlbum(uid);
         }
 
         public IArtist GetArtist(string uid)
         {
-            throw new NotImplementedException();
+            return new SpotifyArtist(uid);
         }
 
         public IPlaylist GetPlaylist(string uid)
         {
-            throw new NotImplementedException();
+            return new SpotifyPlaylist(uid);
         }
 
         public ISong GetSong(string uid)
         {
-            throw new NotImplementedException();
+            return new SpotifySong(uid);
         }
 
         public void PlaySong(ISong song, double position = 0)
         {
-            throw new NotImplementedException();
-        }
-
-        public void RemovePlayStatusListener(ISongPlayListener listener)
-        {
-            throw new NotImplementedException();
+            sd.Player.PlaySpotifyURI(song.UniqueId, 0, position, (NSError error1) =>
+                       {
+                           if (error1 != null) {
+                               this.playingSong = null;
+                               Debug.WriteLine("Err Playing: " + error1.DebugDescription);
+                           } else {
+                               this.playingSong = song;
+                           }
+                       });
         }
 
         public IResultList<IAlbum> SearchAlbum(string query)
         {
-            throw new NotImplementedException();
+            // TODO: Realify
+            var result = new List<IAlbum>();
+            result.Add(new SpotifyAlbum("spotify:album:0zdZSyxWaYmaRMPeUHcG1K"));
+            result.Add(new SpotifyAlbum("spotify:album:7Mh7Q5DQIE9evMeGrKHjg8"));
+            result.Add(new SpotifyAlbum("spotify:album:7uMMbwF64xfNT8VpAkbJAE"));
+            return new SpotifySimpleResultList<IAlbum>(result);
         }
 
         public IResultList<IArtist> SearchArtist(string query)
         {
-            throw new NotImplementedException();
+            // TODO: Realify
+            var artists = new List<IArtist>();
+            artists.Add(new SpotifyArtist("spotify:artist:5ksRONqssB7BR161NTtJAm"));
+            artists.Add(new SpotifyArtist("spotify:artist:0p4nmQO2msCgU4IF37Wi3j"));
+            artists.Add(new SpotifyArtist("spotify:artist:5rSXSAkZ67PYJSvpUpkOr7"));
+            return new SpotifySimpleResultList<IArtist>(artists);
         }
 
         public IResultList<IPlaylist> SearchPlaylists(string query)
         {
-            throw new NotImplementedException();
+            // TODO: Realify
+            var result = new List<IPlaylist>();
+            result.Add(new SpotifyPlaylist("spotify:user:drdanielfc:playlist:2kEtVOI82nPRSCXNO4xAd2"));
+            result.Add(new SpotifyPlaylist("spotify:user:drdanielfc:playlist:4dfYJCt7vfTjBM3qdyHNUb"));
+            result.Add(new SpotifyPlaylist("spotify:user:spotify:playlist:0UHbhCjKlXnFfv98bKrtKv"));
+            return new SpotifySimpleResultList<IPlaylist>(result);
         }
 
         public IResultList<ISong> SearchSong(string query)
         {
-            throw new NotImplementedException();
+            // TODO: Realify
+            var result = new List<ISong>();
+            result.Add(new SpotifySong("spotify:track:2Ml0l8YWJLQhPrRDLpQaDM"));
+            result.Add(new SpotifySong("spotify:track:1BwaPm2VjiOenzjW1TOZuW"));
+            result.Add(new SpotifySong("spotify:track:5USZyz6dnBEn1oLsKcAKQy"));
+            result.Add(new SpotifySong("spotify:track:0mBL2JwjNYKtdFacHxvtJt"));
+            result.Add(new SpotifySong("spotify:track:4EveU9Zb50mjgi5avDNqlK"));
+            return new SpotifySimpleResultList<ISong>(result);
         }
 
         public void SuggestBuffer(List<ISong> songs)
         {
-            throw new NotImplementedException();
+            // No way to do this in the backend yet
+            // Just do nothing
+        }
+
+        public void Login()
+        {
+            SpotifySetup.Login();
+        }
+
+        public void Logout()
+        {
+            // TODO: Test
+            if (this.LoggedIn) {
+                this.sd.Player.Logout();
+            }
+        }
+
+        public void AddStatusListener(IMusicServiceListener listener)
+        {
+            listeners.Add(listener);
+        }
+
+        public void RemoveStatusListener(IMusicServiceListener listener)
+        {
+            listeners.Remove(listener);
         }
     }
 }

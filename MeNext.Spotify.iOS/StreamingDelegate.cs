@@ -9,7 +9,7 @@ namespace MeNext.Spotify.iOS
 {
     public class StreamingDelegate : SPTAudioStreamingDelegate
     {
-        private SPTAudioStreamingController player;
+        public SPTAudioStreamingController Player { get; set; }
 
         public StreamingDelegate()
         {
@@ -19,23 +19,23 @@ namespace MeNext.Spotify.iOS
                 Debug.WriteLine("Got notif");
                 var auth = SPTAuth.DefaultInstance;
 
-                if (this.player == null) {
+                if (this.Player == null) {
                     NSError error = null;
-                    this.player = SPTAudioStreamingController.SharedInstance();
+                    this.Player = SPTAudioStreamingController.SharedInstance();
 
-                    Debug.WriteLine("Is Player Good? " + (this.player != null));
+                    Debug.WriteLine("Is Player Good? " + (this.Player != null));
 
                     // TODO Caching needs to be enabled here?
                     //bool success = this.player.StartWithClientId(auth.ClientID, out error);
-                    bool success = this.player.StartWithClientId(auth.ClientID, null, true, out error);
+                    bool success = this.Player.StartWithClientId(auth.ClientID, null, true, out error);
                     if (success) {
-                        this.player.Delegate = this;
-                        this.player.PlaybackDelegate = new StreamingPlaybackDelegate();
+                        this.Player.Delegate = this;
+                        this.Player.PlaybackDelegate = new StreamingPlaybackDelegate();
                         // this.player.DiskCache = 1024 * 1024 * 64;  // TODO Caching
-                        this.player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
-                        this.player.LoginWithAccessToken(auth.Session.AccessToken);
+                        this.Player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
+                        this.Player.LoginWithAccessToken(auth.Session.AccessToken);
                     } else {
-                        this.player = null;
+                        this.Player = null;
                         // TODO
                         Debug.WriteLine("Error init " + error.Description);
                     }
@@ -45,15 +45,15 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidLogin(SPTAudioStreamingController audioStreaming)
         {
-            Debug.WriteLine("Is Player Good 2? " + (this.player != null));
+            Debug.WriteLine("Is Player Good 2? " + (this.Player != null));
 
-            this.player.PlaySpotifyURI("spotify:track:40pEs6TZQUjoyb7YLNCLbo", 0, 0, (NSError error1) =>
+            this.Player.PlaySpotifyURI("spotify:track:40pEs6TZQUjoyb7YLNCLbo", 0, 0, (NSError error1) =>
                        {
                            if (error1 != null) {
                                Debug.WriteLine("Err Playing: " + error1.DebugDescription);
                            }
                        });
-            this.player.SetVolume(1, (arg0) => { });
+            this.Player.SetVolume(1, (arg0) => { });
             AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
             AVAudioSession.SharedInstance().SetActive(true);
         }
@@ -67,6 +67,5 @@ namespace MeNext.Spotify.iOS
         {
             Debug.WriteLine("Message: " + message);
         }
-
     }
 }

@@ -36,6 +36,9 @@ namespace MeNext.iOS
 
             this.sms = new SpotifyMusicService();
 
+            // TODO: A button to relogin (in case the spotify user logged in as someone else)
+            //this.sms.Login();
+
             return base.FinishedLaunching(app, options);
         }
 

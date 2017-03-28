@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MeNext.MusicService;
 
@@ -110,7 +110,7 @@ namespace MeNext.SampleMusicService
 			}
 		}
 
-		public void AddPlayStatusListener(ISongPlayListener listener)
+		public void AddStatusListener(IMusicServiceListener listener)
 		{
 		}
 
@@ -140,7 +140,7 @@ namespace MeNext.SampleMusicService
 			this.position = position;
 		}
 
-		public void RemovePlayStatusListener(ISongPlayListener listener)
+		public void RemovePlayusListener(IMusicServiceListener listener)
 		{
 		}
 
