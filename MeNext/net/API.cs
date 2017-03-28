@@ -47,7 +47,7 @@ namespace MeNext
         /// Try to create the party. 
         /// </summary>
         /// <returns> The party.</returns>
-        public async Task<string> CreateParty(string id, string name) 
+        public async Task<string> CreateParty(string id, string name)
         {
             var uri = new Uri(string.Format("/createParty/{0}/{1}", id, name));
             return await FireRequest(uri);
@@ -70,9 +70,9 @@ namespace MeNext
         /// <param name="uid">User id.</param>
         /// <param name="eid">Event id.</param>
         /// <param name="sid">song identifier.</param>
-        public async Task<string> SuggestAddSong(string uid, string eid, IUniqueId sid)
+        public async Task<string> SuggestAddSong(string uid, string eid, string sid)
         {
-            var uri = new Uri(string.Format("/suggestAdd/{0}/{1}/{2}", uid, eid, sid.Uid));
+            var uri = new Uri(string.Format("/suggestAdd/{0}/{1}/{2}", uid, eid, sid));
             return await FireRequest(uri);
         }
 
@@ -84,12 +84,12 @@ namespace MeNext
         private async Task<string> FireRequest(Uri uri)
         {
             var result = "";
-                
-                var response = await Client.GetAsync(uri);
-                if (response.IsSuccessStatusCode) {
-                    result = await response.Content.ReadAsStringAsync();
-                }
-       
+
+            var response = await Client.GetAsync(uri);
+            if (response.IsSuccessStatusCode) {
+                result = await response.Content.ReadAsStringAsync();
+            }
+
 
             return result;
         }

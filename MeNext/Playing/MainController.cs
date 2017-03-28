@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -22,9 +22,9 @@ namespace MeNext
     /// <summary>
     /// The main controller the UI interfaces with to communicate with the backend and music player
     /// </summary>
-    public class MainController : ISongPlayListener
+    public class MainController : IMusicServiceListener
     {
-        private IMusicService musicService;
+        public IMusicService musicService;   // // TODO Make this private. It is only public for kludgy testing.
         private PlayController playController;
         private API api;
 
@@ -82,7 +82,7 @@ namespace MeNext
 
             SubscribePollingStatus();
 
-            this.musicService.AddPlayStatusListener(this);
+            this.musicService.AddStatusListener(this);
             this.playController = new PlayController(this.musicService);
 
             this.api = new API("http://menext.danielcentore.com:8080");

@@ -1,6 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using MeNext.Layout;
+using MeNext.MusicService;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace MeNext

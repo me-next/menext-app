@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -8,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Xamarin.Forms;
+using MeNext.MusicService;
 
 namespace MeNext.Droid
 {
@@ -26,7 +26,7 @@ namespace MeNext.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
-            LoadApplication(new App());
+            LoadApplication(new App(null));
         }
 
         /// <summary>

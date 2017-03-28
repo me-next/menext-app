@@ -42,5 +42,21 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>menext-spotify</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.danielcentore.menext.spotify-auth</string>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>spotify</string>
+		<string>spotify-action</string>
+	</array>
 </dict>
 </plist>

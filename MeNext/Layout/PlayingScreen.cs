@@ -8,6 +8,8 @@ namespace MeNext
     {
         public PlayingScreen()
         {
+            this.Title = "Now Playing";
+            NavigationPage.SetHasNavigationBar(this, false);
             var layout = new StackLayout
             {
                 Children = {
@@ -18,7 +20,6 @@ namespace MeNext
             layout.Children.Add(new Button { Text = "Play" });//, Command = hostCommand });
             layout.Children.Add(new Button { Text = ">>" });//, Command = hostCommand });
             Content = layout;
-
         }
     }
 }
