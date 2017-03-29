@@ -16,19 +16,21 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidStopPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
-            //Debug.WriteLine("Track ended: " + trackUri);
+            Debug.WriteLine("Track ended: " + trackUri);
             service.SomethingChanged();
             service.SongEnds(trackUri);
         }
 
         public override void AudioStreamingDidChangePosition(SPTAudioStreamingController audioStreaming, double position)
         {
-            //Debug.WriteLine("Position: " + position);
+            Debug.WriteLine("Position: " + position);
             service.SomethingChanged();
         }
 
         public override void AudioStreamingDidChangePlaybackStatus(SPTAudioStreamingController audioStreaming, bool isPlaying)
         {
+            Debug.WriteLine("playback changed: " + isPlaying);
+
             service.SomethingChanged();
 
             if (isPlaying) {

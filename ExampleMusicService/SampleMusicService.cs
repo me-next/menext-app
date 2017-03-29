@@ -183,5 +183,25 @@ namespace MeNext.SampleMusicService
         public void Logout()
         {
         }
+
+        public IList<ISong> GetSongs(IList<string> uids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<IArtist> GetArtists(IList<string> uids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<IAlbum> GetAlbums(IList<string> uids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<IPlaylist> GetPlaylists(IList<string> uids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -79,11 +79,14 @@ namespace MeNext
         public MainController(IMusicService musicService)
         {
             this.musicService = musicService;
+            this.PullObservers = new List<IPullUpdateObserver>();
 
             SubscribePollingStatus();
 
             this.musicService.AddStatusListener(this);
             this.playController = new PlayController(this.musicService);
+            RegisterObserver(playController);
+
 
             this.api = new API("http://menext.danielcentore.com:8080");
             this.UserKey = "potato";
@@ -91,7 +94,7 @@ namespace MeNext
 
             this.changeID = 0;
 
-            this.PullObservers = new List<IPullUpdateObserver>();
+
         }
 
         /// <summary>

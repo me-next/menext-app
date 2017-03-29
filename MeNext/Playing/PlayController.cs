@@ -2,12 +2,14 @@
 using MeNext.MusicService;
 using SpotifyAPI.Web;
 
+using System.Diagnostics;
+
 namespace MeNext
 {
     /// <summary>
     /// This class handles actually playing music. It should only be used by the host.
     /// </summary>
-    public class PlayController
+    public class PlayController : IPullUpdateObserver
     {
         public StatusMessage PreviousMessage { get; set; }
         public StatusMessage CurrentMessage { get; set; }
@@ -17,6 +19,8 @@ namespace MeNext
         public PlayController(IMusicService musicService)
         {
             this.musicService = musicService;
+            this.currentPullData = new PlayingResponse();
+            this.previousPullData = new PlayingResponse();
         }
 
         /// <summary>
@@ -47,6 +51,35 @@ namespace MeNext
             musicService.Playing = CurrentMessage.Playing;
 
             // TODO: Update volume
+        }
+
+        private PlayingResponse previousPullData;
+        private PlayingResponse currentPullData;
+        public void onNewPullData(PullResponse data)
+        {
+            // TODO: implement properly
+
+
+            if (data == null) {
+                return;
+            }
+
+            var playingInfo = data.Playing;
+
+            // update old messages
+            previousPullData = currentPullData;
+            currentPullData = playingInfo;
+
+            // check for relevant change
+            if (currentPullData.CurrentSongID == previousPullData.CurrentSongID) {
+                return;
+            }
+
+            // lookup song
+            var song = musicService.GetSong(currentPullData.CurrentSongID);
+            musicService.PlaySong(song);
+
+            Debug.WriteLine("tried to play: " + song.UniqueId);
         }
     }
 }

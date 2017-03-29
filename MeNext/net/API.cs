@@ -78,6 +78,12 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        public async Task<string> SongFinished(string uid, string eid, string sid)
+        {
+            var uri = new Uri(string.Format("/songFinished/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
         /// <summary>
         /// Sends a request URI to the server. 
         /// </summary>

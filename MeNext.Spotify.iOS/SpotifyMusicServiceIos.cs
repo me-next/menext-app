@@ -237,6 +237,8 @@ namespace MeNext.Spotify.iOS
                            }
                        });
             }
+
+            Debug.WriteLine("tried to play song: " + song.Name);
         }
 
         public IResultList<IAlbum> SearchAlbum(string query)
