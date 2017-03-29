@@ -1,5 +1,6 @@
 ﻿using System;
 using MeNext.MusicService;
+using SpotifyAPI.Web;
 
 namespace MeNext
 {

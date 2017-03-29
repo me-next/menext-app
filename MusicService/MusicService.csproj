@@ -38,6 +38,7 @@
     <Compile Include="ISong.cs" />
     <Compile Include="IMusicServiceListener.cs" />
     <Compile Include="PageErrorType.cs" />
+    <Compile Include="IMetadata.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

@@ -6,7 +6,7 @@ namespace MeNext.MusicService
     /// <summary>
     /// Represents a music album.
     /// </summary>
-    public interface IAlbum
+    public interface IAlbum : IMetadata
     {
         /// <summary>
         /// Gets the name of the album.

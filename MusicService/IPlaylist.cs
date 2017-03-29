@@ -6,7 +6,7 @@ namespace MeNext.MusicService
     /// <summary>
     /// Represents a playlist
     /// </summary>
-    public interface IPlaylist
+    public interface IPlaylist : IMetadata
     {
         /// <summary>
         /// Gets the name of the playlist.
