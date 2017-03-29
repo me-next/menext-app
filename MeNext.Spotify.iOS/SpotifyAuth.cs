@@ -8,8 +8,11 @@ namespace MeNext.Spotify.iOS
 {
     public class SpotifyAuth : NSObject
     {
-        public SpotifyAuth()
+        private SpotifyMusicServiceIos service;
+
+        public SpotifyAuth(SpotifyMusicServiceIos service)
         {
+            this.service = service;
         }
 
         public static void Login()
@@ -34,7 +37,7 @@ namespace MeNext.Spotify.iOS
 
         public StreamingDelegate CreateStreamingDelegate()
         {
-            var sd = new StreamingDelegate();
+            var sd = new StreamingDelegate(this.service);
 
             SPTAuth auth = SPTAuth.DefaultInstance;
 

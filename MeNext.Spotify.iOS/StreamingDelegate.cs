@@ -11,7 +11,7 @@ namespace MeNext.Spotify.iOS
     {
         public SPTAudioStreamingController Player { get; set; }
 
-        public StreamingDelegate()
+        public StreamingDelegate(SpotifyMusicServiceIos service)
         {
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
             {
@@ -21,13 +21,10 @@ namespace MeNext.Spotify.iOS
                     NSError error = null;
                     this.Player = SPTAudioStreamingController.SharedInstance();
 
-                    // TODO Caching needs to be enabled here?
-                    //bool success = this.player.StartWithClientId(auth.ClientID, out error);
                     bool success = this.Player.StartWithClientId(auth.ClientID, null, true, out error);
                     if (success) {
                         this.Player.Delegate = this;
-                        this.Player.PlaybackDelegate = new StreamingPlaybackDelegate();
-                        // this.player.DiskCache = 1024 * 1024 * 64;  // TODO Caching
+                        this.Player.PlaybackDelegate = new StreamingPlaybackDelegate(service);
                         this.Player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
                         this.Player.LoginWithAccessToken(auth.Session.AccessToken);
                     } else {

@@ -37,20 +37,28 @@ namespace MeNext
             var playSomethingElse = new Command(() =>
             {
                 var songs = new List<string>();
-                songs.Add("spotify:track:0imYRG0WKxUOOcqBu3VX10");
-                songs.Add("spotify:track:54b8qPFqYqIndfdxiLApea");
-                songs.Add("spotify:track:57hJxdJGm8kZMU0xPGNBAA");
-                songs.Add("spotify:track:5VSAonaAPhhGn0G7hMYwWK");
-                songs.Add("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
-                songs.Add("spotify:track:3AI7ca5RpYLyqaVgU7K1AP");
-                songs.Add("spotify:track:22M5LjnTiBLsMoz5OLCOEB");
-                songs.Add("spotify:track:6t1FIJlZWTQfIZhsGjaulM");
-                songs.Add("spotify:track:1DndHckdH9m5rp6gYP086b");
-                songs.Add("spotify:track:2EKI5LB3e3zuK1BStWvOt6");
-                songs.Add("spotify:track:7CPJQ5HQIN2ziarFhRqLrz");
-                songs.Add("spotify:track:3gOsZGaMej7EMVy6VBjxHM");
-                songs.Add("spotify:track:1D1nixOVWOxvNfWi0UD7VX");
-                songs.Add("spotify:track:1v2zyAJrChw5JnfafSkwkJ");
+                // Long Songs
+                //songs.Add("spotify:track:0imYRG0WKxUOOcqBu3VX10");
+                //songs.Add("spotify:track:54b8qPFqYqIndfdxiLApea");
+                //songs.Add("spotify:track:57hJxdJGm8kZMU0xPGNBAA");
+                //songs.Add("spotify:track:5VSAonaAPhhGn0G7hMYwWK");
+                //songs.Add("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
+                //songs.Add("spotify:track:3AI7ca5RpYLyqaVgU7K1AP");
+                //songs.Add("spotify:track:22M5LjnTiBLsMoz5OLCOEB");
+                //songs.Add("spotify:track:6t1FIJlZWTQfIZhsGjaulM");
+                //songs.Add("spotify:track:1DndHckdH9m5rp6gYP086b");
+                //songs.Add("spotify:track:2EKI5LB3e3zuK1BStWvOt6");
+                //songs.Add("spotify:track:7CPJQ5HQIN2ziarFhRqLrz");
+                //songs.Add("spotify:track:3gOsZGaMej7EMVy6VBjxHM");
+                //songs.Add("spotify:track:1D1nixOVWOxvNfWi0UD7VX");
+                //songs.Add("spotify:track:1v2zyAJrChw5JnfafSkwkJ");
+
+
+                // Short songs
+                songs.Add("spotify:track:5cImdQZJ1jppfGCFa3P1Xm");
+                songs.Add("spotify:track:2Fw9d40vTv6jqgYubo0UGC");
+                songs.Add("spotify:track:6tusfajR8czPAqYGjxCPqA");
+                songs.Add("spotify:track:18hivPvBBimfyWTP5D5OJu");
 
                 int r = rnd.Next(songs.Count);
 

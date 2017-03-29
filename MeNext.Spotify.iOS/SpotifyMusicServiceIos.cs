@@ -23,7 +23,7 @@ namespace MeNext.Spotify.iOS
 
         public SpotifyMusicServiceIos()
         {
-            sd = new SpotifyAuth().CreateStreamingDelegate();
+            sd = new SpotifyAuth(this).CreateStreamingDelegate();
             this.setupWebApi();
         }
 
@@ -268,6 +268,21 @@ namespace MeNext.Spotify.iOS
         public void RemoveStatusListener(IMusicServiceListener listener)
         {
             listeners.Remove(listener);
+        }
+
+        internal void SongEnds(string uri)
+        {
+            var x = this.GetSong(uri);
+            foreach (var l in listeners) {
+                l.SongEnds(this.GetSong(uri));
+            }
+        }
+
+        internal void SomethingChanged()
+        {
+            foreach (var l in listeners) {
+                l.SomethingChanged();
+            }
         }
     }
 }
