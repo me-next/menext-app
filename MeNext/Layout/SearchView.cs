@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
+using MeNext.MusicService;
+using MeNext.SampleMusicService;
 
 
 namespace MeNext
@@ -11,21 +13,25 @@ namespace MeNext
         private SearchBar searchBar;
         private Label resultsLabel;
         private SongListModel model;
+        private bool liveSearch;
 
         public SearchView()
         {
             // TODO: clean up this testing code
             NavigationPage.SetHasNavigationBar(this, false);
-            Song selectedSong = null;
+            ISong selectedSong = null;
+            liveSearch = false;
 
             resultsLabel = new Label
             {
                 Text = ""
             };
 
+            //TODO: hide playNextButton if user doesn't have permission to add to PN queue
             Button playNextButton = new Button 
             { 
                 Text = "Add to PlayNext", 
+                BackgroundColor = Color.Orange,
                 HorizontalOptions = LayoutOptions.StartAndExpand 
             };
             playNextButton.Clicked += (sender, e) =>
@@ -40,6 +46,7 @@ namespace MeNext
             Button suggestionButton = new Button 
             { 
                 Text = "Add to Suggestions", 
+                BackgroundColor = Color.Blue,
                 HorizontalOptions = LayoutOptions.EndAndExpand 
             };
             suggestionButton.Clicked += (sender, e) =>
@@ -55,14 +62,13 @@ namespace MeNext
             {
                 Padding = 3,
                 Orientation = StackOrientation.Horizontal,
-                //VerticalOptions = LayoutOptions.FillAndExpand,
                 Children = {
                     playNextButton,
                     suggestionButton
                 }
             };
 
-            model = new SongListModel(new List<Song>());
+            model = new SongListModel(new List<ISong>());
             SongListView songList = new SongListView(model, new BasicSongCellFactory());
             songList.OnSongSelected += (song) =>
             {
@@ -73,9 +79,26 @@ namespace MeNext
             searchBar = new SearchBar
             {
                 Placeholder = "Enter search term",
-                SearchCommand = new Command(() => TextChanged(searchBar.Text))
+                SearchCommand = new Command(() => SearchForSong(searchBar.Text))
             };
             searchBar.TextChanged += (sender, e) => TextChanged(searchBar.Text);
+
+            //button for testing, can be removed/repurposed later
+            Button toggleLive = new Button
+            {
+                Text = "Toggle Live Searching",
+                BackgroundColor = Color.Red,
+                HorizontalOptions = LayoutOptions.Center
+            };
+            toggleLive.Clicked += (sender, e) =>
+            {
+                liveSearch = !liveSearch;
+                if (liveSearch) {
+                    toggleLive.BackgroundColor = Color.Green;
+                } else {
+                    toggleLive.BackgroundColor = Color.Red;
+                }
+            };
 
             Content = new StackLayout
             {
@@ -83,6 +106,7 @@ namespace MeNext
                 Children = {
                     queueButtons,
                     searchBar,
+                    toggleLive,
                     resultsLabel,
                     songList,
                 }
@@ -90,47 +114,38 @@ namespace MeNext
         }
 
         /// <summary>
-        /// The function to handle when the text in the search bar changes
+        /// The function to handle when search command (generally via keyboard search button) is sent to the search bar
         /// Takes in the text value from the search bar, searches with the music service, and updates the SongViewModel
         /// </summary>
-        public void TextChanged(string text)
+        public void SearchForSong(string text)
         {
             //TODO: get songs from music service
 
             resultsLabel.Text = "";
 
-            List<Song> songs = new List<Song>();
+            List<ISong> noSongs = new List<ISong>();
 
-            List<Song> songs1 = new List<Song>
-            {
-                new Song("A"),
-                new Song("B"),
-                new Song("C"),
-            };
+            IMusicService service = new SampleMusicService.SampleMusicService();
+            IResultList<ISong> results = service.SearchSong(text);
 
-            List<Song> songs2 = new List<Song>
-            {
-                new Song("1"),
-                new Song("2"),
-                new Song("3"),
-            };
-
-            List<Song> searchResults = new List<Song>();
-            if (text == "") {
-                resultsLabel.Text = "";
-                searchResults = songs;
-            } else if (text == "letters") {
-                searchResults = songs1;
-            } else if (text == "numbers") {
-                searchResults = songs2;
-            } else {
-                //TODO: edit/remove once there are actual results from the music service
+            if (results == null || results.Items == null || results.Items.Count == 0) {
                 resultsLabel.Text = "No Results.";
-                searchResults = songs;
+                model.SetAll(noSongs);
+            } else {
+                model.SetAll(results.Items);
             }
 
-            model.Clear();
-            model.AddMultiple(searchResults);
+        }
+
+        /// <summary>
+        /// The function to handle when the text in the search bar changes. 
+        /// If live searching is enabled, calls the SearchForSong function.
+        /// </summary>
+        private void TextChanged(string text)
+        {
+            if (liveSearch) {
+                SearchForSong(text);
+            }
         }
 
     }

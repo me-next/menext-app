@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
+using MeNext.MusicService;
 
 
 namespace MeNext
@@ -16,10 +17,10 @@ namespace MeNext
             this.Title = "Queue Placeholder";
             this.mainController = mainController;
 
-            List<Song> songs = new List<Song>
+            List<ISong> songs = new List<ISong>
             {
-                new Song("A"),
-                new Song("B"),
+                new SampleMusicService.SampleSong("A"),
+                new SampleMusicService.SampleSong("B"),
             };
 
             NavigationPage.SetHasNavigationBar(this, false);
@@ -38,7 +39,7 @@ namespace MeNext
             var addButton = new Button { Text = "addSong" };
             addButton.Clicked += (sender, e) =>
             {
-                var song = new Song("song" + songCounter);
+                var song = new SampleMusicService.SampleSong("song" + songCounter);
                 model.Add(song);
                 songCounter++;
 
@@ -62,7 +63,7 @@ namespace MeNext
     /// </summary>
     public class SuggestionQueueModel : SongListModel
     {
-        public SuggestionQueueModel(List<Song> songs) : base(songs)
+        public SuggestionQueueModel(List<ISong> songs) : base(songs)
         {
         }
 
@@ -74,10 +75,10 @@ namespace MeNext
         {
             // TODO: use ISongs, will need spotify lookup to get more detailed song info. 
             var queue = data.SuggestQueue;
-            var songs = new List<Song>();
+            var songs = new List<ISong>();
 
             foreach(var elem in queue.Songs) {
-                songs.Add(new Song(elem.ID));
+                songs.Add(new SampleMusicService.SampleSong(elem.ID));
             }
 
             SetAll(songs);
