@@ -14,9 +14,12 @@ namespace MeNext
         private Label resultsLabel;
         private SongListModel model;
         private bool liveSearch;
+        private MainController controller;
 
-        public SearchView()
+        public SearchView(MainController controller)
         {
+            this.controller = controller;
+
             // TODO: clean up this testing code
             NavigationPage.SetHasNavigationBar(this, false);
             ISong selectedSong = null;
@@ -28,31 +31,31 @@ namespace MeNext
             };
 
             //TODO: hide playNextButton if user doesn't have permission to add to PN queue
-            Button playNextButton = new Button 
-            { 
-                Text = "Add to PlayNext", 
+            Button playNextButton = new Button
+            {
+                Text = "Add to PlayNext",
                 BackgroundColor = Color.Orange,
-                HorizontalOptions = LayoutOptions.StartAndExpand 
+                HorizontalOptions = LayoutOptions.StartAndExpand
             };
             playNextButton.Clicked += (sender, e) =>
             {
-                if (selectedSong == null) { 
-                    return; 
+                if (selectedSong == null) {
+                    return;
                 }
                 //TODO: add song to actual playnext queue
                 Debug.WriteLine("adding song to play next: " + selectedSong.Name);
             };
 
-            Button suggestionButton = new Button 
-            { 
-                Text = "Add to Suggestions", 
+            Button suggestionButton = new Button
+            {
+                Text = "Add to Suggestions",
                 BackgroundColor = Color.Blue,
-                HorizontalOptions = LayoutOptions.EndAndExpand 
+                HorizontalOptions = LayoutOptions.EndAndExpand
             };
             suggestionButton.Clicked += (sender, e) =>
             {
-                if (selectedSong == null) { 
-                    return; 
+                if (selectedSong == null) {
+                    return;
                 }
                 //TODO: add song to actual suggestion queue
                 Debug.WriteLine("adding song to suggestions: " + selectedSong.Name);
@@ -125,8 +128,8 @@ namespace MeNext
 
             List<ISong> noSongs = new List<ISong>();
 
-            IMusicService service = new SampleMusicService.SampleMusicService();
-            IResultList<ISong> results = service.SearchSong(text);
+            //IMusicService service = new SampleMusicService.SampleMusicService();
+            IResultList<ISong> results = controller.musicService.SearchSong(text);
 
             if (results == null || results.Items == null || results.Items.Count == 0) {
                 resultsLabel.Text = "No Results.";
