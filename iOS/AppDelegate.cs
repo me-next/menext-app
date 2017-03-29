@@ -48,7 +48,7 @@ namespace MeNext.iOS
                 return false;
             }
             // TODO: Untie this from Spotify and make it platform neutral?
-            return new SpotifyAuth().OpenUrl(application, url, sourceApplication, annotation);
+            return new SpotifyAuth(musicService).OpenUrl(application, url, sourceApplication, annotation);
         }
 
         /// <summary>

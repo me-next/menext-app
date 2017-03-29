@@ -101,15 +101,15 @@ namespace MeNext
         /// <param name="slug">The event name.</param>
         public JoinEventResult RequestJoinEvent(string slug)
         {
-           var task = Task.Run(async () =>
-            {
-                return await api.JoinParty(this.UserKey, this.UserName);
-            });
+            var task = Task.Run(async () =>
+             {
+                 return await api.JoinParty(this.UserKey, this.UserName);
+             });
 
             var json = task.Result;
             Debug.WriteLine("json: " + json);
 
-            if(task.IsFaulted) {
+            if (task.IsFaulted) {
                 Debug.WriteLine("oh nose! error:" + task.Exception.ToString());
                 return JoinEventResult.FAIL_GENERIC;
             }
@@ -479,6 +479,7 @@ namespace MeNext
         /// </summary>
         public void SongEnds(ISong song)
         {
+            Debug.WriteLine("== SONG ENDED ==");
             // Tell the server we want to play the next song.
             // As host, we will have permission to do this.
             this.RequestSkip();
@@ -489,6 +490,7 @@ namespace MeNext
         /// </summary>
         public void SomethingChanged()
         {
+            Debug.WriteLine("Time: {0}", this.musicService.PlayingPosition);
             Device.BeginInvokeOnMainThread(() =>
             {
                 // TODO: Update the UI
