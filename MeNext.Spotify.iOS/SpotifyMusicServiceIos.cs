@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Foundation;
@@ -11,19 +11,35 @@ using UIKit;
 namespace MeNext.Spotify.iOS
 {
     // TODO Document
-    // Based heavily on https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
-    // and https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
-    public class SpotifyMusicService : IMusicService
+    // Based mostly on https://github.com/spotify/ios-sdk/tree/2db9f565b45e683b4bb62c1ee1bdc34660f07c8f/Demo%20Projects/Simple%20Track%20Playback/Simple%20Track%20Playback
+    // With a special mention of https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
+    public class SpotifyMusicServiceIos : IMusicService
     {
         private readonly List<IMusicServiceListener> listeners = new List<IMusicServiceListener>();
 
         private StreamingDelegate sd;
-
         private ISong playingSong;
+        private WebApi webApi;
 
-        public SpotifyMusicService()
+        public SpotifyMusicServiceIos()
         {
-            sd = new SpotifySetup().CreateStreamingDelegate();
+            sd = new SpotifyAuth().CreateStreamingDelegate();
+            this.setupWebApi();
+        }
+
+        private void setupWebApi()
+        {
+            // Default web api without any special access
+            this.webApi = new WebApi();
+
+            // If we update our session, we need to create a new web api to use
+            NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
+              {
+                  var auth = SPTAuth.DefaultInstance;
+                  this.webApi.updateAccessToken(auth.Session.AccessToken, auth.Session.TokenType);
+              });
+
+            // TODO: Handle situation where session is invalidated
         }
 
         /// <summary>
@@ -163,24 +179,27 @@ namespace MeNext.Spotify.iOS
                 return (this.sd.Player != null && this.sd.Player.LoggedIn);
             }
         }
+
+        // TODO: Expose GetAlbumS, ...
+
         public IAlbum GetAlbum(string uid)
         {
-            return new SpotifyAlbum(uid);
+            return webApi.metadata.GetAlbum(uid);
         }
 
         public IArtist GetArtist(string uid)
         {
-            return new SpotifyArtist(uid);
+            return webApi.metadata.GetArtist(uid);
         }
 
         public IPlaylist GetPlaylist(string uid)
         {
-            return new SpotifyPlaylist(uid);
+            return webApi.metadata.GetPlaylist(uid);
         }
 
         public ISong GetSong(string uid)
         {
-            return new SpotifySong(uid);
+            return webApi.metadata.GetSong(uid);
         }
 
         public void PlaySong(ISong song, double position = 0)
@@ -204,44 +223,22 @@ namespace MeNext.Spotify.iOS
 
         public IResultList<IAlbum> SearchAlbum(string query)
         {
-            // TODO: Realify
-            var result = new List<IAlbum>();
-            result.Add(new SpotifyAlbum("spotify:album:0zdZSyxWaYmaRMPeUHcG1K"));
-            result.Add(new SpotifyAlbum("spotify:album:7Mh7Q5DQIE9evMeGrKHjg8"));
-            result.Add(new SpotifyAlbum("spotify:album:7uMMbwF64xfNT8VpAkbJAE"));
-            return new SpotifySimpleResultList<IAlbum>(result);
+            return webApi.SearchAlbum(query);
         }
 
         public IResultList<IArtist> SearchArtist(string query)
         {
-            // TODO: Realify
-            var artists = new List<IArtist>();
-            artists.Add(new SpotifyArtist("spotify:artist:5ksRONqssB7BR161NTtJAm"));
-            artists.Add(new SpotifyArtist("spotify:artist:0p4nmQO2msCgU4IF37Wi3j"));
-            artists.Add(new SpotifyArtist("spotify:artist:5rSXSAkZ67PYJSvpUpkOr7"));
-            return new SpotifySimpleResultList<IArtist>(artists);
+            return webApi.SearchArtist(query);
         }
 
         public IResultList<IPlaylist> SearchPlaylists(string query)
         {
-            // TODO: Realify
-            var result = new List<IPlaylist>();
-            result.Add(new SpotifyPlaylist("spotify:user:drdanielfc:playlist:2kEtVOI82nPRSCXNO4xAd2"));
-            result.Add(new SpotifyPlaylist("spotify:user:drdanielfc:playlist:4dfYJCt7vfTjBM3qdyHNUb"));
-            result.Add(new SpotifyPlaylist("spotify:user:spotify:playlist:0UHbhCjKlXnFfv98bKrtKv"));
-            return new SpotifySimpleResultList<IPlaylist>(result);
+            return webApi.SearchPlaylists(query);
         }
 
         public IResultList<ISong> SearchSong(string query)
         {
-            // TODO: Realify
-            var result = new List<ISong>();
-            result.Add(new SpotifySong("spotify:track:2Ml0l8YWJLQhPrRDLpQaDM"));
-            result.Add(new SpotifySong("spotify:track:1BwaPm2VjiOenzjW1TOZuW"));
-            result.Add(new SpotifySong("spotify:track:5USZyz6dnBEn1oLsKcAKQy"));
-            result.Add(new SpotifySong("spotify:track:0mBL2JwjNYKtdFacHxvtJt"));
-            result.Add(new SpotifySong("spotify:track:4EveU9Zb50mjgi5avDNqlK"));
-            return new SpotifySimpleResultList<ISong>(result);
+            return webApi.SearchSong(query);
         }
 
         public void SuggestBuffer(List<ISong> songs)
@@ -252,7 +249,7 @@ namespace MeNext.Spotify.iOS
 
         public void Login()
         {
-            SpotifySetup.Login();
+            SpotifyAuth.Login();
         }
 
         public void Logout()

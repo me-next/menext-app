@@ -6,9 +6,9 @@ using UIKit;
 
 namespace MeNext.Spotify.iOS
 {
-    public class SpotifySetup : NSObject
+    public class SpotifyAuth : NSObject
     {
-        public SpotifySetup()
+        public SpotifyAuth()
         {
         }
 
@@ -42,8 +42,23 @@ namespace MeNext.Spotify.iOS
             // TODO Move out of the service
             auth.ClientID = "b79f545d6c24407aa6bed17af62275d6";
 
-            // SPTAuthStreamingScope = Audio playing
-            auth.RequestedScopes = new NSObject[] { SpotifyConstants.SPTAuthStreamingScope };
+            // Request permission to do stuff
+            // We should leave anything we don't use commented out
+            auth.RequestedScopes = new NSObject[] {
+                SpotifyConstants.SPTAuthStreamingScope,                   // Playing audio
+                SpotifyConstants.SPTAuthPlaylistReadPrivateScope,
+                SpotifyConstants.SPTAuthPlaylistReadCollaborativeScope,
+                //SpotifyConstants.SPTAuthPlaylistModifyPublicScope,
+                //SpotifyConstants.SPTAuthPlaylistModifyPrivateScope,
+                //SpotifyConstants.SPTAuthUserFollowModifyScope,
+                //SpotifyConstants.SPTAuthUserFollowReadScope,
+                SpotifyConstants.SPTAuthUserLibraryReadScope,
+                //SpotifyConstants.SPTAuthUserLibraryModifyScope,
+                SpotifyConstants.SPTAuthUserReadPrivateScope,             // Gives access to user's country
+                //SpotifyConstants.SPTAuthUserReadTopScope,
+                //SpotifyConstants.SPTAuthUserReadBirthDateScope,
+                //SpotifyConstants.SPTAuthUserReadEmailScope
+            };
 
             // Callback
             // TODO: Move out of the service

@@ -14,7 +14,7 @@ namespace MeNext.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        private SpotifyMusicService musicService;
+        private SpotifyMusicServiceIos musicService;
         private MainController mainController;
         private PollingTask pollingTask;
 
@@ -25,7 +25,7 @@ namespace MeNext.iOS
             // create common music service objects
             // these will go through the PollingTask to the Poller
             //musicService = new SampleMusicService.SampleMusicService();
-            musicService = new SpotifyMusicService();
+            musicService = new SpotifyMusicServiceIos();
             mainController = new MainController(this.musicService);
         }
 
@@ -48,7 +48,7 @@ namespace MeNext.iOS
                 return false;
             }
             // TODO: Untie this from Spotify and make it platform neutral?
-            return new SpotifySetup().OpenUrl(application, url, sourceApplication, annotation);
+            return new SpotifyAuth().OpenUrl(application, url, sourceApplication, annotation);
         }
 
         /// <summary>
