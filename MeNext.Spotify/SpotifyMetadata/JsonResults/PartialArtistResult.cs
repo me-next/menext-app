@@ -1,7 +1,7 @@
 ﻿using System;
 namespace MeNext.Spotify
 {
-    public class PartialArtistResult
+    public class PartialArtistResult : IMetadataResult
     {
         public object external_urls { get; set; }
         public string href { get; set; }

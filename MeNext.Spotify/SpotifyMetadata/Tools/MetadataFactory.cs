@@ -20,6 +20,7 @@ namespace MeNext.Spotify
         }
 
         // Assumption: All uids are in fact of type T
+        // TODO: Verify that
         private List<Q> GetMany<T, Q>(List<string> uids) where T : ISpotifyMetadata, Q
         {
             var result = new List<Q>();

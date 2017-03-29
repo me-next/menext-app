@@ -29,7 +29,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApi.cs" />
-    <Compile Include="SpotifyMetadata\Tools\ISpotifyMetadata.cs" />
     <Compile Include="SpotifyMetadata\Tools\MetadataFactory.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\TracksResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\TrackResult.cs" />
@@ -48,12 +47,18 @@
     <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifySong.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\ArtistsResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\ArtistResult.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\SearchResult.cs" />
+    <Compile Include="SpotifyMetadata\MusicServiceImpls\ISpotifyMetadata.cs" />
+    <Compile Include="SpotifyMetadata\Search.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\SearchChunkResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\IMetadataResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SpotifyMetadata\" />
     <Folder Include="SpotifyMetadata\Tools\" />
     <Folder Include="SpotifyMetadata\JsonResults\" />
     <Folder Include="SpotifyMetadata\MusicServiceImpls\" />
+    <Folder Include="SpotifyMetadata\SearchResults\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MusicService\MusicService.csproj">

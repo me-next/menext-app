@@ -6,7 +6,7 @@ namespace MeNext.MusicService
     /// <summary>
     /// Represents an artist.
     /// </summary>
-    public interface IArtist
+    public interface IArtist : IMetadata
     {
         /// <summary>
         /// Gets the artist name.

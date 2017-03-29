@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
-    public class TrackResult
+    public class TrackResult : IMetadataResult
     {
         public PartialAlbumResult album { get; set; }
         public IList<PartialArtistResult> artists { get; set; }

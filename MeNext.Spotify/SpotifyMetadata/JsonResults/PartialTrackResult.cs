@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
-    public class PartialTrackResult
+    public class PartialTrackResult : IMetadataResult
     {
         public IList<PartialArtistResult> artists { get; set; }
         public IList<string> available_markets { get; set; }

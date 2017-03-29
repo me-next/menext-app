@@ -6,7 +6,7 @@ namespace MeNext.MusicService
     /// <summary>
     /// Represents a song.
     /// </summary>
-    public interface ISong
+    public interface ISong : IMetadata
     {
         /// <summary>
         /// Gets the name of the song.

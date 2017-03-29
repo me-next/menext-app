@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MeNext.Spotify
 {
-    public class AlbumResult
+    public class AlbumResult : IMetadataResult
     {
         public string album_type { get; set; }
         public IList<PartialArtistResult> artists { get; set; }

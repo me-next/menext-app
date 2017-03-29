@@ -15,13 +15,14 @@ namespace MeNext.Spotify
     /// </summary>
     public class WebApi
     {
+        // Don't include trailing /
         private const string BASE_ADDRESS = "https://api.spotify.com/v1";
 
         private const int DEFAULT_RETRY_TIME = 10;
 
         private HttpClient http;
 
-        public MetadataFactory factory { get; set; }
+        public MetadataFactory metadata { get; set; }
 
         // Access tokens
         private string accessToken;
@@ -35,7 +36,7 @@ namespace MeNext.Spotify
         {
             http = new HttpClient();
             //http.BaseAddress = new Uri(BASE_ADDRESS);
-            factory = new MetadataFactory(this);
+            metadata = new MetadataFactory(this);
         }
 
         /// <summary>
@@ -63,24 +64,47 @@ namespace MeNext.Spotify
             return encoded;
         }
 
+        public IResultList<ISong> SearchSong(string rawQuery)
+        {
+            Debug.WriteLine("Searching for: {0}", rawQuery);
+            string encodedQuery = EncodeQuery(rawQuery);
+
+            string endUri = string.Format("/search?q={0}&type={1}", encodedQuery, "track");
+
+            return SearchUri<ISong, PartialTrackResult>(BASE_ADDRESS + endUri);
+        }
+
+        public IResultList<T> SearchUri<T, Q>(string uri) where T : IMetadata where Q : IMetadataResult
+        {
+            var task = Task.Run(async () =>
+            {
+                return await GetJsonFullUri(uri);
+            });
+
+            var json = task.Result;
+            var jsonResult = JsonConvert.DeserializeObject<SearchResult>(json);
+
+            var search = new Search<T, Q>(SearchChunkResult<PartialTrackResult>.CastTypeParam<Q>(jsonResult.tracks), this);
+
+            return search;
+        }
+
         public IResultList<IAlbum> SearchAlbum(string query)
         {
-            return null;
+            // TODO
+            throw new NotImplementedException();
         }
 
         public IResultList<IArtist> SearchArtist(string query)
         {
-            return null;
+            // TODO
+            throw new NotImplementedException();
         }
 
         public IResultList<IPlaylist> SearchPlaylists(string query)
         {
-            return null;
-        }
-
-        public IResultList<ISong> SearchSong(string query)
-        {
-            return null;
+            // TODO
+            throw new NotImplementedException();
         }
 
         // TODO: Test rate limiting
@@ -127,24 +151,30 @@ namespace MeNext.Spotify
         {
             Debug.Assert(uriEnd[0] == '/');
 
-            var uri = new Uri(BASE_ADDRESS + uriEnd);
+            return await GetJsonFullUri(BASE_ADDRESS + uriEnd);
+        }
+
+        public async Task<string> GetJsonFullUri(string fullUri)
+        {
+            Debug.WriteLine(fullUri);
+
+            var uri = new Uri(fullUri);
             HttpResponseMessage response;
             try {
                 response = await http.GetAsync(uri);
-                Debug.WriteLine(response.RequestMessage.RequestUri);
                 response.EnsureSuccessStatusCode();
 
             } catch (WebException we) {
+                // TODO: Fix rate limiting code so it works whether WebException thrown or not
+                // Or, better, find out if WebException is thrown for 429?
                 if (await ProcessWebException(we)) {
-                    return await GetJson(uriEnd);
+                    return await GetJsonFullUri(fullUri);
                 } else {
-                    Debug.WriteLine(uri.AbsolutePath);
                     Debug.WriteLine(we.Message);
                     Debug.WriteLine(we.StackTrace);
                     return null;
                 }
             } catch (Exception e) {
-                Debug.WriteLine(uri.AbsolutePath);
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.StackTrace);
                 return null;

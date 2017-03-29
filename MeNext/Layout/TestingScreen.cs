@@ -42,6 +42,15 @@ namespace MeNext
                 songs.Add("spotify:track:57hJxdJGm8kZMU0xPGNBAA");
                 songs.Add("spotify:track:5VSAonaAPhhGn0G7hMYwWK");
                 songs.Add("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
+                songs.Add("spotify:track:3AI7ca5RpYLyqaVgU7K1AP");
+                songs.Add("spotify:track:22M5LjnTiBLsMoz5OLCOEB");
+                songs.Add("spotify:track:6t1FIJlZWTQfIZhsGjaulM");
+                songs.Add("spotify:track:1DndHckdH9m5rp6gYP086b");
+                songs.Add("spotify:track:2EKI5LB3e3zuK1BStWvOt6");
+                songs.Add("spotify:track:7CPJQ5HQIN2ziarFhRqLrz");
+                songs.Add("spotify:track:3gOsZGaMej7EMVy6VBjxHM");
+                songs.Add("spotify:track:1D1nixOVWOxvNfWi0UD7VX");
+                songs.Add("spotify:track:1v2zyAJrChw5JnfafSkwkJ");
 
                 int r = rnd.Next(songs.Count);
 
@@ -55,8 +64,15 @@ namespace MeNext
 
             var testCommand = new Command(() =>
             {
-                var song = musicService.GetSong("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
-                Debug.WriteLine(song.Artists[0].Name);
+                //var song = musicService.GetSong("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
+                //Debug.WriteLine(song.Artists[0].Name);
+
+                Debug.WriteLine("Searching");
+                var results = musicService.SearchSong("abba");
+                foreach (var result in results.NextPage.Items) {
+                    Debug.WriteLine(result.Name);
+                }
+                Debug.WriteLine("Done");
             });
             layout.Children.Add(new Button
             {

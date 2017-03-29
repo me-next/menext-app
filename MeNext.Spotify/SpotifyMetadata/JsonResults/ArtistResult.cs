@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MeNext.Spotify
 {
-    public class ArtistResult
+    public class ArtistResult : IMetadataResult
     {
         public object external_urls { get; set; }
         public object followers { get; set; }
