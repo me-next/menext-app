@@ -44,10 +44,10 @@ namespace MeNext
                     await Task.Delay(MS_PER_POLL);
 
                     // TODO: Obtain a real status message
-                    var response = await api.SayHello();
+                    //var response = await api.SayHello();
 
                     mainController.Poll();
-
+                    /*
                     var message = new StatusMessage
                     {
                         TestingText = "Test: " + response,
@@ -59,6 +59,7 @@ namespace MeNext
                     {
                         MessagingCenter.Send<StatusMessage>(message, "StatusMessage");
                     });
+                    */
                 }
             }, token);
         }

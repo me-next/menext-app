@@ -266,12 +266,12 @@ namespace MeNext
             {
                 return await api.SuggestAddSong(this.UserKey, this.EventSlug, song.UniqueId);
             });
-            var json = task.Result;
-            Debug.WriteLine("json: " + json);
 
             if (task.IsFaulted) {
                 Debug.WriteLine("failed to add song!" + task.Exception.ToString());
             }
+
+            Debug.WriteLine("added " + song.UniqueId + " to suggestions");
         }
 
         /// <summary>

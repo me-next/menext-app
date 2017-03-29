@@ -36,10 +36,10 @@ namespace MeNext.Layout
             //playingScreen.Icon = "playingScreenIcon.png";  If we make this icon
             Children.Add(playingScreen);
 
-            var libraryScreen = new NavigationPage(new PlaceholderScreen());
-            libraryScreen.Title = "Library";
-            //libraryScreen.Icon = "libraryScreenIcon.png";  If we make this icon
-            Children.Add(libraryScreen);
+            //var libraryScreen = new NavigationPage(new PlaceholderScreen());
+            //libraryScreen.Title = "Library";
+            ////libraryScreen.Icon = "libraryScreenIcon.png";  If we make this icon
+            //Children.Add(libraryScreen);
 
             var searchScreen = new NavigationPage(new SearchView(mainController));
             searchScreen.Title = "Search";
