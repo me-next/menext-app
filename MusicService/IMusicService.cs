@@ -108,6 +108,14 @@ namespace MeNext.MusicService
         /// <param name="uid">Uid.</param>
         IPlaylist GetPlaylist(String uid);
 
+        IList<ISong> GetSongs(IList<String> uids);
+
+        IList<IArtist> GetArtists(IList<String> uids);
+
+        IList<IAlbum> GetAlbums(IList<String> uids);
+
+        IList<IPlaylist> GetPlaylists(IList<String> uids);
+
         /// <summary>
         /// Gets the user library songs.
         /// </summary>

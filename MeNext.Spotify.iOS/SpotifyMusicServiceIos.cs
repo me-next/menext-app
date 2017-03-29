@@ -180,8 +180,6 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        // TODO: Expose GetAlbumS, ...
-
         public IAlbum GetAlbum(string uid)
         {
             return webApi.metadata.GetAlbum(uid);
@@ -200,6 +198,26 @@ namespace MeNext.Spotify.iOS
         public ISong GetSong(string uid)
         {
             return webApi.metadata.GetSong(uid);
+        }
+
+        public IList<ISong> GetSongs(IList<string> uids)
+        {
+            return webApi.metadata.GetSongs(uids);
+        }
+
+        public IList<IArtist> GetArtists(IList<string> uids)
+        {
+            return webApi.metadata.GetArtists(uids);
+        }
+
+        public IList<IAlbum> GetAlbums(IList<string> uids)
+        {
+            return webApi.metadata.GetAlbums(uids);
+        }
+
+        public IList<IPlaylist> GetPlaylists(IList<string> uids)
+        {
+            return webApi.metadata.GetPlaylists(uids);
         }
 
         public void PlaySong(ISong song, double position = 0)
@@ -284,5 +302,7 @@ namespace MeNext.Spotify.iOS
                 l.SomethingChanged();
             }
         }
+
+
     }
 }

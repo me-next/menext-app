@@ -21,7 +21,7 @@ namespace MeNext.Spotify
 
         // Assumption: All uids are in fact of type T
         // TODO: Verify that
-        private List<Q> GetMany<T, Q>(List<string> uids) where T : ISpotifyMetadata, Q
+        private List<Q> GetMany<T, Q>(IList<string> uids) where T : ISpotifyMetadata, Q
         {
             var result = new List<Q>();
             var absent = new List<string>();
@@ -49,7 +49,7 @@ namespace MeNext.Spotify
         /// <returns>The metadata objects.</returns>
         /// <param name="uids">Uids.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        private List<ISpotifyMetadata> Obtain<T>(List<string> uids) where T : ISpotifyMetadata
+        private List<ISpotifyMetadata> Obtain<T>(IList<string> uids) where T : ISpotifyMetadata
         {
             // TODO: Add SpotifyPlaylist support, which does not have a "get multiple" endpoint
             // Then remove this assetion
@@ -118,22 +118,22 @@ namespace MeNext.Spotify
             return GetMany<T, Q>(list)[0];
         }
 
-        public List<ISong> GetSongs(List<string> uids)
+        public List<ISong> GetSongs(IList<string> uids)
         {
             return GetMany<SpotifySong, ISong>(uids);
         }
 
-        public List<IAlbum> GetAlbums(List<string> uids)
+        public List<IAlbum> GetAlbums(IList<string> uids)
         {
             return GetMany<SpotifyAlbum, IAlbum>(uids);
         }
 
-        public List<IArtist> GetArtists(List<string> uids)
+        public List<IArtist> GetArtists(IList<string> uids)
         {
             return GetMany<SpotifyArtist, IArtist>(uids);
         }
 
-        public List<IPlaylist> GetPlaylists(List<string> uids)
+        public List<IPlaylist> GetPlaylists(IList<string> uids)
         {
             return GetMany<SpotifyPlaylist, IPlaylist>(uids);
         }
