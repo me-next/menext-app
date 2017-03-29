@@ -84,6 +84,8 @@ namespace MeNext
             SubscribePollingStatus();
 
             this.musicService.AddStatusListener(this);
+
+            // set up the play controller
             this.playController = new PlayController(this.musicService);
             RegisterObserver(playController);
 
@@ -230,7 +232,18 @@ namespace MeNext
         /// </summary>
         public void RequestSkip()
         {
-            Debug.Assert(this.InEvent);
+            // TODO: songFinished with actual song
+            var task = Task.Run(async () =>
+             {
+                return await api.SongFinished(this.EventSlug, this.UserKey, "dummy");
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("oh nose! error requesting song:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("requested next song");
         }
 
         /// <summary>
@@ -267,7 +280,7 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
             {
-                return await api.SuggestAddSong(this.UserKey, this.EventSlug, song.UniqueId);
+                return await api.SuggestAddSong(this.EventSlug, this.UserKey, song.UniqueId);
             });
 
             if (task.IsFaulted) {
@@ -468,7 +481,7 @@ namespace MeNext
                 }
 
                 // Update UI
-                this.SomethingChanged();
+                //this.SomethingChanged();
             });
 
             MessagingCenter.Subscribe<CancelledMessage>(this, "CancelledMessage", message =>
@@ -485,6 +498,8 @@ namespace MeNext
             Debug.WriteLine("== SONG ENDED ==");
             // Tell the server we want to play the next song.
             // As host, we will have permission to do this.
+
+            // TODO: recover from missing a skip...
             this.RequestSkip();
         }
 

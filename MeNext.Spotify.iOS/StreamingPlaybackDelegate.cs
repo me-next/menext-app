@@ -11,6 +11,7 @@ namespace MeNext.Spotify.iOS
 
         public StreamingPlaybackDelegate(SpotifyMusicServiceIos service)
         {
+            Debug.WriteLine("stream delegate construct");
             this.service = service;
         }
 

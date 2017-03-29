@@ -27,6 +27,7 @@ namespace MeNext.Spotify.iOS
                         this.Player.PlaybackDelegate = new StreamingPlaybackDelegate(service);
                         this.Player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
                         this.Player.LoginWithAccessToken(auth.Session.AccessToken);
+                        Debug.WriteLine("success in streaming delegate");
                     } else {
                         this.Player = null;
                         // TODO
@@ -38,6 +39,7 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidLogin(SPTAudioStreamingController audioStreaming)
         {
+            Debug.Write("audio stream login");
             // TODO: Stop doing this
             //this.Player.PlaySpotifyURI("spotify:track:0imYRG0WKxUOOcqBu3VX10", 0, 0, (NSError error1) =>
             //           {

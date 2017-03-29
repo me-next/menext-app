@@ -29,6 +29,7 @@ namespace MeNext
         /// <param name="message">Message.</param>
         public void UpdateActualPlaying(StatusMessage message)
         {
+            /*
             PreviousMessage = CurrentMessage;
             CurrentMessage = message;
 
@@ -49,12 +50,14 @@ namespace MeNext
 
             // Update playing status
             musicService.Playing = CurrentMessage.Playing;
+            */
 
             // TODO: Update volume
         }
 
         private PlayingResponse previousPullData;
         private PlayingResponse currentPullData;
+
         public void onNewPullData(PullResponse data)
         {
             // TODO: implement properly
@@ -72,6 +75,12 @@ namespace MeNext
 
             // check for relevant change
             if (currentPullData.CurrentSongID == previousPullData.CurrentSongID) {
+                // if no change, and we aren't playing, request next song
+                return;
+            }
+
+            // if we don't have a song, skip
+            if (!currentPullData.HasSong) {
                 return;
             }
 
@@ -79,7 +88,7 @@ namespace MeNext
             var song = musicService.GetSong(currentPullData.CurrentSongID);
             musicService.PlaySong(song);
 
-            Debug.WriteLine("tried to play: " + song.UniqueId);
+            Debug.WriteLine("tried to play: " + song.UniqueId + " name: " + song.Name);
         }
     }
 }

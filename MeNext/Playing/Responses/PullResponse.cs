@@ -34,5 +34,9 @@ namespace MeNext
     {
         [JsonProperty(PropertyName = "CurrentSongId")]
         public string CurrentSongID;
+
+        // false when there is no song to play
+        [JsonProperty(PropertyName = "HasSong")]
+        public bool HasSong;
     }
 }

@@ -236,6 +236,7 @@ namespace MeNext.Spotify.iOS
 
                            }
                        });
+                Debug.WriteLine("going to play the song now");
             }
 
             Debug.WriteLine("tried to play song: " + song.Name);
