@@ -155,40 +155,5 @@ namespace MeNext.Spotify
 
             return jsonResult;
         }
-
-        //// TODO Add market support
-        //// https://developer.spotify.com/web-api/search-item/
-        //// type = album, artist, playlist, or track
-        //private async Task<IResultList<T>> Search<T>(string queryInput, string type)
-        //{
-        //    Debug.Assert(Array.IndexOf(new string[] { "album", "artist", "playlist", "track" }, type) >= 0);
-
-        //    var queryEncoded = EncodeQuery(queryInput);
-        //    var uri = new Uri(string.Format("/search?q={0}&type={1}", queryEncoded, type));
-
-        //    HttpResponseMessage response;
-        //    try {
-        //        response = await http.GetAsync(uri);
-        //        response.EnsureSuccessStatusCode();
-        //    } catch (WebException we) {
-        //        if (await ProcessWebException(we)) {
-        //            return await Search<T>(queryInput, type);
-        //        } else {
-        //            // TODO: Return IResultList w/ error set
-        //            return null;
-        //        }
-        //    } catch (Exception) {
-        //        // TODO: return IResultList with error set
-        //        return null;
-        //    }
-
-        //    // Get the data and do stuff with it
-        //    var jsonResult = await response.Content.ReadAsStringAsync();
-
-        //    var deserialisedResult = JsonConvert.DeserializeObject(jsonResult);
-
-
-        //    return null;
-        //}
     }
 }

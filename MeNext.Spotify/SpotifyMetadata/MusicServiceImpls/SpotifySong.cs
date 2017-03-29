@@ -15,7 +15,7 @@ namespace MeNext.Spotify
         private const string ENDPOINT_MULTIPLE = "tracks";
 
         private MetadataFactory factory;
-        private string uid;
+        private string uri;
         private string name;
         private int trackNumber;
         private int diskNumber;
@@ -26,7 +26,7 @@ namespace MeNext.Spotify
         internal SpotifySong(MetadataFactory factory, TrackResult result)
         {
             this.factory = factory;
-            this.uid = result.uri;
+            this.uri = result.uri;
             this.name = result.name;
             this.trackNumber = result.track_number;
             this.diskNumber = result.disc_number;
@@ -91,7 +91,7 @@ namespace MeNext.Spotify
         {
             get
             {
-                return this.uid;
+                return this.uri;
             }
         }
 

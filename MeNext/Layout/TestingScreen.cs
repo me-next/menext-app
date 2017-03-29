@@ -56,7 +56,7 @@ namespace MeNext
             var testCommand = new Command(() =>
             {
                 var song = musicService.GetSong("spotify:track:3fkPMWQ6cBNBLuFcPyMS8s");
-                Debug.WriteLine(song.Name);
+                Debug.WriteLine(song.Artists[0].Name);
             });
             layout.Children.Add(new Button
             {

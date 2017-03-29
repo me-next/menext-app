@@ -65,11 +65,13 @@ namespace MeNext.Spotify
                 var songs = SpotifySong.ObtainSongs(this, sids);
                 result.AddRange(songs);
             } else if (typeof(T) == typeof(SpotifyAlbum)) {
-                // TODO
+                var albums = SpotifyAlbum.ObtainAlbums(this, sids);
+                result.AddRange(albums);
             } else if (typeof(T) == typeof(SpotifyArtist)) {
-                // TODO
+                var artists = SpotifyArtist.ObtainArtists(this, sids);
+                result.AddRange(artists);
             } else if (typeof(T) == typeof(SpotifyPlaylist)) {
-                // TODO
+                // TODO Add playlist support to this factory
             } else {
                 throw new Exception("Invalid type T: " + typeof(T).Name);
             }

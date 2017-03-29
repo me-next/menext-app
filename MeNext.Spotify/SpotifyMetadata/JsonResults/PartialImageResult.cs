@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 namespace MeNext.Spotify
 {
-    public class ImageResult
+    public class PartialImageResult
     {
         public int height { get; set; }
         public int width { get; set; }
