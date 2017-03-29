@@ -5,40 +5,41 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System;
+using MeNext.MusicService;
 
 namespace MeNext
 {
     // Song is a POD class for song information.
     // TODO: maybe move this out of this file? Create a more legitimate version? Use the implementation
     // from menext/music-service?
-    public class Song
-    {
-        public Song(string name)
-        {
-            this.Name = name;
-        }
+    //public class Song
+    //{
+    //    public Song(string name)
+    //    {
+    //        this.Name = name;
+    //    }
 
-        public Song(string name, string artist)
-        {
-            this.Name = name;
-            this.Artist = artist;
-        }
+    //    public Song(string name, string artist)
+    //    {
+    //        this.Name = name;
+    //        this.Artist = artist;
+    //    }
 
-        public string Name
-        {
-            get;
-        }
+    //    public string Name
+    //    {
+    //        get;
+    //    }
 
-        public string Artist
-        {
-            get;
-        }
+    //    public string Artist
+    //    {
+    //        get;
+    //    }
 
-        public override string ToString()
-        {
-            return string.Format("[Song: Name={0}, Artist={1}]", Name, Artist);
-        }
-    };
+    //    public override string ToString()
+    //    {
+    //        return string.Format("[Song: Name={0}, Artist={1}]", Name, Artist);
+    //    }
+    //};
 
     /// <summary>
     /// SongCellFactory controls how the song gets rendered for the SongList.
@@ -77,9 +78,9 @@ namespace MeNext
     /// A controller updates this list. The view observes the model and updates as needed
     /// This doesn't provide any priority-queue functionality, since the truth is always the server.
     /// </summary>
-    public class SongListModel : ObservableCollection<Song>, IPullUpdateObserver
+    public class SongListModel : ObservableCollection<ISong>, IPullUpdateObserver
     {
-        public SongListModel(List<Song> songs) : base(songs)
+        public SongListModel(List<ISong> songs) : base(songs)
         {
         }
 
@@ -88,7 +89,7 @@ namespace MeNext
         /// Functionally the same as looping through newSongs and calling the normal Add function on each
         ///   except that the NotifyCollectionChangedEvent triggers only once, instead of for each item
         /// </summary>
-        public void AddMultiple(List<Song> newSongs)
+        public void AddMultiple(List<ISong> newSongs)
         {
             this.CheckReentrancy();
             foreach (var song in newSongs) {
@@ -102,7 +103,7 @@ namespace MeNext
         /// AddMultiple, but with a clear
         /// </summary>
         /// <param name="newSongs">New songs.</param>
-        public void SetAll(List<Song> newSongs)
+        public void SetAll(List<ISong> newSongs)
         {
             this.CheckReentrancy();
             this.Items.Clear();
@@ -168,7 +169,7 @@ namespace MeNext
         /// <summary>
         /// delegate for when a song is clicked
         /// </summary>
-        public delegate void SongClickedEvent(Song song);
+        public delegate void SongClickedEvent(ISong song);
 
         /// <summary>
         /// called when a song is tapped on once
@@ -182,7 +183,7 @@ namespace MeNext
         /// <param name="e">E.</param>
         private void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var song = (Song) e.Item;
+            var song = (ISong) e.Item;
             this.OnSongSelected(song);
         }
     }
