@@ -60,9 +60,9 @@ namespace MeNext
         /// id = userKey, name = userName, slug = PartyID
         /// </summary>
         /// <returns> The party.</returns>
-        public async Task<string> JoinParty(string id, string name, string slug)
+        public async Task<string> JoinParty(string slug, string id, string name)
         {
-            var uri = new Uri(string.Format("/joinParty/{2}/{0}/{1}", id, name, slug));
+            var uri = new Uri(string.Format("/joinParty/{0}/{1}/{2}", slug, id, name));
             return await FireRequest(uri);
         }
 

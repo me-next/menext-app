@@ -109,7 +109,7 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-                 return await api.JoinParty(this.UserKey, this.UserName, slug);
+                 return await api.JoinParty(slug, this.UserKey, this.UserName);
              });
 
             var json = task.Result;
