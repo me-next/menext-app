@@ -26,7 +26,7 @@ namespace MeNext
             NavigationPage.SetHasNavigationBar(this, false);
 
             // suggestion queue model observes the pulls
-            var model = new SuggestionQueueModel(songs);
+            var model = new SuggestionQueueModel(songs, mainController);
             mainController.RegisterObserver(model);
 
             var songList = new SongListView(model, new BasicSongCellFactory());
@@ -63,8 +63,11 @@ namespace MeNext
     /// </summary>
     public class SuggestionQueueModel : SongListModel
     {
-        public SuggestionQueueModel(List<ISong> songs) : base(songs)
+        private MainController mainController;
+
+        public SuggestionQueueModel(List<ISong> songs, MainController mainController) : base(songs)
         {
+            this.mainController = mainController;
         }
 
         /// <summary>
@@ -77,8 +80,13 @@ namespace MeNext
             var queue = data.SuggestQueue;
             var songs = new List<ISong>();
 
+            // look up the metadata with spotify for each song
             foreach(var elem in queue.Songs) {
-                songs.Add(new SampleMusicService.SampleSong(elem.ID));
+                var songID = elem.ID;
+
+                // TODO: lookup all the songs at once
+                var song = mainController.musicService.GetSong(songID);
+                songs.Add(song);
             }
 
             SetAll(songs);

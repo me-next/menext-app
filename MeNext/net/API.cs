@@ -72,9 +72,16 @@ namespace MeNext
         /// <param name="uid">User id.</param>
         /// <param name="eid">Event id.</param>
         /// <param name="sid">song identifier.</param>
-        public async Task<string> SuggestAddSong(string uid, string eid, string sid)
+        public async Task<string> SuggestAddSong(string eid, string uid, string sid)
         {
-            var uri = new Uri(string.Format("/suggestAdd/{0}/{1}/{2}", uid, eid, sid));
+            var uri = new Uri(string.Format("/suggest/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
+        public async Task<string> SongFinished(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/songFinished/{0}/{1}/{2}", eid, uid, sid));
+            Debug.WriteLine("Song finished uri:" + uri.ToString());
             return await FireRequest(uri);
         }
 

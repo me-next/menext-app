@@ -59,6 +59,8 @@ namespace MeNext
                 }
                 //TODO: add song to actual suggestion queue
                 Debug.WriteLine("adding song to suggestions: " + selectedSong.Name);
+
+                controller.RequestAddToSuggestions(selectedSong);
             };
 
             StackLayout queueButtons = new StackLayout

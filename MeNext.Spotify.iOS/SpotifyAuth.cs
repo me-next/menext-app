@@ -86,6 +86,7 @@ namespace MeNext.Spotify.iOS
 
         public bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
         {
+            Debug.WriteLine("open URL called");
             SPTAuth auth = SPTAuth.DefaultInstance;
 
             // This is the callback that's triggerred when auth is completed (or fails).
@@ -96,6 +97,7 @@ namespace MeNext.Spotify.iOS
                     Debug.WriteLine("*** Auth error: " + error.Description);
                 } else {
                     auth.Session = session;
+                    Debug.WriteLine("auth good");
                 }
 
                 NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
