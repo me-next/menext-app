@@ -31,10 +31,11 @@ namespace MeNext
         }
         void HostCommand(MainController mc)
         {
-            JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent("EventName"));
+            JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent("Test"));
             if (joinEvent.EventResult.ToString() == "SUCCESS") 
             {
                 Navigation.PopAsync();
+                Navigation.PushAsync(new JoinedEvent(mc));
             }
         }
         public Tuple<string, string, string> HostParty()

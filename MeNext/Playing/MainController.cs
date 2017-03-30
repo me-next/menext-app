@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MeNext.MusicService;
 using Xamarin.Forms;
-
 using Newtonsoft.Json;
 
 namespace MeNext
@@ -27,6 +27,7 @@ namespace MeNext
         public IMusicService musicService;   // // TODO Make this private. It is only public for kludgy testing.
         private PlayController playController;
         private API api;
+        private static Random random = new Random();
 
         /// <summary>
         /// Used for cancelling polling. We should generally just stop polling instead.
@@ -91,7 +92,7 @@ namespace MeNext
 
 
             this.api = new API("http://menext.danielcentore.com:8080");
-            this.UserKey = "potato";
+            this.UserKey = RandomString(6);
             this.UserName = "bob";
 
             this.changeID = 0;
@@ -103,12 +104,12 @@ namespace MeNext
         /// Attempts to join an event.
         /// </summary>
         /// <returns>The result of the attempt.</returns>
-        /// <param name="slug">The event name.</param>
+        /// <param name="slug">The event id.</param>
         public JoinEventResult RequestJoinEvent(string slug)
         {
             var task = Task.Run(async () =>
              {
-                 return await api.JoinParty(this.UserKey, this.UserName);
+                 return await api.JoinParty(this.UserKey, this.UserName, slug);
              });
 
             var json = task.Result;
@@ -119,8 +120,8 @@ namespace MeNext
                 return JoinEventResult.FAIL_GENERIC;
             }
 
-            Debug.WriteLine("joined event" + slug);
-            _ConfigureForEvent(this.UserKey, true, slug);
+            Debug.WriteLine("joined event\'" + slug + "\'");
+            _ConfigureForEvent(this.UserKey, false, slug);
             return JoinEventResult.SUCCESS;
         }
 
@@ -147,6 +148,7 @@ namespace MeNext
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
 
 
+            Debug.WriteLine("joined event \'" + slug + "\'\n");
             _ConfigureForEvent(this.UserKey, true, result.EventID);
             return CreateEventResult.SUCCESS;
         }
@@ -513,6 +515,12 @@ namespace MeNext
             {
                 // TODO: Update the UI
             });
+        }
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
