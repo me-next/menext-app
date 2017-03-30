@@ -11,6 +11,10 @@ namespace MeNext.Spotify.iOS
     {
         public SPTAudioStreamingController Player { get; set; }
 
+        // TODO: Disabling for now because it breaks some songs
+        // ex "G String Tuning Note" often doesn't work w/ cache
+        public const bool SPOTIFY_CACHE_ENABLED = false;
+
         public StreamingDelegate(SpotifyMusicServiceIos service)
         {
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
@@ -21,11 +25,13 @@ namespace MeNext.Spotify.iOS
                     NSError error = null;
                     this.Player = SPTAudioStreamingController.SharedInstance();
 
-                    bool success = this.Player.StartWithClientId(auth.ClientID, null, true, out error);
+                    bool success = this.Player.StartWithClientId(auth.ClientID, null, SPOTIFY_CACHE_ENABLED, out error);
                     if (success) {
                         this.Player.Delegate = this;
                         this.Player.PlaybackDelegate = new StreamingPlaybackDelegate(service);
-                        this.Player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
+                        if (SPOTIFY_CACHE_ENABLED) {
+                            this.Player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
+                        }
                         this.Player.LoginWithAccessToken(auth.Session.AccessToken);
                         Debug.WriteLine("success in streaming delegate");
                     } else {
