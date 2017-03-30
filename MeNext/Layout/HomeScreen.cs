@@ -19,7 +19,7 @@ namespace MeNext
                     new Label { Text = "Im a Home Screen" }
                 }
             };
-            var joinPage = new JoinEvent();
+            var joinPage = new JoinEvent(mc);
             var hostPage = new HostEvent(mc);
             var joinCommand = new Command(() => Navigation.PushAsync(joinPage));
             var hostCommand = new Command(() => Navigation.PushAsync(hostPage));
