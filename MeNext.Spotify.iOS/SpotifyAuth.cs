@@ -26,7 +26,7 @@ namespace MeNext.Spotify.iOS
 
             SPTAuth auth = SPTAuth.DefaultInstance;
 
-            if (SPTAuth.SupportsApplicationAuthentication && false) {
+            if (SPTAuth.SupportsApplicationAuthentication) {
                 // Auth using Spotify app
                 Debug.WriteLine("Auth using spotify app");
                 UIApplication.SharedApplication.OpenUrl(auth.SpotifyAppAuthenticationURL);
