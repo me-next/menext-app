@@ -25,6 +25,8 @@ namespace MeNext.Spotify.iOS
                     NSError error = null;
                     this.Player = SPTAudioStreamingController.SharedInstance();
 
+                    Debug.WriteLine(this.Player == null ? "Null" : "Not null");
+
                     bool success = this.Player.StartWithClientId(auth.ClientID, null, SPOTIFY_CACHE_ENABLED, out error);
                     if (success) {
                         this.Player.Delegate = this;

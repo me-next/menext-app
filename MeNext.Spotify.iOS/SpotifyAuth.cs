@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Foundation;
 using MeNext.Spotify.iOS.Auth;
+using SafariServices;
 using UIKit;
 
 namespace MeNext.Spotify.iOS
@@ -17,21 +19,21 @@ namespace MeNext.Spotify.iOS
 
         public static void Login()
         {
-            if (!SPTAuth.SpotifyApplicationIsInstalled) {
-                // TODO: Error message?
-                return;
-            }
+            //if (!SPTAuth.SpotifyApplicationIsInstalled) {
+            //    // TODO: Error message?
+            //    return;
+            //}
 
             SPTAuth auth = SPTAuth.DefaultInstance;
 
-            if (SPTAuth.SupportsApplicationAuthentication) {
+            if (SPTAuth.SupportsApplicationAuthentication && false) {
                 // Auth using Spotify app
                 Debug.WriteLine("Auth using spotify app");
                 UIApplication.SharedApplication.OpenUrl(auth.SpotifyAppAuthenticationURL);
             } else {
                 // App using web view
-                Debug.WriteLine("ERR: Cannot auth using spotify app");
-                // TODO: Use web auth vi           }
+                Debug.WriteLine("Cannot auth using spotify app. Authing with web view.");
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(auth.SpotifyWebAuthenticationURL.AbsoluteString));
             }
         }
 
@@ -111,6 +113,54 @@ namespace MeNext.Spotify.iOS
 
             return false;
         }
+
+
+        // Stolen from https://github.com/jguertl/SharePlugin/blob/5cd908cfe62d6f5d002823b4d712689dd1386a67/Share/Share.Plugin.iOSUnified/ShareImplementation.cs
+        //public async Task<bool> OpenBrowser(string url, bool useSafari = true)
+        //{
+        //try {
+        //    if (useSafari && UIDevice.CurrentDevice.CheckSystemVersion(9, 0)) {
+        //        // create safari controller
+        //        var sfViewController = new SFSafariViewController(new NSUrl(url), false);
+
+        //        // show safari controller
+        //        var vc = GetVisibleViewController();
+
+        //        if (sfViewController.PopoverPresentationController != null) {
+        //            sfViewController.PopoverPresentationController.SourceView = vc.View;
+        //        }
+
+        //        await vc.PresentViewControllerAsync(sfViewController, true);
+        //    } else {
+        //        UIApplication.SharedApplication.OpenUrl(new NSUrl(url));
+        //    }
+
+        //    return true;
+        //} catch (Exception ex) {
+        //    Console.WriteLine("Unable to open browser: " + ex.Message);
+        //    return false;
+        //}
+        //}
+
+
+        UIViewController GetVisibleViewController(UIViewController controller = null)
+        {
+            controller = controller ?? UIApplication.SharedApplication.KeyWindow.RootViewController;
+
+            if (controller.PresentedViewController == null)
+                return controller;
+
+            if (controller.PresentedViewController is UINavigationController) {
+                return ((UINavigationController) controller.PresentedViewController).VisibleViewController;
+            }
+
+            if (controller.PresentedViewController is UITabBarController) {
+                return ((UITabBarController) controller.PresentedViewController).SelectedViewController;
+            }
+
+            return GetVisibleViewController(controller.PresentedViewController);
+        }
+
 
         //public void startAuthenticationFlow()
         //{
