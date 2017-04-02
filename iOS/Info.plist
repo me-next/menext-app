@@ -6,8 +6,6 @@
 	<string>MeNext</string>
 	<key>CFBundleName</key>
 	<string>MeNext</string>
-	<key>CFBundleIdentifier</key>
-	<string>connorfoody.menext</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -58,5 +56,7 @@
 		<string>spotify</string>
 		<string>spotify-action</string>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.danielcentore.me-next</string>
 </dict>
 </plist>
