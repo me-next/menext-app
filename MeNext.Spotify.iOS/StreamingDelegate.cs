@@ -10,6 +10,7 @@ namespace MeNext.Spotify.iOS
     public class StreamingDelegate : SPTAudioStreamingDelegate
     {
         public SPTAudioStreamingController Player { get; set; }
+        private SpotifyMusicServiceIos service;
 
         // TODO: Disabling for now because it breaks some songs
         // ex "G String Tuning Note" often doesn't work w/ cache
@@ -19,55 +20,67 @@ namespace MeNext.Spotify.iOS
         {
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
             {
+                Debug.WriteLine("Got session updated notification", "stream");
+                this.service = service;
                 var auth = SPTAuth.DefaultInstance;
 
                 if (this.Player == null) {
                     NSError error = null;
                     this.Player = SPTAudioStreamingController.SharedInstance();
 
-                    Debug.WriteLine(this.Player == null ? "Null" : "Not null");
+                    Debug.WriteLine("Player is " + this.Player == null ? "Null" : "Not null", "stream");
 
                     bool success = this.Player.StartWithClientId(auth.ClientID, null, SPOTIFY_CACHE_ENABLED, out error);
                     if (success) {
                         this.Player.Delegate = this;
                         this.Player.PlaybackDelegate = new StreamingPlaybackDelegate(service);
                         if (SPOTIFY_CACHE_ENABLED) {
+                            Debug.WriteLine("Spotify cache is enabled", "stream");
                             this.Player.DiskCache = new SPTDiskCache(1024 * 1024 * 64);
+                        } else {
+                            Debug.WriteLine("Spotify cache is disabled", "stream");
                         }
-                        this.Player.LoginWithAccessToken(auth.Session.AccessToken);
-                        Debug.WriteLine("success in streaming delegate");
+
                     } else {
                         this.Player = null;
-                        // TODO
-                        Debug.WriteLine("Error init " + error.Description);
+                        Debug.WriteLine("*** Error: " + error.Description, "stream");
+                        return;
                     }
+                } else {
+                    Debug.WriteLine("Player was already not null", "stream");
                 }
+
+                Debug.WriteLine("Trying to login with access token", "stream");
+                this.Player.LoginWithAccessToken(auth.Session.AccessToken);
+
+                this.service.SomethingChanged();
             });
         }
 
         public override void AudioStreamingDidLogin(SPTAudioStreamingController audioStreaming)
         {
-            Debug.Write("audio stream login");
-            // TODO: Stop doing this
-            //this.Player.PlaySpotifyURI("spotify:track:0imYRG0WKxUOOcqBu3VX10", 0, 0, (NSError error1) =>
-            //           {
-            //               if (error1 != null) {
-            //                   Debug.WriteLine("Err Playing: " + error1.DebugDescription);
-            //               }
-            //           });
+            Debug.Write("Logged in successfully!", "stream");
+
             this.Player.SetVolume(1, (arg0) => { });
             AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
             AVAudioSession.SharedInstance().SetActive(true);
+
+            this.service.SomethingChanged();
+        }
+
+        public override void AudioStreamingDidLogout(SPTAudioStreamingController audioStreaming)
+        {
+            this.service.SomethingChanged();
         }
 
         public override void AudioStreamingDidReceiveError(SPTAudioStreamingController audioStreaming, NSError error)
         {
-            Debug.WriteLine("Error: " + error.Description);
+            Debug.WriteLine("*** Error: " + error.Description, "stream");
         }
 
         public override void AudioStreamingDidReceiveMessage(SPTAudioStreamingController audioStreaming, string message)
         {
-            Debug.WriteLine("Message: " + message);
+            Debug.WriteLine("Message: " + message, "stream");
         }
     }
 }

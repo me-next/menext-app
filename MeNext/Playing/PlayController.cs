@@ -11,9 +11,6 @@ namespace MeNext
     /// </summary>
     public class PlayController : IPullUpdateObserver
     {
-        public StatusMessage PreviousMessage { get; set; }
-        public StatusMessage CurrentMessage { get; set; }
-
         private readonly IMusicService musicService;
 
         public PlayController(IMusicService musicService)
@@ -27,33 +24,33 @@ namespace MeNext
         /// Updates the actual playing status based on the information in the latest status message
         /// </summary>
         /// <param name="message">Message.</param>
-        public void UpdateActualPlaying(StatusMessage message)
-        {
-            /*
-            PreviousMessage = CurrentMessage;
-            CurrentMessage = message;
+        //public void UpdateActualPlaying(StatusMessage message)
+        //{
+        /*
+        PreviousMessage = CurrentMessage;
+        CurrentMessage = message;
 
-            if (CurrentMessage.CurrentSong != null) {
-                var song = musicService.GetSong(CurrentMessage.CurrentSong);
+        if (CurrentMessage.CurrentSong != null) {
+            var song = musicService.GetSong(CurrentMessage.CurrentSong);
 
-                // Check if a seek has occurred or a new song is playing
-                if (PreviousMessage == null
-                    || PreviousMessage.SongStartTime != CurrentMessage.SongStartTime
-                    || PreviousMessage.CurrentSong != CurrentMessage.CurrentSong) {
-                    var positionMs = CurrentMessage.ServerTime - CurrentMessage.SongStartTime;
-                    positionMs = Math.Max(0, positionMs);
-                    double positionSec = positionMs / 1000.0 + CurrentMessage.SongStartPos;
+            // Check if a seek has occurred or a new song is playing
+            if (PreviousMessage == null
+                || PreviousMessage.SongStartTime != CurrentMessage.SongStartTime
+                || PreviousMessage.CurrentSong != CurrentMessage.CurrentSong) {
+                var positionMs = CurrentMessage.ServerTime - CurrentMessage.SongStartTime;
+                positionMs = Math.Max(0, positionMs);
+                double positionSec = positionMs / 1000.0 + CurrentMessage.SongStartPos;
 
-                    musicService.PlaySong(song, positionSec);
-                }
+                musicService.PlaySong(song, positionSec);
             }
-
-            // Update playing status
-            musicService.Playing = CurrentMessage.Playing;
-            */
-
-            // TODO: Update volume
         }
+
+        // Update playing status
+        musicService.Playing = CurrentMessage.Playing;
+        */
+
+        // TODO: Update volume
+        //}
 
         private PlayingResponse previousPullData;
         private PlayingResponse currentPullData;
@@ -88,7 +85,7 @@ namespace MeNext
             var song = musicService.GetSong(currentPullData.CurrentSongID);
             musicService.PlaySong(song);
 
-            Debug.WriteLine("tried to play: " + song.UniqueId + " name: " + song.Name);
+            Debug.WriteLine("Tried to play: " + song.UniqueId + " name: " + song.Name);
         }
     }
 }

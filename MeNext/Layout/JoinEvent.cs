@@ -10,10 +10,10 @@ namespace MeNext
         public JoinEvent(MainController mc)
         {
             var layout = new StackLayout();
-            eventIDEntry = new Entry { Placeholder = "Event ID Code"};
+            eventIDEntry = new Entry { Placeholder = "Event ID Code" };
             eventIDEntry.TextChanged += (object sender, TextChangedEventArgs e) =>
             {
-                Debug.WriteLine("text changed:" + e.ToString());
+                Debug.WriteLine("Text changed:" + e.ToString());
             };
 
             var joinCommand = new Command<commandClass>(JoinCommand);
@@ -35,9 +35,8 @@ namespace MeNext
             if (joinEvent.EventResult.ToString() == "SUCCESS") {
                 Navigation.PopAsync();
                 Navigation.PushAsync(new JoinedEvent(cClass.mc));
-            }
-            else {
-                Debug.WriteLine("Oh no, couldn't join event successfully.  Error Message: " + joinEvent.EventResult.ToString() + "\n");
+            } else {
+                Debug.WriteLine("Couldn't join event successfully: " + joinEvent.EventResult.ToString());
             }
         }
 

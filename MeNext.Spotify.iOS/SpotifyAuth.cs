@@ -19,26 +19,23 @@ namespace MeNext.Spotify.iOS
 
         public static void Login()
         {
-            //if (!SPTAuth.SpotifyApplicationIsInstalled) {
-            //    // TODO: Error message?
-            //    return;
-            //}
-
             SPTAuth auth = SPTAuth.DefaultInstance;
 
             if (SPTAuth.SupportsApplicationAuthentication) {
                 // Auth using Spotify app
-                Debug.WriteLine("Auth using spotify app");
+                Debug.WriteLine("Spotify available; Using Spotify authentication.", "auth");
                 UIApplication.SharedApplication.OpenUrl(auth.SpotifyAppAuthenticationURL);
             } else {
                 // App using web view
-                Debug.WriteLine("Cannot auth using spotify app. Authing with web view.");
+                Debug.WriteLine("Spotify unavailable; Using web authentication.", "auth");
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(auth.SpotifyWebAuthenticationURL.AbsoluteString));
             }
         }
 
         public StreamingDelegate CreateStreamingDelegate()
         {
+            Debug.WriteLine("Creating streaming delegate", "auth");
+
             var sd = new StreamingDelegate(this.service);
 
             SPTAuth auth = SPTAuth.DefaultInstance;
@@ -76,99 +73,43 @@ namespace MeNext.Spotify.iOS
             //auth.TokenSwapURL;
             //auth.TokenRefreshURL;
 
-            // TODO remove
-            // Console.WriteLine("Has Spotify: " + SPTAuth.SpotifyApplicationIsInstalled);
-
             // If we have a valid session, notify that the session was updated so player gets setup
             if (auth.Session != null && auth.Session.IsValid) {
+                Debug.WriteLine("We have an existing, valid session. Reusing it.", "auth");
                 NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
+            } else {
+                Debug.WriteLine("We do not have a valid session.", "auth");
             }
             return sd;
         }
 
         public bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
         {
-            Debug.WriteLine("open URL called");
+            Debug.WriteLine("OpenUrl called with url: " + url.AbsoluteString, "auth");
+
             SPTAuth auth = SPTAuth.DefaultInstance;
 
             // This is the callback that's triggerred when auth is completed (or fails).
             SPTAuthCallback authCallback = (NSError error, SPTSession session) =>
             {
                 if (error != null) {
-                    // TODO: Do something?
-                    Debug.WriteLine("*** Auth error: " + error.Description);
+                    Debug.WriteLine("*** Authentication error: " + error.Description, "auth");
                 } else {
                     auth.Session = session;
-                    Debug.WriteLine("auth good");
+                    Debug.WriteLine("Authentication successful. Notifying the plebs.", "auth");
+                    NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
                 }
-
-                NSNotificationCenter.DefaultCenter.PostNotificationName("sessionUpdated", this);
             };
 
             // Handle the callback from the authentication service
             if (auth.CanHandleURL(url)) {
+                Debug.WriteLine("We can handle this Url.", "auth");
                 auth.HandleAuthCallbackWithTriggeredAuthURL(url, authCallback);
                 return true;
             }
 
+            Debug.WriteLine("We cannot handle this Url.", "auth");
             return false;
         }
-
-
-        // Stolen from https://github.com/jguertl/SharePlugin/blob/5cd908cfe62d6f5d002823b4d712689dd1386a67/Share/Share.Plugin.iOSUnified/ShareImplementation.cs
-        //public async Task<bool> OpenBrowser(string url, bool useSafari = true)
-        //{
-        //try {
-        //    if (useSafari && UIDevice.CurrentDevice.CheckSystemVersion(9, 0)) {
-        //        // create safari controller
-        //        var sfViewController = new SFSafariViewController(new NSUrl(url), false);
-
-        //        // show safari controller
-        //        var vc = GetVisibleViewController();
-
-        //        if (sfViewController.PopoverPresentationController != null) {
-        //            sfViewController.PopoverPresentationController.SourceView = vc.View;
-        //        }
-
-        //        await vc.PresentViewControllerAsync(sfViewController, true);
-        //    } else {
-        //        UIApplication.SharedApplication.OpenUrl(new NSUrl(url));
-        //    }
-
-        //    return true;
-        //} catch (Exception ex) {
-        //    Console.WriteLine("Unable to open browser: " + ex.Message);
-        //    return false;
-        //}
-        //}
-
-
-        UIViewController GetVisibleViewController(UIViewController controller = null)
-        {
-            controller = controller ?? UIApplication.SharedApplication.KeyWindow.RootViewController;
-
-            if (controller.PresentedViewController == null)
-                return controller;
-
-            if (controller.PresentedViewController is UINavigationController) {
-                return ((UINavigationController) controller.PresentedViewController).VisibleViewController;
-            }
-
-            if (controller.PresentedViewController is UITabBarController) {
-                return ((UITabBarController) controller.PresentedViewController).SelectedViewController;
-            }
-
-            return GetVisibleViewController(controller.PresentedViewController);
-        }
-
-
-        //public void startAuthenticationFlow()
-        //{
-        //    var spotifyAuthenticationViewController = SPTAuthViewController.AuthenticationViewController;
-        //    spotifyAuthenticationViewController.Delegate = new AuthViewDelegate(this);
-        //    spotifyAuthenticationViewController.ModalPresentationStyle = UIModalPresentationStyle.OverCurrentContext;
-        //    spotifyAuthenticationViewController.DefinesPresentationContext = true;
-        //    this.PresentViewController(spotifyAuthenticationViewController, fll);
-        //}
     }
 }

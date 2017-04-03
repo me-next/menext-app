@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
 using MeNext.MusicService;
-using MeNext.SampleMusicService;
-
 
 namespace MeNext
 {

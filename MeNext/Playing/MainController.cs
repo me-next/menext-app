@@ -28,6 +28,7 @@ namespace MeNext
         private PlayController playController;
         private API api;
         private static Random random = new Random();
+        private List<IUIChangeListener> listeners = new List<IUIChangeListener>();
 
         /// <summary>
         /// Used for cancelling polling. We should generally just stop polling instead.
@@ -82,22 +83,22 @@ namespace MeNext
             this.musicService = musicService;
             this.PullObservers = new List<IPullUpdateObserver>();
 
-            SubscribePollingStatus();
-
             this.musicService.AddStatusListener(this);
 
             // set up the play controller
             this.playController = new PlayController(this.musicService);
             RegisterObserver(playController);
 
-
             this.api = new API("http://menext.danielcentore.com:8080");
+
             this.UserKey = RandomString(6);
+
+            // TODO Username?
             this.UserName = "bob";
 
             this.changeID = 0;
 
-
+            this.InEvent = false;
         }
 
         /// <summary>
@@ -107,21 +108,26 @@ namespace MeNext
         /// <param name="slug">The event id.</param>
         public JoinEventResult RequestJoinEvent(string slug)
         {
+            Debug.Assert(!this.InEvent);
+
+            Debug.WriteLine("Requesting to join an event...");
             var task = Task.Run(async () =>
              {
                  return await api.JoinParty(slug, this.UserKey, this.UserName);
              });
 
             var json = task.Result;
-            Debug.WriteLine("json: " + json);
+
+            Debug.WriteLine("Got json: " + task.Result);
 
             if (task.IsFaulted) {
-                Debug.WriteLine("oh nose! error:" + task.Exception.ToString());
+                Debug.WriteLine("*** Error:" + task.Exception.ToString());
                 return JoinEventResult.FAIL_GENERIC;
             }
 
-            Debug.WriteLine("joined event\'" + slug + "\'");
             _ConfigureForEvent(this.UserKey, false, slug);
+
+            Debug.WriteLine("Joined event\'" + slug + "\'");
             return JoinEventResult.SUCCESS;
         }
 
@@ -132,23 +138,25 @@ namespace MeNext
         /// <param name="slug">The event name.</param>
         public CreateEventResult RequestCreateEvent(string slug)
         {
+            Debug.Assert(!this.InEvent);
+
             var task = Task.Run(async () =>
             {
                 return await api.CreateParty(this.UserKey, this.UserName);
             });
             var json = task.Result;
-            Debug.WriteLine("json: " + json);
+            Debug.WriteLine("Json: " + json);
 
             // TODO: real error check
             if (task.IsFaulted) {
-                Debug.WriteLine("failed to join event!" + task.Exception.ToString());
+                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
                 return CreateEventResult.FAIL_GENERIC;
             }
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
 
 
-            Debug.WriteLine("joined event \'" + slug + "\'\n");
+            Debug.WriteLine("Created event \'" + slug + "\'\n");
             _ConfigureForEvent(this.UserKey, true, result.EventID);
             return CreateEventResult.SUCCESS;
         }
@@ -167,6 +175,7 @@ namespace MeNext
             if (IsHost)
                 this.musicService.Playing = false;
             this.InEvent = false;
+            this.SomethingChanged();
             return EndEventResult.SUCCESS;
         }
 
@@ -195,6 +204,8 @@ namespace MeNext
 
 
             this.InEvent = false;
+
+            this.SomethingChanged();
             return LeaveEventResult.SUCCESS;
         }
 
@@ -211,6 +222,7 @@ namespace MeNext
             this.EventSlug = eventSlug;
             this.InEvent = true;
             _StartPolling();
+            this.SomethingChanged();
         }
 
         /// <summary>
@@ -219,6 +231,7 @@ namespace MeNext
         public void RequestPlay()
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -227,6 +240,7 @@ namespace MeNext
         public void RequestPause()
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -237,15 +251,15 @@ namespace MeNext
             // TODO: songFinished with actual song
             var task = Task.Run(async () =>
              {
-                return await api.SongFinished(this.EventSlug, this.UserKey, "dummy");
+                 return await api.SongFinished(this.EventSlug, this.UserKey, "dummy");
              });
 
             if (task.IsFaulted) {
-                Debug.WriteLine("oh nose! error requesting song:" + task.Exception.ToString());
+                Debug.WriteLine("Error requesting skip:" + task.Exception.ToString());
                 return;
             }
 
-            Debug.WriteLine("requested next song");
+            Debug.WriteLine("Requested next song");
         }
 
         /// <summary>
@@ -254,6 +268,7 @@ namespace MeNext
         public void RequestPrevious()
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -263,6 +278,7 @@ namespace MeNext
         public void RequestVolume(double vol)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -272,6 +288,7 @@ namespace MeNext
         public void RequestSeek(double pos)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -286,10 +303,10 @@ namespace MeNext
             });
 
             if (task.IsFaulted) {
-                Debug.WriteLine("failed to add song!" + task.Exception.ToString());
+                Debug.WriteLine("Failed to add song to suggestions!" + task.Exception.ToString());
             }
 
-            Debug.WriteLine("added " + song.UniqueId + " to suggestions");
+            Debug.WriteLine("Added " + song.UniqueId + " to suggestions");
         }
 
         /// <summary>
@@ -299,6 +316,7 @@ namespace MeNext
         public void RequestRemoveFromSuggestions(ISong song)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -313,6 +331,7 @@ namespace MeNext
         public void RequestAddToPlayNext(ISong song, int index = -1)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -322,6 +341,7 @@ namespace MeNext
         public void RequestRemoveFromPlayNext(ISong song)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -336,6 +356,7 @@ namespace MeNext
         public void MoveWithinPlayNext(ISong song, int index)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -345,6 +366,7 @@ namespace MeNext
         public void RequestThumbUp(ISong song)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -354,6 +376,7 @@ namespace MeNext
         public void RequestThumbDown(ISong song)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -363,6 +386,7 @@ namespace MeNext
         public void RequestThumbNeutral(ISong song)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -371,6 +395,7 @@ namespace MeNext
         public void RequestEventPermissions(/* TODO: permissions structure */)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -380,6 +405,7 @@ namespace MeNext
         public void RequestUserPermissions(string username /* TODO: permissions structure */)
         {
             Debug.Assert(this.InEvent);
+            // TODO
         }
 
         /// <summary>
@@ -422,11 +448,11 @@ namespace MeNext
             }
 
             if (task.IsFaulted) {
-                Debug.WriteLine("failed to pull!" + task.Exception.ToString());
+                Debug.WriteLine("*** Failed to pull: " + task.Exception.ToString());
             }
 
             // try to parse the pull
-            Debug.WriteLine("pull json: " + json + ". " + json.Length);
+            Debug.WriteLine("Pull json: " + json + ". " + json.Length);
 
             var result = JsonConvert.DeserializeObject<PullResponse>(json);
 
@@ -458,41 +484,6 @@ namespace MeNext
         }
 
         /// <summary>
-        /// Subscribes to the polling status.
-        /// </summary>
-        private void SubscribePollingStatus()
-        {
-            MessagingCenter.Subscribe<StatusMessage>(this, "StatusMessage", message =>
-            {
-                if (!this.InEvent)
-                    return;
-
-                // Print the debug text
-                if (message.TestingText != null) {
-                }
-
-                // If the event is ended, we should leave and return to the homepage.
-                if (!message.EventActive)
-                    LeaveEvent();
-
-                // TODO: Update stuff based on message
-
-                // Update music playing if we are the host
-                if (IsHost) {
-                    playController.UpdateActualPlaying(message);
-                }
-
-                // Update UI
-                //this.SomethingChanged();
-            });
-
-            MessagingCenter.Subscribe<CancelledMessage>(this, "CancelledMessage", message =>
-            {
-                // TODO: This is leftover from the tutorial. Remove if we don't decide to use it for anything.
-            });
-        }
-
-        /// <summary>
         /// Called by the music service when a song ends
         /// </summary>
         public void SongEnds(ISong song)
@@ -510,17 +501,24 @@ namespace MeNext
         /// </summary>
         public void SomethingChanged()
         {
-            Debug.WriteLine("Time: {0}", this.musicService.PlayingPosition);
             Device.BeginInvokeOnMainThread(() =>
             {
-                // TODO: Update the UI
+                foreach (var listener in listeners) {
+                    listener.SomethingChanged();
+                }
             });
         }
+
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        internal void AddStatusListener(IUIChangeListener listener)
+        {
+            listeners.Add(listener);
         }
     }
 }

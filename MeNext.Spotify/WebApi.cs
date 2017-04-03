@@ -156,7 +156,7 @@ namespace MeNext.Spotify
 
         public async Task<string> GetJsonFullUri(string fullUri)
         {
-            Debug.WriteLine(fullUri);
+            Debug.WriteLine("Getting URI: {0}", fullUri);
 
             var uri = new Uri(fullUri);
             HttpResponseMessage response;
