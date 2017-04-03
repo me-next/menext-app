@@ -11,13 +11,12 @@ namespace MeNext.Spotify.iOS
 
         public StreamingPlaybackDelegate(SpotifyMusicServiceIos service)
         {
-            Debug.WriteLine("stream delegate construct");
             this.service = service;
         }
 
         public override void AudioStreamingDidStopPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
-            Debug.WriteLine("Track ended: " + trackUri);
+            Debug.WriteLine("Track ended: " + trackUri, "playback");
             service.SomethingChanged();
             service.SongEnds(trackUri);
         }
@@ -30,9 +29,7 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidChangePlaybackStatus(SPTAudioStreamingController audioStreaming, bool isPlaying)
         {
-            Debug.WriteLine("playback changed: " + isPlaying);
-
-            service.SomethingChanged();
+            Debug.WriteLine("Playback changed: " + isPlaying, "playback");
 
             if (isPlaying) {
                 // This makes it so we can actually hear audio
@@ -42,6 +39,8 @@ namespace MeNext.Spotify.iOS
             } else {
                 AVAudioSession.SharedInstance().SetActive(false);
             }
+
+            service.SomethingChanged();
         }
     }
 }

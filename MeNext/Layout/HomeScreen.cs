@@ -4,10 +4,15 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
-    public class HomeScreen : ContentPage
+    public class HomeScreen : ContentPage, IUIChangeListener
     {
+        private MainController mc;
+
+        private Label loggedIn;
+
         public HomeScreen(MainController mc)
         {
+            this.mc = mc;
             var musicService = mc.musicService;
 
             this.Title = "Home";
@@ -16,6 +21,8 @@ namespace MeNext
             {
                 Padding = LayoutConsts.DEFAULT_PADDING
             };
+
+            layout.Children.Add(loggedIn = new Label());
 
             // TODO: Make these appear and dissappear based on availability
             layout.Children.Add(new Button
@@ -38,11 +45,25 @@ namespace MeNext
 
             layout.Children.Add(new Button
             {
+                Text = "Logout of Spotify",
+                Command = new Command(() => musicService.Logout())
+            });
+
+            layout.Children.Add(new Button
+            {
                 Text = "End Event",
                 Command = new Command(() => mc.RequestEndEvent())
             });
 
             Content = layout;
+
+            mc.AddStatusListener(this);
+            this.SomethingChanged();
+        }
+
+        public void SomethingChanged()
+        {
+            loggedIn.Text = "Spotify: " + (mc.musicService.LoggedIn ? "Logged In" : "Logged Out");
         }
     }
 }

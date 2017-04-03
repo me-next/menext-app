@@ -110,7 +110,7 @@ namespace MeNext
         {
             Debug.Assert(!this.InEvent);
 
-            Debug.WriteLine("[JOIN] Requesting to join an event...");
+            Debug.WriteLine("Requesting to join an event...");
             var task = Task.Run(async () =>
              {
                  return await api.JoinParty(slug, this.UserKey, this.UserName);
@@ -118,16 +118,16 @@ namespace MeNext
 
             var json = task.Result;
 
-            Debug.WriteLine("[JOIN] Got json: " + task.Result);
+            Debug.WriteLine("Got json: " + task.Result);
 
             if (task.IsFaulted) {
-                Debug.WriteLine("[JOIN] Error:" + task.Exception.ToString());
+                Debug.WriteLine("*** Error:" + task.Exception.ToString());
                 return JoinEventResult.FAIL_GENERIC;
             }
 
             _ConfigureForEvent(this.UserKey, false, slug);
 
-            Debug.WriteLine("[JOIN] Joined event\'" + slug + "\'");
+            Debug.WriteLine("Joined event\'" + slug + "\'");
             return JoinEventResult.SUCCESS;
         }
 
@@ -145,18 +145,18 @@ namespace MeNext
                 return await api.CreateParty(this.UserKey, this.UserName);
             });
             var json = task.Result;
-            Debug.WriteLine("json: " + json);
+            Debug.WriteLine("Json: " + json);
 
             // TODO: real error check
             if (task.IsFaulted) {
-                Debug.WriteLine("failed to join event!" + task.Exception.ToString());
+                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
                 return CreateEventResult.FAIL_GENERIC;
             }
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
 
 
-            Debug.WriteLine("joined event \'" + slug + "\'\n");
+            Debug.WriteLine("Created event \'" + slug + "\'\n");
             _ConfigureForEvent(this.UserKey, true, result.EventID);
             return CreateEventResult.SUCCESS;
         }
@@ -255,11 +255,11 @@ namespace MeNext
              });
 
             if (task.IsFaulted) {
-                Debug.WriteLine("oh nose! error requesting song:" + task.Exception.ToString());
+                Debug.WriteLine("Error requesting skip:" + task.Exception.ToString());
                 return;
             }
 
-            Debug.WriteLine("requested next song");
+            Debug.WriteLine("Requested next song");
         }
 
         /// <summary>
@@ -303,10 +303,10 @@ namespace MeNext
             });
 
             if (task.IsFaulted) {
-                Debug.WriteLine("failed to add song!" + task.Exception.ToString());
+                Debug.WriteLine("Failed to add song to suggestions!" + task.Exception.ToString());
             }
 
-            Debug.WriteLine("added " + song.UniqueId + " to suggestions");
+            Debug.WriteLine("Added " + song.UniqueId + " to suggestions");
         }
 
         /// <summary>
@@ -448,11 +448,11 @@ namespace MeNext
             }
 
             if (task.IsFaulted) {
-                Debug.WriteLine("failed to pull!" + task.Exception.ToString());
+                Debug.WriteLine("*** Failed to pull: " + task.Exception.ToString());
             }
 
             // try to parse the pull
-            Debug.WriteLine("pull json: " + json + ". " + json.Length);
+            Debug.WriteLine("Pull json: " + json + ". " + json.Length);
 
             var result = JsonConvert.DeserializeObject<PullResponse>(json);
 

@@ -85,7 +85,7 @@ namespace MeNext
             var song = musicService.GetSong(currentPullData.CurrentSongID);
             musicService.PlaySong(song);
 
-            Debug.WriteLine("tried to play: " + song.UniqueId + " name: " + song.Name);
+            Debug.WriteLine("Tried to play: " + song.UniqueId + " name: " + song.Name);
         }
     }
 }

@@ -20,8 +20,6 @@ namespace MeNext.iOS
 
         public AppDelegate()
         {
-            Debug.WriteLine("in app delegate constructor");
-
             // create common music service objects
             // these will go through the PollingTask to the Poller
             //musicService = new SampleMusicService.SampleMusicService();
