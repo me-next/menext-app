@@ -35,8 +35,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Layout\MainPage.cs" />
-    <Compile Include="Layout\HomeScreen.cs" />
-    <Compile Include="Layout\PlaceholderScreen.cs" />
     <Compile Include="Layout\LayoutConsts.cs" />
     <Compile Include="Layout\PlayingScreen.cs" />
     <Compile Include="Layout\JoinEvent.cs" />
@@ -45,7 +43,6 @@
     <Compile Include="Playing\PlayController.cs" />
     <Compile Include="Playing\TaskMessages\StartPollMessage.cs" />
     <Compile Include="Playing\TaskMessages\StopPollMessage.cs" />
-    <Compile Include="Playing\TaskMessages\StatusMessage.cs" />
     <Compile Include="Playing\Poller.cs" />
     <Compile Include="Playing\TaskMessages\CancelledMessage.cs" />
     <Compile Include="Playing\Results\JoinEventResult.cs" />
@@ -62,6 +59,8 @@
     <Compile Include="Playing\Responses\PullResponse.cs" />
     <Compile Include="Layout\TestingScreen.cs" />
     <Compile Include="Layout\JoinedEvent.cs" />
+    <Compile Include="Layout\HomeScreen.cs" />
+    <Compile Include="Layout\IUIChangeListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
@@ -97,7 +96,6 @@
       <Name>MusicService</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\ExampleMusicService\ExampleMusicService.projitems" Label="Shared" Condition="Exists('..\ExampleMusicService\ExampleMusicService.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
 </Project>

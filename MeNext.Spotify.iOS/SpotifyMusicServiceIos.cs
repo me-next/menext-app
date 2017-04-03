@@ -93,7 +93,7 @@ namespace MeNext.Spotify.iOS
 
             set
             {
-                if (this.CanPlayNow && this.sd.Player.PlaybackState.IsPlaying != value) {
+                if (this.CanPlayNow && this.sd?.Player?.PlaybackState?.IsPlaying != value) {
                     // TODO Handle error
                     this.sd.Player.SetIsPlaying(value, (NSError arg0) => { });
                 }

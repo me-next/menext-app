@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.iOS", "iOS\MeNext.iO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.Droid", "Droid\MeNext.Droid.csproj", "{01AD4898-4237-42F4-902A-F439D7BE9375}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ExampleMusicService", "ExampleMusicService\ExampleMusicService.shproj", "{B01D6F70-FAF7-4070-82AC-7B0F9AEA3FA0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicService", "MusicService\MusicService.csproj", "{39433743-3793-40F6-92E5-5504AAFDD1AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.Spotify.iOS", "MeNext.Spotify.iOS\MeNext.Spotify.iOS.csproj", "{6A3D63E2-1637-4D32-B5CF-C1D3AB507C10}"

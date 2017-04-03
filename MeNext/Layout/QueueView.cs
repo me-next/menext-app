@@ -19,8 +19,8 @@ namespace MeNext
 
             List<ISong> songs = new List<ISong>
             {
-                new SampleMusicService.SampleSong("A"),
-                new SampleMusicService.SampleSong("B"),
+                //new SampleMusicService.SampleSong("A"),
+                //new SampleMusicService.SampleSong("B"),
             };
 
             NavigationPage.SetHasNavigationBar(this, false);
@@ -35,22 +35,22 @@ namespace MeNext
                 Debug.WriteLine("selected song: " + song.Name);
             };
 
-            int songCounter = 0;
-            var addButton = new Button { Text = "addSong" };
-            addButton.Clicked += (sender, e) =>
-            {
-                var song = new SampleMusicService.SampleSong("song" + songCounter);
-                model.Add(song);
-                songCounter++;
+            //int songCounter = 0;
+            //var addButton = new Button { Text = "addSong" };
+            //addButton.Clicked += (sender, e) =>
+            //{
+            //    var song = new SampleMusicService.SampleSong("song" + songCounter);
+            //    model.Add(song);
+            //    songCounter++;
 
-                Debug.WriteLine("adding song: " + song.Name);
-            };
+            //    Debug.WriteLine("adding song: " + song.Name);
+            //};
 
             Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
-                    addButton,
+                    //addButton,
                     new Label { Text = "queue holder" },
                     songList,
                 }
@@ -81,7 +81,7 @@ namespace MeNext
             var songs = new List<ISong>();
 
             // look up the metadata with spotify for each song
-            foreach(var elem in queue.Songs) {
+            foreach (var elem in queue.Songs) {
                 var songID = elem.ID;
 
                 // TODO: lookup all the songs at once

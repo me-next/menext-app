@@ -13,9 +13,9 @@ namespace MeNext
 
         public Poller(MainController mainController)
         {
-            // TODO: the android side passes null in here...
             this.mainController = mainController;
         }
+
         /// <summary>
         /// Polls the server until we stop polling
         /// 
@@ -32,33 +32,14 @@ namespace MeNext
         {
             // TODO: Disable polling when the app goes to background and we are not the host?
 
-            // TODO: Fix this warning?
             await Task.Run(async () =>
             {
-                var api = new API("http://menext.danielcentore.com:8080");
-                long i = 0;
                 for (;;) {
-                    ++i;
                     token.ThrowIfCancellationRequested();
-
-                    await Task.Delay(MS_PER_POLL);
-
-                    // TODO: Obtain a real status message
-                    var response = await api.SayHello();
 
                     mainController.Poll();
 
-                    var message = new StatusMessage
-                    {
-                        TestingText = "Test: " + response,
-                        EventActive = true,
-                        ChangeId = i
-                    };
-
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        MessagingCenter.Send<StatusMessage>(message, "StatusMessage");
-                    });
+                    await Task.Delay(MS_PER_POLL);
                 }
             }, token);
         }
