@@ -23,8 +23,12 @@ namespace MeNext.Spotify.iOS
 
         public SpotifyMusicServiceIos()
         {
-            sd = new SpotifyAuth(this).CreateStreamingDelegate();
+            // This needs to happen BEFORE auth slash streaming delegate, so if they login with a pre-existing session
+            // we get the memo and can pass it on to the existing web api.
             this.setupWebApi();
+
+            sd = new SpotifyAuth(this).CreateStreamingDelegate();
+
         }
 
         private void setupWebApi()
@@ -177,8 +181,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                // TODO: Implement user library
-                throw new NotImplementedException();
+                return webApi.GetUserLibrarySongs();
             }
         }
 

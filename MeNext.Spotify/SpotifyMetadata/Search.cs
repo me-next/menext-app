@@ -7,16 +7,21 @@ namespace MeNext.Spotify
 {
     public class Search<T, Q> : IResultList<T> where T : IMetadata where Q : IMetadataResult
     {
+        private WebApi webApi;
+        private bool isWrapped;
+
         private int firstResult;
         private bool hasNextPage;
         private List<T> items;
-        private WebApi webApi;
         private string nextPage;
         private string prevPage;
 
-        public Search(SearchChunkResult<Q> searchResult, WebApi webApi)
+
+        public Search(PagingObjectResult<Q> searchResult, WebApi webApi, bool isWrapped)
         {
             this.webApi = webApi;
+            this.isWrapped = isWrapped;
+
             this.firstResult = searchResult.offset;
             this.hasNextPage = (searchResult.next != null);
             this.nextPage = searchResult.next;
@@ -85,7 +90,7 @@ namespace MeNext.Spotify
                 if (nextPage == null) {
                     return null;
                 }
-                return webApi.SearchUri<T, Q>(nextPage);
+                return webApi.PagingUri<T, Q>(nextPage, this.isWrapped);
             }
         }
 
@@ -96,7 +101,7 @@ namespace MeNext.Spotify
                 if (prevPage == null) {
                     return null;
                 }
-                return webApi.SearchUri<T, Q>(prevPage);
+                return webApi.PagingUri<T, Q>(prevPage, this.isWrapped);
             }
         }
     }

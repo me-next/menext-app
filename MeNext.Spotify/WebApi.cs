@@ -48,6 +48,7 @@ namespace MeNext.Spotify
         {
             this.accessToken = accessToken;
             this.tokenType = tokenType;
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
         }
 
         // TODO: Unit test this
@@ -71,22 +72,7 @@ namespace MeNext.Spotify
 
             string endUri = string.Format("/search?q={0}&type={1}", encodedQuery, "track");
 
-            return SearchUri<ISong, PartialTrackResult>(BASE_ADDRESS + endUri);
-        }
-
-        public IResultList<T> SearchUri<T, Q>(string uri) where T : IMetadata where Q : IMetadataResult
-        {
-            var task = Task.Run(async () =>
-            {
-                return await GetJsonFullUri(uri);
-            });
-
-            var json = task.Result;
-            var jsonResult = JsonConvert.DeserializeObject<SearchResult>(json);
-
-            var search = new Search<T, Q>(SearchChunkResult<PartialTrackResult>.CastTypeParam<Q>(jsonResult.tracks), this);
-
-            return search;
+            return PagingUri<ISong, PartialTrackResult>(BASE_ADDRESS + endUri, true);
         }
 
         public IResultList<IAlbum> SearchAlbum(string query)
@@ -107,7 +93,37 @@ namespace MeNext.Spotify
             throw new NotImplementedException();
         }
 
+        public IResultList<ISong> GetUserLibrarySongs()
+        {
+            return PagingUri<ISong, SavedTrackResult>(BASE_ADDRESS + "/me/tracks", false);
+        }
+
+        public IResultList<T> PagingUri<T, Q>(string uri, bool isWrapped) where T : IMetadata where Q : IMetadataResult
+        {
+            var task = Task.Run(async () =>
+            {
+                return await GetJsonFullUri(uri);
+            });
+
+            var json = task.Result;
+
+            PagingObjectResult<Q> theList = null;
+
+            // TODO: Cache the results from this instead of discarding them in favour of the URI?
+            if (isWrapped) {
+                var jsonResult = JsonConvert.DeserializeObject<SearchResult<Q>>(json);
+                theList = PagingObjectResult<Q>.CastTypeParam<Q>(jsonResult.Items);
+            } else {
+                theList = JsonConvert.DeserializeObject<PagingObjectResult<Q>>(json);
+            }
+
+            var search = new Search<T, Q>(theList, this, isWrapped);
+
+            return search;
+        }
+
         // TODO: Test rate limiting
+        // Pretty sure this code is wrong
         /// <summary>
         /// Processes the web exception.
         /// </summary>

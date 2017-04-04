@@ -50,8 +50,9 @@
     <Compile Include="SpotifyMetadata\SearchResults\SearchResult.cs" />
     <Compile Include="SpotifyMetadata\MusicServiceImpls\ISpotifyMetadata.cs" />
     <Compile Include="SpotifyMetadata\Search.cs" />
-    <Compile Include="SpotifyMetadata\SearchResults\SearchChunkResult.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\PagingObjectResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\IMetadataResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\SavedTrackResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SpotifyMetadata\" />
