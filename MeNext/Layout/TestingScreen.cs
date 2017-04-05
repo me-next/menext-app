@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MeNext.MusicService;
 using Xamarin.Forms;
 
 namespace MeNext
@@ -79,7 +80,7 @@ namespace MeNext
                 var playlists = musicService.UserLibraryPlaylists;
                 foreach (var p in playlists.Items) {
                     Debug.WriteLine("\n== " + p.Name + " ==");
-                    foreach (var s in p.Songs.Items) {
+                    foreach (var s in new ResultListWrapper<ISong>(p.Songs)) {
                         Debug.WriteLine(s.Name);
                     }
                 }
