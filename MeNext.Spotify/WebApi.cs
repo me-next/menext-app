@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -134,7 +134,7 @@ namespace MeNext.Spotify
 
             // Store metadata in the cache so we can use it, if possible
             foreach (var item in theList.items) {
-                metadata.ResultCacheSubmit(item);
+                metadata.CacheSubmit(item);
             }
 
             var search = new PagingWrapper<T, Q>(theList, this, isWrapped);

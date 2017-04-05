@@ -20,11 +20,18 @@ namespace MeNext.Spotify
             this.factory = factory;
             this.uri = result.uri;
             this.songUids = new List<string>();
-            // TODO Cache these tracks instead of just discarding them for their UIDs
             foreach (var track in result.tracks.items) {
                 this.songUids.Add(track.uri);
             }
             this.name = result.name;
+
+            // Submit items for caching
+            foreach (var track in result.tracks.items) {
+                this.factory.CacheSubmit(track);
+            }
+            foreach (var artist in result.artists) {
+                this.factory.CacheSubmit(artist);
+            }
         }
 
         public string Name

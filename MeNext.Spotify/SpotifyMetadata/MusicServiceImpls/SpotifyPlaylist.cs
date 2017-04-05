@@ -23,15 +23,13 @@ namespace MeNext.Spotify
 
             PagingObjectResult<PlaylistTrackResult> tracks = result.tracks;
 
-            // TODO: Do similar caching in the other classes
-            foreach (var playlistTrack in tracks.items) {
-                var trackResult = playlistTrack.track;
-                var song = new SpotifySong(factory, trackResult);
-                factory.CacheSubmit(song);
-            }
-
             var wrap = new PagingWrapper<ISong, PlaylistTrackResult>(tracks, webApi, false);
             this.page1 = wrap;
+
+            // Submit items for caching
+            foreach (var playlistTrack in tracks.items) {
+                this.factory.CacheSubmit(playlistTrack);
+            }
         }
 
         internal SpotifyPlaylist(MetadataFactory factory, PartialPlaylistResult result, WebApi webApi)
