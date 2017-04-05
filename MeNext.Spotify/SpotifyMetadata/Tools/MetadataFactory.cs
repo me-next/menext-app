@@ -33,7 +33,7 @@ namespace MeNext.Spotify
         public void ResultCacheSubmit(IMetadataResult data)
         {
             var meta = data.ToMetadata(this.webApi, this);
-            if (meta != null) {
+            if (meta != null && !cache.ContainsKey(meta.UniqueId)) {
                 this.CacheSubmit(meta);
             }
         }

@@ -17,8 +17,7 @@ namespace MeNext.Spotify
 
         public IMetadata ToMetadata(WebApi webApi, MetadataFactory metadata)
         {
-            // TODO Cache?
-            return null;
+            return new SpotifyArtist(metadata, this);
         }
     }
 }
