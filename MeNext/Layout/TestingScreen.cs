@@ -76,30 +76,40 @@ namespace MeNext
                 //Debug.WriteLine(song.Artists[0].Name);
 
                 Debug.WriteLine("Searching");
-                var results = musicService.UserLibrarySongs;
-                if (results != null) {
-                    Debug.WriteLine("results was not null");
-                    if (results.Items != null) {
-                        Debug.WriteLine("items was not null. printing them.");
-                        foreach (var result in results.Items) {
-                            Debug.WriteLine(result.Name);
-                        }
-
-                        if (results.HasNextPage) {
-                            Debug.WriteLine("Has next page. Printing it.");
-                            foreach (var result in results.NextPage.Items) {
-                                Debug.WriteLine(result.Name);
-                            }
-                        } else {
-                            Debug.WriteLine("Does not have next page.");
-                        }
-                    } else {
-                        Debug.WriteLine("items was null");
+                var playlists = musicService.UserLibraryPlaylists;
+                foreach (var p in playlists.Items) {
+                    Debug.WriteLine("\n== " + p.Name + " ==");
+                    foreach (var s in p.Songs.Items) {
+                        Debug.WriteLine(s.Name);
                     }
-
-                } else {
-                    Debug.WriteLine("results was null");
                 }
+
+
+
+                //var results = musicService.UserLibrarySongs;
+                //if (results != null) {
+                //    Debug.WriteLine("results was not null");
+                //    if (results.Items != null) {
+                //        Debug.WriteLine("items was not null. printing them.");
+                //        foreach (var result in results.Items) {
+                //            Debug.WriteLine(result.Name);
+                //        }
+
+                //        if (results.HasNextPage) {
+                //            Debug.WriteLine("Has next page. Printing it.");
+                //            foreach (var result in results.NextPage.Items) {
+                //                Debug.WriteLine(result.Name);
+                //            }
+                //        } else {
+                //            Debug.WriteLine("Does not have next page.");
+                //        }
+                //    } else {
+                //        Debug.WriteLine("items was null");
+                //    }
+
+                //} else {
+                //    Debug.WriteLine("results was null");
+                //}
 
                 Debug.WriteLine("Done");
             });

@@ -1,39 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using MeNext.MusicService;
+using MeNext.Spotify;
+using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
     public class SpotifyPlaylist : IPlaylist, ISpotifyMetadata
     {
-        private readonly string spotifyUri;
+        private MetadataFactory factory;
+        private string uri;
+        private string name;
+        private IResultList<ISong> page1;
 
-        internal SpotifyPlaylist(string spotifyUri)
+        internal SpotifyPlaylist(MetadataFactory factory, PlaylistResult result, WebApi webApi)
         {
-            this.spotifyUri = spotifyUri;
+            this.factory = factory;
+            this.uri = result.uri;
+            this.name = result.name;
+
+            // TODO Cache these tracks?
+            PagingObjectResult<PlaylistTrackResult> tracks = result.tracks;
+
+            var wrap = new PagingWrapper<ISong, PlaylistTrackResult>(tracks, webApi, false);
+            this.page1 = wrap;
         }
 
         public string Name
         {
             get
             {
-                // TODO
-                return "Playlist Name";
+                return this.name;
             }
         }
 
-        public List<ISong> Songs
+        public IResultList<ISong> Songs
         {
             get
             {
-                // TODO
-                var result = new List<ISong>();
-                //result.Add(new SpotifySong("spotify:track:2Ml0l8YWJLQhPrRDLpQaDM"));
-                //result.Add(new SpotifySong("spotify:track:1BwaPm2VjiOenzjW1TOZuW"));
-                //result.Add(new SpotifySong("spotify:track:5USZyz6dnBEn1oLsKcAKQy"));
-                //result.Add(new SpotifySong("spotify:track:0mBL2JwjNYKtdFacHxvtJt"));
-                //result.Add(new SpotifySong("spotify:track:4EveU9Zb50mjgi5avDNqlK"));
-                return result;
+                return this.page1;
             }
         }
 
@@ -41,8 +48,31 @@ namespace MeNext.Spotify
         {
             get
             {
-                return spotifyUri;
+                return uri;
             }
+        }
+
+        // This one is a bit different than the other 3 obtainers, because the API is totally different
+        internal static List<SpotifyPlaylist> ObtainPlaylists(MetadataFactory factory, IList<string> uids, WebApi webApi)
+        {
+            var result = new List<SpotifyPlaylist>();
+
+            foreach (var uid in uids) {
+                // Format example: spotify:user:wizzlersmate:playlist:1AVZz0mBuGbCEoNRQdYQju
+                var lastColon = uid.LastIndexOf(':');
+                var id = uid.Substring(lastColon + 1);
+                var username = uid.Substring(13, lastColon - 9 - 13);
+
+                var task = Task.Run(async () =>
+                {
+                    return await webApi.GetJson("/users/" + username + "/playlists/" + id);
+                });
+                var json = task.Result;
+                var jsonResult = JsonConvert.DeserializeObject<PlaylistResult>(json);
+                result.Add(new SpotifyPlaylist(factory, jsonResult, webApi));
+            }
+
+            return result;
         }
     }
 }

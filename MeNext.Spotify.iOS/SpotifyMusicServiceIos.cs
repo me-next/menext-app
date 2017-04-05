@@ -172,8 +172,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                // TODO: Implement user library
-                throw new NotImplementedException();
+                return webApi.GetUserLibraryPlaylists();
             }
         }
 

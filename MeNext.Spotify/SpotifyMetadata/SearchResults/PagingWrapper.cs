@@ -5,34 +5,39 @@ using MeNext.MusicService;
 
 namespace MeNext.Spotify
 {
-    public class Search<T, Q> : IResultList<T> where T : IMetadata where Q : IMetadataResult
+    /// <summary>
+    /// This class wraps a PagingObjectResult, which comes from the Spotify API, in an IResultList, so it can
+    /// be accessed agnostically.
+    /// </summary>
+    public class PagingWrapper<T, Q> : IResultList<T> where T : IMetadata where Q : IMetadataResult
     {
-        private WebApi webApi;
-        private bool isWrapped;
+        private readonly WebApi webApi;
+        private readonly bool isWrapped;
 
-        private int firstResult;
-        private bool hasNextPage;
-        private List<T> items;
-        private string nextPage;
-        private string prevPage;
+        private readonly int firstResult;
+        private readonly bool hasNextPage;
+        private readonly List<T> items;
+        private readonly string nextPage;
+        private readonly string prevPage;
 
 
-        public Search(PagingObjectResult<Q> searchResult, WebApi webApi, bool isWrapped)
+        public PagingWrapper(PagingObjectResult<Q> result, WebApi webApi, bool isWrapped)
         {
             this.webApi = webApi;
             this.isWrapped = isWrapped;
 
-            this.firstResult = searchResult.offset;
-            this.hasNextPage = (searchResult.next != null);
-            this.nextPage = searchResult.next;
-            this.prevPage = searchResult.previous;
+            this.firstResult = result.offset;
+            this.hasNextPage = (result.next != null);
+            this.nextPage = result.next;
+            this.prevPage = result.previous;
 
+            // TODO Use some of this info to help cache?
             this.items = new List<T>();
+            var uids = new List<string>();
+            foreach (var item in result.items) {
+                uids.Add(item.uri);
+            }
             if (typeof(T) == typeof(ISong)) {
-                var uids = new List<string>();
-                foreach (var song in searchResult.items) {
-                    uids.Add(song.uri);
-                }
                 var songs = webApi.metadata.GetSongs(uids);
                 foreach (var song in songs) {
                     this.items.Add((T) song);
@@ -44,8 +49,10 @@ namespace MeNext.Spotify
                 // TODO
                 throw new NotImplementedException();
             } else if (typeof(T) == typeof(IPlaylist)) {
-                // TODO
-                throw new NotImplementedException();
+                var playlists = webApi.metadata.GetPlaylists(uids);
+                foreach (var pl in playlists) {
+                    this.items.Add((T) pl);
+                }
             } else {
                 throw new Exception("Invalid type T: " + typeof(T).Name);
             }

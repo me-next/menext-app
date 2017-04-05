@@ -98,6 +98,22 @@ namespace MeNext.Spotify
             return PagingUri<ISong, SavedTrackResult>(BASE_ADDRESS + "/me/tracks", false);
         }
 
+        public IResultList<IPlaylist> GetUserLibraryPlaylists()
+        {
+            return PagingUri<IPlaylist, PartialPlaylistResult>(BASE_ADDRESS + "/me/playlists", false);
+        }
+
+        /// <summary>
+        /// Creates an IResultList for the paging object located in the response to a Spotify URI.
+        /// </summary>
+        /// <returns>The IResultList.</returns>
+        /// <param name="uri">The entire Spotify request URI (including the BASE_ADDRESS).</param>
+        /// <param name="isWrapped">
+        /// If set to <c>true</c>, the paging object is wrapped in a SearchResult, which actually contains multiple
+        /// paging objects. We deduce which one to use based on type parameter Q.
+        /// </param>
+        /// <typeparam name="T">The internal data type; an instance of IMetadata.</typeparam>
+        /// <typeparam name="Q">The json data type; an instance of IMetadataResult.</typeparam>
         public IResultList<T> PagingUri<T, Q>(string uri, bool isWrapped) where T : IMetadata where Q : IMetadataResult
         {
             var task = Task.Run(async () =>
@@ -107,7 +123,7 @@ namespace MeNext.Spotify
 
             var json = task.Result;
 
-            PagingObjectResult<Q> theList = null;
+            PagingObjectResult<Q> theList;
 
             // TODO: Cache the results from this instead of discarding them in favour of the URI?
             if (isWrapped) {
@@ -117,7 +133,7 @@ namespace MeNext.Spotify
                 theList = JsonConvert.DeserializeObject<PagingObjectResult<Q>>(json);
             }
 
-            var search = new Search<T, Q>(theList, this, isWrapped);
+            var search = new PagingWrapper<T, Q>(theList, this, isWrapped);
 
             return search;
         }

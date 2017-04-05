@@ -51,10 +51,6 @@ namespace MeNext.Spotify
         /// <typeparam name="T">The 1st type parameter.</typeparam>
         private List<ISpotifyMetadata> Obtain<T>(IList<string> uids) where T : ISpotifyMetadata
         {
-            // TODO: Add SpotifyPlaylist support, which does not have a "get multiple" endpoint
-            // Then remove this assetion
-            Debug.Assert(typeof(T) != typeof(SpotifyPlaylist));
-
             var sids = new Queue<string>();
             foreach (var uid in uids) {
                 var split = uid.Split(':');
@@ -72,7 +68,8 @@ namespace MeNext.Spotify
                 var artists = SpotifyArtist.ObtainArtists(this, sids);
                 result.AddRange(artists);
             } else if (typeof(T) == typeof(SpotifyPlaylist)) {
-                // TODO Add playlist support to this factory
+                var playlists = SpotifyPlaylist.ObtainPlaylists(this, uids, webApi);
+                result.AddRange(playlists);
             } else {
                 throw new Exception("Invalid type T: " + typeof(T).Name);
             }
@@ -111,13 +108,6 @@ namespace MeNext.Spotify
             return result;
         }
 
-        private Q GetOne<T, Q>(string uid) where T : ISpotifyMetadata, Q
-        {
-            var list = new List<string>();
-            list.Add(uid);
-            return GetMany<T, Q>(list)[0];
-        }
-
         public List<ISong> GetSongs(IList<string> uids)
         {
             return GetMany<SpotifySong, ISong>(uids);
@@ -136,6 +126,15 @@ namespace MeNext.Spotify
         public List<IPlaylist> GetPlaylists(IList<string> uids)
         {
             return GetMany<SpotifyPlaylist, IPlaylist>(uids);
+        }
+
+        // Uses the corresponding GetMany function with a single uid, and then returns the singular result.
+        // Just cuts down on code repetition
+        private Q GetOne<T, Q>(string uid) where T : ISpotifyMetadata, Q
+        {
+            var list = new List<string>();
+            list.Add(uid);
+            return GetMany<T, Q>(list)[0];
         }
 
         public ISong GetSong(string uid)
