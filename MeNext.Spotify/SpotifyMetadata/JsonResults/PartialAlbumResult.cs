@@ -4,6 +4,10 @@ using MeNext.MusicService;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Holder for deserialized Spotify json.
+    /// See https://developer.spotify.com/web-api/endpoint-reference/
+    /// </summary>
     public class PartialAlbumResult : IMetadataResult
     {
         public string album_type { get; set; }

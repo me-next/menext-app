@@ -3,6 +3,10 @@ using MeNext.MusicService;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Holder for deserialized Spotify json.
+    /// See https://developer.spotify.com/web-api/endpoint-reference/
+    /// </summary>
     public class PartialArtistResult : IMetadataResult
     {
         public object external_urls { get; set; }

@@ -5,6 +5,10 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Holder for deserialized Spotify json.
+    /// See https://developer.spotify.com/web-api/endpoint-reference/
+    /// </summary>
     public class PartialPlaylistResult : IMetadataResult
     {
         public bool? collaborative { get; set; }
