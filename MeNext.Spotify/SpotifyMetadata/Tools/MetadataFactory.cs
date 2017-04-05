@@ -12,7 +12,6 @@ namespace MeNext.Spotify
     {
         // TODO: Make the cache clean out old entries occassionally?
         private ConcurrentDictionary<string, IMetadata> cache = new ConcurrentDictionary<string, IMetadata>();
-        private ConcurrentDictionary<string, IMetadataResult> resultCache = new ConcurrentDictionary<string, IMetadataResult>();
 
         public WebApi webApi { get; private set; }
 
@@ -33,7 +32,10 @@ namespace MeNext.Spotify
 
         public void ResultCacheSubmit(IMetadataResult data)
         {
-            resultCache[data.uri] = data;
+            var meta = data.ToMetadata(this.webApi, this);
+            if (meta != null) {
+                this.CacheSubmit(meta);
+            }
         }
 
         // Assumption: All uids are in fact of type T
@@ -45,13 +47,6 @@ namespace MeNext.Spotify
             foreach (string uid in uids) {
                 if (cache.ContainsKey(uid)) {
                     result.Add((T) cache[uid]);
-                } else if (resultCache.ContainsKey(uid)) {
-                    var metadata = resultCache[uid].ToMetadata(webApi, this);
-                    if (metadata != null) {
-                        result.Add((T) metadata);
-                    } else {
-                        absent.Add(uid);
-                    }
                 } else {
                     absent.Add(uid);
                 }

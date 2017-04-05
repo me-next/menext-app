@@ -125,7 +125,6 @@ namespace MeNext.Spotify
 
             PagingObjectResult<Q> theList;
 
-            // TODO: Cache the results from this instead of discarding them in favour of the URI?
             if (isWrapped) {
                 var jsonResult = JsonConvert.DeserializeObject<SearchResult<Q>>(json);
                 theList = PagingObjectResult<Q>.CastTypeParam<Q>(jsonResult.Items);
@@ -133,6 +132,7 @@ namespace MeNext.Spotify
                 theList = JsonConvert.DeserializeObject<PagingObjectResult<Q>>(json);
             }
 
+            // Store metadata in the cache so we can use it, if possible
             foreach (var item in theList.items) {
                 metadata.ResultCacheSubmit(item);
             }
