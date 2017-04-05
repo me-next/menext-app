@@ -10,7 +10,8 @@ namespace MeNext.Spotify
 {
     public class MetadataFactory
     {
-        private ConcurrentDictionary<string, ISpotifyMetadata> cache = new ConcurrentDictionary<string, ISpotifyMetadata>();
+        // TODO: Make the cache clean out old entries occassionally?
+        private ConcurrentDictionary<string, IMetadata> cache = new ConcurrentDictionary<string, IMetadata>();
 
         public WebApi webApi { get; private set; }
 
@@ -19,8 +20,17 @@ namespace MeNext.Spotify
             this.webApi = webApi;
         }
 
+        /// <summary>
+        /// Submits a chunk of metadata to the cache
+        /// </summary>
+        /// <param name="data">The metadata.</param>
+        public void CacheSubmit(IMetadata data)
+        {
+            cache[data.UniqueId] = data;
+        }
+
         // Assumption: All uids are in fact of type T
-        // TODO: Verify that
+        // TODO: Verify that?
         private List<Q> GetMany<T, Q>(IList<string> uids) where T : ISpotifyMetadata, Q
         {
             var result = new List<Q>();
@@ -37,7 +47,7 @@ namespace MeNext.Spotify
             var obtained = Obtain<T>(absent);
             foreach (var thing in obtained) {
                 result.Add((Q) thing);
-                cache[thing.UniqueId] = thing;
+                CacheSubmit(thing);
             }
 
             return result;

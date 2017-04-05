@@ -20,8 +20,7 @@ namespace MeNext.Spotify
         private readonly string nextPage;
         private readonly string prevPage;
 
-
-        public PagingWrapper(PagingObjectResult<Q> result, WebApi webApi, bool isWrapped)
+        internal PagingWrapper(PagingObjectResult<Q> result, WebApi webApi, bool isWrapped)
         {
             this.webApi = webApi;
             this.isWrapped = isWrapped;
