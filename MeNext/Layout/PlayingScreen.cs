@@ -26,17 +26,14 @@ namespace MeNext
                 Command = new Command(() => mainController.RequestPrevious())
             });
 
+            var playCommand = new Command(() =>
+            {
+                mainController.musicService.Playing = !mainController.musicService.Playing;
+            });
             layout.Children.Add(new Button
             {
                 Text = "Play/Pause",
-                Command = new Command((obj) =>
-                {
-                    if (mainController.musicService.Playing) {
-                        mainController.RequestPause();
-                    } else {
-                        mainController.RequestPlay();
-                    }
-                })
+                Command = playCommand
             });
 
             layout.Children.Add(new Button

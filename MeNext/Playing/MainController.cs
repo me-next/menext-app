@@ -251,7 +251,7 @@ namespace MeNext
             // TODO: songFinished with actual song
             var task = Task.Run(async () =>
              {
-                 return await api.SongFinished(this.EventSlug, this.UserKey, "dummy");
+                return await api.SongFinished(this.EventSlug, this.UserKey, this.musicService.PlayingSong.UniqueId);
              });
 
             if (task.IsFaulted) {
