@@ -4,13 +4,13 @@ using System.Diagnostics;
 
 namespace MeNext.Spotify
 {
-    public class SearchChunkResult<Q> where Q : IMetadataResult
+    public class PagingObjectResult<Q> where Q : IMetadataResult
     {
-        public static SearchChunkResult<T> CastTypeParam<T>(SearchChunkResult<Q> original) where T : IMetadataResult
+        public static PagingObjectResult<T> CastTypeParam<T>(PagingObjectResult<Q> original) where T : IMetadataResult
         {
             Debug.Assert(typeof(T) == typeof(Q));
 
-            var fresh = new SearchChunkResult<T>();
+            var fresh = new PagingObjectResult<T>();
             fresh.href = original.href;
             fresh.limit = original.limit;
             fresh.next = original.next;

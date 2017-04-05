@@ -24,6 +24,14 @@ namespace MeNext.Spotify
                 this.songUids.Add(track.uri);
             }
             this.name = result.name;
+
+            // Submit items for caching
+            foreach (var track in result.tracks.items) {
+                this.factory.CacheSubmit(track);
+            }
+            foreach (var artist in result.artists) {
+                this.factory.CacheSubmit(artist);
+            }
         }
 
         public string Name

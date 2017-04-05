@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -48,6 +48,7 @@ namespace MeNext.Spotify
         {
             this.accessToken = accessToken;
             this.tokenType = tokenType;
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
         }
 
         // TODO: Unit test this
@@ -71,22 +72,7 @@ namespace MeNext.Spotify
 
             string endUri = string.Format("/search?q={0}&type={1}", encodedQuery, "track");
 
-            return SearchUri<ISong, PartialTrackResult>(BASE_ADDRESS + endUri);
-        }
-
-        public IResultList<T> SearchUri<T, Q>(string uri) where T : IMetadata where Q : IMetadataResult
-        {
-            var task = Task.Run(async () =>
-            {
-                return await GetJsonFullUri(uri);
-            });
-
-            var json = task.Result;
-            var jsonResult = JsonConvert.DeserializeObject<SearchResult>(json);
-
-            var search = new Search<T, Q>(SearchChunkResult<PartialTrackResult>.CastTypeParam<Q>(jsonResult.tracks), this);
-
-            return search;
+            return PagingUri<ISong, PartialTrackResult>(BASE_ADDRESS + endUri, true);
         }
 
         public IResultList<IAlbum> SearchAlbum(string query)
@@ -107,7 +93,57 @@ namespace MeNext.Spotify
             throw new NotImplementedException();
         }
 
+        public IResultList<ISong> GetUserLibrarySongs()
+        {
+            return PagingUri<ISong, SavedTrackResult>(BASE_ADDRESS + "/me/tracks", false);
+        }
+
+        public IResultList<IPlaylist> GetUserLibraryPlaylists()
+        {
+            return PagingUri<IPlaylist, PartialPlaylistResult>(BASE_ADDRESS + "/me/playlists", false);
+        }
+
+        /// <summary>
+        /// Creates an IResultList for the paging object located in the response to a Spotify URI.
+        /// </summary>
+        /// <returns>The IResultList.</returns>
+        /// <param name="uri">The entire Spotify request URI (including the BASE_ADDRESS).</param>
+        /// <param name="isWrapped">
+        /// If set to <c>true</c>, the paging object is wrapped in a SearchResult, which actually contains multiple
+        /// paging objects. We deduce which one to use based on type parameter Q.
+        /// </param>
+        /// <typeparam name="T">The internal data type; an instance of IMetadata.</typeparam>
+        /// <typeparam name="Q">The json data type; an instance of IMetadataResult.</typeparam>
+        public IResultList<T> PagingUri<T, Q>(string uri, bool isWrapped) where T : IMetadata where Q : IMetadataResult
+        {
+            var task = Task.Run(async () =>
+            {
+                return await GetJsonFullUri(uri);
+            });
+
+            var json = task.Result;
+
+            PagingObjectResult<Q> theList;
+
+            if (isWrapped) {
+                var jsonResult = JsonConvert.DeserializeObject<SearchResult<Q>>(json);
+                theList = PagingObjectResult<Q>.CastTypeParam<Q>(jsonResult.Items);
+            } else {
+                theList = JsonConvert.DeserializeObject<PagingObjectResult<Q>>(json);
+            }
+
+            // Store metadata in the cache so we can use it, if possible
+            foreach (var item in theList.items) {
+                metadata.CacheSubmit(item);
+            }
+
+            var search = new PagingWrapper<T, Q>(theList, this, isWrapped);
+
+            return search;
+        }
+
         // TODO: Test rate limiting
+        // Pretty sure this code is wrong
         /// <summary>
         /// Processes the web exception.
         /// </summary>
@@ -156,7 +192,7 @@ namespace MeNext.Spotify
 
         public async Task<string> GetJsonFullUri(string fullUri)
         {
-            Debug.WriteLine("Getting URI: {0}", fullUri);
+            Debug.WriteLine("::Getting URI: {0}", fullUri);
 
             var uri = new Uri(fullUri);
             HttpResponseMessage response;

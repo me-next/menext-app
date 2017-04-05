@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UseMSBuildEngine>true</UseMSBuildEngine>
     <OutputType>Library</OutputType>
-    <RootNamespace>MusicService</RootNamespace>
+    <RootNamespace>MeNext.MusicService</RootNamespace>
     <AssemblyName>MusicService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
@@ -39,6 +39,8 @@
     <Compile Include="IMusicServiceListener.cs" />
     <Compile Include="PageErrorType.cs" />
     <Compile Include="IMetadata.cs" />
+    <Compile Include="ResultListEnumerator.cs" />
+    <Compile Include="ResultListWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

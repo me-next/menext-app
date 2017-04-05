@@ -30,7 +30,7 @@ namespace MeNext.MusicService
         /// Gets the list of songs in the playlist.
         /// </summary>
         /// <value>The songs.</value>
-        List<ISong> Songs
+        IResultList<ISong> Songs
         {
             get;
         }
