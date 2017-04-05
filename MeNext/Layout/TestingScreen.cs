@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MeNext.MusicService;
 using Xamarin.Forms;
 
 namespace MeNext
@@ -76,10 +77,41 @@ namespace MeNext
                 //Debug.WriteLine(song.Artists[0].Name);
 
                 Debug.WriteLine("Searching");
-                var results = musicService.SearchSong("abba");
-                foreach (var result in results.NextPage.Items) {
-                    Debug.WriteLine(result.Name);
+                var playlists = musicService.UserLibraryPlaylists;
+                foreach (var p in playlists.Items) {
+                    Debug.WriteLine("\n== " + p.Name + " ==");
+                    foreach (var s in new ResultListWrapper<ISong>(p.Songs)) {
+                        Debug.WriteLine(s.Name);
+                    }
                 }
+
+
+
+                //var results = musicService.UserLibrarySongs;
+                //if (results != null) {
+                //    Debug.WriteLine("results was not null");
+                //    if (results.Items != null) {
+                //        Debug.WriteLine("items was not null. printing them.");
+                //        foreach (var result in results.Items) {
+                //            Debug.WriteLine(result.Name);
+                //        }
+
+                //        if (results.HasNextPage) {
+                //            Debug.WriteLine("Has next page. Printing it.");
+                //            foreach (var result in results.NextPage.Items) {
+                //                Debug.WriteLine(result.Name);
+                //            }
+                //        } else {
+                //            Debug.WriteLine("Does not have next page.");
+                //        }
+                //    } else {
+                //        Debug.WriteLine("items was null");
+                //    }
+
+                //} else {
+                //    Debug.WriteLine("results was null");
+                //}
+
                 Debug.WriteLine("Done");
             });
             layout.Children.Add(new Button

@@ -63,6 +63,7 @@
     <Compile Include="StreamingPlaybackDelegate.cs" />
     <Compile Include="SpotifyAuth.cs" />
     <Compile Include="SpotifyResults\SpotifySimpleResultList.cs" />
+    <Compile Include="GlobalSuppressions2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeNext.Spotify.iOS.Auth\MeNext.Spotify.iOS.Auth.csproj">

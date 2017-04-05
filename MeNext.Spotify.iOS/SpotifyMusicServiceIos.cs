@@ -23,8 +23,12 @@ namespace MeNext.Spotify.iOS
 
         public SpotifyMusicServiceIos()
         {
-            sd = new SpotifyAuth(this).CreateStreamingDelegate();
+            // This needs to happen BEFORE auth slash streaming delegate, so if they login with a pre-existing session
+            // we get the memo and can pass it on to the existing web api.
             this.setupWebApi();
+
+            sd = new SpotifyAuth(this).CreateStreamingDelegate();
+
         }
 
         private void setupWebApi()
@@ -85,7 +89,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                if (this.CanPlayNow) {
+                if (this.CanPlayNow && this.sd.Player.PlaybackState != null) {
                     return this.sd.Player.PlaybackState.IsPlaying;
                 }
                 return false;
@@ -93,9 +97,15 @@ namespace MeNext.Spotify.iOS
 
             set
             {
-                if (this.CanPlayNow && this.sd.Player.PlaybackState.IsPlaying != value) {
-                    // TODO Handle error
-                    this.sd.Player.SetIsPlaying(value, (NSError arg0) => { });
+                if (this.CanPlayNow
+                    && this.sd.Player.PlaybackState != null
+                    && this.sd.Player.PlaybackState.IsPlaying != value) {
+                    this.sd.Player.SetIsPlaying(value, (NSError error) =>
+                    {
+                        if (error != null) {
+                            Debug.WriteLine("Error setting playing to " + value + ": " + error.DebugDescription, "service");
+                        }
+                    });
                 }
             }
         }
@@ -104,7 +114,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                if (this.CanPlayNow) {
+                if (this.CanPlayNow && this.sd.Player.PlaybackState != null) {
                     return this.sd.Player.PlaybackState.Position;
                 }
                 return 0.0;
@@ -113,8 +123,12 @@ namespace MeNext.Spotify.iOS
             set
             {
                 if (this.CanPlayNow) {
-                    // TODO Handle error
-                    this.sd.Player.SeekTo(value, (NSError arg0) => { });
+                    this.sd.Player.SeekTo(value, (NSError error) =>
+                    {
+                        if (error != null) {
+                            Debug.WriteLine("Error seeking to " + value + ": " + error.DebugDescription, "service");
+                        }
+                    });
                 }
             }
         }
@@ -158,8 +172,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                // TODO: Implement user library
-                throw new NotImplementedException();
+                return webApi.GetUserLibraryPlaylists();
             }
         }
 
@@ -167,8 +180,7 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                // TODO: Implement user library
-                throw new NotImplementedException();
+                return webApi.GetUserLibrarySongs();
             }
         }
 
@@ -222,24 +234,21 @@ namespace MeNext.Spotify.iOS
 
         public void PlaySong(ISong song, double position = 0)
         {
+            Debug.WriteLine("Trying to play song: " + song.Name, "service");
             if (this.CanPlayNow) {
                 sd.Player.PlaySpotifyURI(song.UniqueId, 0, position, (NSError error1) =>
                        {
                            if (error1 != null) {
-
                                this.playingSong = null;
-                               // TODO Handle error
-                               Debug.WriteLine("Err Playing: " + error1.DebugDescription);
+                               Debug.WriteLine("*** Error Playing: " + error1.DebugDescription, "service");
                            } else {
-
                                this.playingSong = song;
-
+                               Debug.WriteLine("Seemingly successfully played song", "service");
                            }
                        });
-                Debug.WriteLine("going to play the song now");
+            } else {
+                Debug.WriteLine("Whoops, can't play right now. Not logged in.", "service");
             }
-
-            Debug.WriteLine("tried to play song: " + song.Name);
         }
 
         public IResultList<IAlbum> SearchAlbum(string query)
@@ -270,14 +279,19 @@ namespace MeNext.Spotify.iOS
 
         public void Login()
         {
+            Debug.WriteLine("Login request received in music service", "auth");
             SpotifyAuth.Login();
         }
 
         public void Logout()
         {
             // TODO: Test
+            Debug.WriteLine("Logout request received in music service", "auth");
             if (this.LoggedIn) {
                 this.sd.Player.Logout();
+                Debug.WriteLine("Logged out.", "auth");
+            } else {
+                Debug.WriteLine("We weren't actually logged in though...", "auth");
             }
         }
 
@@ -305,7 +319,5 @@ namespace MeNext.Spotify.iOS
                 l.SomethingChanged();
             }
         }
-
-
     }
 }

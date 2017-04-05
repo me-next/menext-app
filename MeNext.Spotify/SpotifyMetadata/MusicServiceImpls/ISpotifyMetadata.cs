@@ -1,15 +1,12 @@
 ﻿using System;
+using MeNext.MusicService;
+
 namespace MeNext.Spotify
 {
-    public interface ISpotifyMetadata
+    /// <summary>
+    /// Represents a metadata class for Spotify
+    /// </summary>
+    public interface ISpotifyMetadata : IMetadata
     {
-        /// <summary>
-        /// Gets a Spotify unique identifier.
-        /// </summary>
-        /// <value>The unique identifier.</value>
-        string UniqueId
-        {
-            get;
-        }
     }
 }

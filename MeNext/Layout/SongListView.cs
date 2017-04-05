@@ -9,38 +9,6 @@ using MeNext.MusicService;
 
 namespace MeNext
 {
-    // Song is a POD class for song information.
-    // TODO: maybe move this out of this file? Create a more legitimate version? Use the implementation
-    // from menext/music-service?
-    //public class Song
-    //{
-    //    public Song(string name)
-    //    {
-    //        this.Name = name;
-    //    }
-
-    //    public Song(string name, string artist)
-    //    {
-    //        this.Name = name;
-    //        this.Artist = artist;
-    //    }
-
-    //    public string Name
-    //    {
-    //        get;
-    //    }
-
-    //    public string Artist
-    //    {
-    //        get;
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return string.Format("[Song: Name={0}, Artist={1}]", Name, Artist);
-    //    }
-    //};
-
     /// <summary>
     /// SongCellFactory controls how the song gets rendered for the SongList.
     /// Add buttons, click events etc. in here. 

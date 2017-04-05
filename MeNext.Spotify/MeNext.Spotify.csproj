@@ -30,28 +30,32 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApi.cs" />
     <Compile Include="SpotifyMetadata\Tools\MetadataFactory.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\TracksResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\TrackResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\PartialAlbumResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\PartialArtistResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\PartialImageResult.cs" />
     <Compile Include="SpotifyMetadata\Tools\Util.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\IResultWithList.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\AlbumsResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\AlbumResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\PartialTracksResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\PartialTrackResult.cs" />
     <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifyAlbum.cs" />
     <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifyArtist.cs" />
     <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifyPlaylist.cs" />
     <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifySong.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\ArtistsResult.cs" />
-    <Compile Include="SpotifyMetadata\JsonResults\ArtistResult.cs" />
     <Compile Include="SpotifyMetadata\SearchResults\SearchResult.cs" />
     <Compile Include="SpotifyMetadata\MusicServiceImpls\ISpotifyMetadata.cs" />
-    <Compile Include="SpotifyMetadata\Search.cs" />
-    <Compile Include="SpotifyMetadata\SearchResults\SearchChunkResult.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\PagingObjectResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\IMetadataResult.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\PagingWrapper.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\AlbumResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\ArtistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\PlaylistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\TrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialAlbumResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialArtistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialPlaylistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialTrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\AlbumsResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\ArtistsResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\SavedTrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\PartialTracksResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PlaylistTrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\TracksResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialImageResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SpotifyMetadata\" />
@@ -59,6 +63,9 @@
     <Folder Include="SpotifyMetadata\JsonResults\" />
     <Folder Include="SpotifyMetadata\MusicServiceImpls\" />
     <Folder Include="SpotifyMetadata\SearchResults\" />
+    <Folder Include="SpotifyMetadata\JsonResults\MainResults\" />
+    <Folder Include="SpotifyMetadata\JsonResults\PartialResults\" />
+    <Folder Include="SpotifyMetadata\JsonResults\AmalgomateResults\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MusicService\MusicService.csproj">
