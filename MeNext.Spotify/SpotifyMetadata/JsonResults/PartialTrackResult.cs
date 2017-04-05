@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using MeNext.MusicService;
 using Newtonsoft.Json;
 
 namespace MeNext.Spotify
@@ -21,5 +23,11 @@ namespace MeNext.Spotify
         public int track_number { get; set; }
         public string type { get; set; }
         public string uri { get; set; }
+
+        public IMetadata ToMetadata(WebApi webApi, MetadataFactory metadata)
+        {
+            // TODO Cache?
+            return null;
+        }
     }
 }

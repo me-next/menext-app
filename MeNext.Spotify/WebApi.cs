@@ -133,6 +133,10 @@ namespace MeNext.Spotify
                 theList = JsonConvert.DeserializeObject<PagingObjectResult<Q>>(json);
             }
 
+            foreach (var item in theList.items) {
+                metadata.ResultCacheSubmit(item);
+            }
+
             var search = new PagingWrapper<T, Q>(theList, this, isWrapped);
 
             return search;

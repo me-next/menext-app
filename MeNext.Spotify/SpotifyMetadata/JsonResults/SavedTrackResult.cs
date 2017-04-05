@@ -1,4 +1,6 @@
 ﻿using System;
+using MeNext.MusicService;
+
 namespace MeNext.Spotify
 {
     public class SavedTrackResult : IMetadataResult
@@ -12,6 +14,12 @@ namespace MeNext.Spotify
             {
                 return track.uri;
             }
+        }
+
+        public IMetadata ToMetadata(WebApi webApi, MetadataFactory metadata)
+        {
+            // TODO Cache?
+            return null;
         }
     }
 }

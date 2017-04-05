@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MeNext.MusicService;
 using Newtonsoft.Json;
 
 namespace MeNext.Spotify
@@ -24,5 +25,11 @@ namespace MeNext.Spotify
         public string uri { get; set; }
 
         public PagingObjectResult<PlaylistTrackResult> tracks { get; set; }
+
+        public IMetadata ToMetadata(WebApi webApi, MetadataFactory metadata)
+        {
+            // TODO Cache?
+            return null;
+        }
     }
 }

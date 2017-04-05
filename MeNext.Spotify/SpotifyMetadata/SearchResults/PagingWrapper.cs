@@ -14,23 +14,39 @@ namespace MeNext.Spotify
         private readonly WebApi webApi;
         private readonly bool isWrapped;
 
-        private readonly int firstResult;
-        private readonly bool hasNextPage;
-        private readonly List<T> items;
-        private readonly string nextPage;
-        private readonly string prevPage;
+        private string delayedLoad;
+
+        private int firstResult;
+        private List<T> items;
+        private string nextPage;
+        private string prevPage;
+
+        /// <summary>
+        /// Dummy constructor for if we don't actually have any of the info yet, just where to get the first real page
+        /// </summary>
+        /// <param name="firstUrl">First URL.</param>
+        /// <param name="webApi">Web API.</param>
+        /// <param name="isWrapped">If set to <c>true</c> is wrapped.</param>
+        internal PagingWrapper(string firstUrl, WebApi webApi, bool isWrapped)
+        {
+            // TODO: When this is the case, have first access to a param block and fill in the real data
+            this.webApi = webApi;
+            this.isWrapped = isWrapped;
+
+            this.delayedLoad = firstUrl;
+        }
 
         internal PagingWrapper(PagingObjectResult<Q> result, WebApi webApi, bool isWrapped)
         {
             this.webApi = webApi;
             this.isWrapped = isWrapped;
 
+            this.delayedLoad = null;
+
             this.firstResult = result.offset;
-            this.hasNextPage = (result.next != null);
             this.nextPage = result.next;
             this.prevPage = result.previous;
 
-            // TODO Use some of this info to help cache?
             this.items = new List<T>();
             var uids = new List<string>();
             foreach (var item in result.items) {
@@ -57,6 +73,22 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Checks if we had a delayed load for this page and, if so, load it.
+        /// </summary>
+        public void UndelayLoad()
+        {
+            if (delayedLoad != null) {
+                var wrapper = (PagingWrapper<T, Q>) webApi.PagingUri<T, Q>(delayedLoad, this.isWrapped);
+                this.firstResult = wrapper.firstResult;
+                this.nextPage = wrapper.nextPage;
+                this.prevPage = wrapper.prevPage;
+                this.items = wrapper.items;
+
+                this.delayedLoad = null;
+            }
+        }
+
         public PageErrorType Error
         {
             get
@@ -69,6 +101,7 @@ namespace MeNext.Spotify
         {
             get
             {
+                UndelayLoad();
                 return firstResult;
             }
         }
@@ -77,7 +110,8 @@ namespace MeNext.Spotify
         {
             get
             {
-                return hasNextPage;
+                UndelayLoad();
+                return (this.nextPage != null);
             }
         }
 
@@ -85,6 +119,7 @@ namespace MeNext.Spotify
         {
             get
             {
+                UndelayLoad();
                 return this.items;
             }
         }
@@ -93,6 +128,7 @@ namespace MeNext.Spotify
         {
             get
             {
+                UndelayLoad();
                 if (nextPage == null) {
                     return null;
                 }
@@ -104,6 +140,7 @@ namespace MeNext.Spotify
         {
             get
             {
+                UndelayLoad();
                 if (prevPage == null) {
                     return null;
                 }

@@ -34,6 +34,18 @@ namespace MeNext.Spotify
             this.page1 = wrap;
         }
 
+        internal SpotifyPlaylist(MetadataFactory factory, PartialPlaylistResult result, WebApi webApi)
+        {
+            this.factory = factory;
+            this.uri = result.uri;
+            this.name = result.name;
+
+            var trackHref = result.tracks.href;
+
+            var wrap = new PagingWrapper<ISong, PlaylistTrackResult>(trackHref, webApi, false);
+            this.page1 = wrap;
+        }
+
         public string Name
         {
             get

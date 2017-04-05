@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MeNext.MusicService;
 
 namespace MeNext.Spotify
 {
@@ -15,5 +16,11 @@ namespace MeNext.Spotify
         public string name { get; set; }
         public string type { get; set; }
         public string uri { get; set; }
+
+        public IMetadata ToMetadata(WebApi webApi, MetadataFactory metadata)
+        {
+            // TODO cache
+            return null;
+        }
     }
 }

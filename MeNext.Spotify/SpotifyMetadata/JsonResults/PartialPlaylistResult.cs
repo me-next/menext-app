@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using MeNext.MusicService;
 using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
     public class PartialPlaylistResult : IMetadataResult
     {
-        public bool collaborative { get; set; }
+        public bool? collaborative { get; set; }
         public object external_urls { get; set; }
         public string href { get; set; }
         public string id { get; set; }
@@ -18,8 +19,19 @@ namespace MeNext.Spotify
         public object isPublic { get; set; }
 
         public string snapshot_id { get; set; }
-        public object tracks { get; set; }
+        public TracksHrefResult tracks { get; set; }
         public string type { get; set; }
         public string uri { get; set; }
+
+        public IMetadata ToMetadata(WebApi webApi, MetadataFactory metadata)
+        {
+            return new SpotifyPlaylist(metadata, this, webApi);
+        }
+    }
+
+    public class TracksHrefResult
+    {
+        public string href { get; set; }
+        public int? total { get; set; }
     }
 }
