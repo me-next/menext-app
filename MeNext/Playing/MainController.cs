@@ -392,8 +392,16 @@ namespace MeNext
         /// <summary>
         /// Requests that the current event be given permissions
         /// </summary>
-        public void RequestEventPermissions(/* TODO: permissions structure */)
+        /// <param name="permissions">integer where each bit is a bool for a parameter. 0-5</param>
+        /// Assumes that the Event begins with Play Next and Suggest Allowed but everything else not allowed.
+        public void RequestEventPermissions(int permissions)
         {
+            //set the permissions for the Event
+            //1 is Suggest
+            //2 is Play Next
+            //4 is Play Now
+            //8 is Play Volume
+            //16 is Play Skip
             Debug.Assert(this.InEvent);
             // TODO
         }
