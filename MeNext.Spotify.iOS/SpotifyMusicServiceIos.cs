@@ -10,32 +10,26 @@ using UIKit;
 
 namespace MeNext.Spotify.iOS
 {
+    // VERSION: Spotify iOS SDK Beta 25
     // TODO Document
     // Based mostly on https://github.com/spotify/ios-sdk/tree/2db9f565b45e683b4bb62c1ee1bdc34660f07c8f/Demo%20Projects/Simple%20Track%20Playback/Simple%20Track%20Playback
     // With a special mention of https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
-    public class SpotifyMusicServiceIos : IMusicService
+    public class SpotifyMusicServiceIos : SpotifyMusicService
     {
-        private readonly List<IMusicServiceListener> listeners = new List<IMusicServiceListener>();
-
-        private StreamingDelegate sd;
+        private readonly StreamingDelegate sd;
         private ISong playingSong;
-        private WebApi webApi;
 
         public SpotifyMusicServiceIos()
         {
             // This needs to happen BEFORE auth slash streaming delegate, so if they login with a pre-existing session
             // we get the memo and can pass it on to the existing web api.
-            this.setupWebApi();
+            this.setupTokenUpdater();
 
             sd = new SpotifyAuth(this).CreateStreamingDelegate();
-
         }
 
-        private void setupWebApi()
+        private void setupTokenUpdater()
         {
-            // Default web api without any special access
-            this.webApi = new WebApi();
-
             // If we update our session, we need to create a new web api to use
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
               {
@@ -54,38 +48,14 @@ namespace MeNext.Spotify.iOS
         {
             get
             {
-                return LoggedIn;
+                return CanPlay;
             }
         }
 
         // =========================== //
-        public bool CanPlay
-        {
-            get
-            {
-                // TODO: Check if the user has premium
-                return LoggedIn;
-            }
-        }
 
-        public bool CanSearch
-        {
-            get
-            {
-                // Any user can search (in principle)
-                return true;
-            }
-        }
 
-        public string Name
-        {
-            get
-            {
-                return "Spotify";
-            }
-        }
-
-        public bool Playing
+        public override bool Playing
         {
             get
             {
@@ -110,7 +80,7 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        public double PlayingPosition
+        public override double PlayingPosition
         {
             get
             {
@@ -133,7 +103,7 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        public ISong PlayingSong
+        public override ISong PlayingSong
         {
             get
             {
@@ -141,50 +111,7 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        public bool HasUserLibrary
-        {
-            get
-            {
-                // TODO: Implement user library
-                return false;
-            }
-        }
-
-        public IResultList<IAlbum> UserLibraryAlbums
-        {
-            get
-            {
-                // TODO: Implement user library
-                throw new NotImplementedException();
-            }
-        }
-
-        public IResultList<IArtist> UserLibraryArtists
-        {
-            get
-            {
-                // TODO: Implement user library
-                throw new NotImplementedException();
-            }
-        }
-
-        public IResultList<IPlaylist> UserLibraryPlaylists
-        {
-            get
-            {
-                return webApi.GetUserLibraryPlaylists();
-            }
-        }
-
-        public IResultList<ISong> UserLibrarySongs
-        {
-            get
-            {
-                return webApi.GetUserLibrarySongs();
-            }
-        }
-
-        public bool LoggedIn
+        public override bool LoggedIn
         {
             get
             {
@@ -192,47 +119,7 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        public IAlbum GetAlbum(string uid)
-        {
-            return webApi.metadata.GetAlbum(uid);
-        }
-
-        public IArtist GetArtist(string uid)
-        {
-            return webApi.metadata.GetArtist(uid);
-        }
-
-        public IPlaylist GetPlaylist(string uid)
-        {
-            return webApi.metadata.GetPlaylist(uid);
-        }
-
-        public ISong GetSong(string uid)
-        {
-            return webApi.metadata.GetSong(uid);
-        }
-
-        public IList<ISong> GetSongs(IList<string> uids)
-        {
-            return webApi.metadata.GetSongs(uids);
-        }
-
-        public IList<IArtist> GetArtists(IList<string> uids)
-        {
-            return webApi.metadata.GetArtists(uids);
-        }
-
-        public IList<IAlbum> GetAlbums(IList<string> uids)
-        {
-            return webApi.metadata.GetAlbums(uids);
-        }
-
-        public IList<IPlaylist> GetPlaylists(IList<string> uids)
-        {
-            return webApi.metadata.GetPlaylists(uids);
-        }
-
-        public void PlaySong(ISong song, double position = 0)
+        public override void PlaySong(ISong song, double position = 0)
         {
             Debug.WriteLine("Trying to play song: " + song.Name, "service");
             if (this.CanPlayNow) {
@@ -251,39 +138,13 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        public IResultList<IAlbum> SearchAlbum(string query)
-        {
-            return webApi.SearchAlbum(query);
-        }
-
-        public IResultList<IArtist> SearchArtist(string query)
-        {
-            return webApi.SearchArtist(query);
-        }
-
-        public IResultList<IPlaylist> SearchPlaylists(string query)
-        {
-            return webApi.SearchPlaylists(query);
-        }
-
-        public IResultList<ISong> SearchSong(string query)
-        {
-            return webApi.SearchSong(query);
-        }
-
-        public void SuggestBuffer(List<ISong> songs)
-        {
-            // No way to do this in the backend yet
-            // Just do nothing
-        }
-
-        public void Login()
+        public override void Login()
         {
             Debug.WriteLine("Login request received in music service", "auth");
             SpotifyAuth.Login();
         }
 
-        public void Logout()
+        public override void Logout()
         {
             // TODO: Test
             Debug.WriteLine("Logout request received in music service", "auth");
@@ -292,31 +153,6 @@ namespace MeNext.Spotify.iOS
                 Debug.WriteLine("Logged out.", "auth");
             } else {
                 Debug.WriteLine("We weren't actually logged in though...", "auth");
-            }
-        }
-
-        public void AddStatusListener(IMusicServiceListener listener)
-        {
-            listeners.Add(listener);
-        }
-
-        public void RemoveStatusListener(IMusicServiceListener listener)
-        {
-            listeners.Remove(listener);
-        }
-
-        internal void SongEnds(string uri)
-        {
-            var x = this.GetSong(uri);
-            foreach (var l in listeners) {
-                l.SongEnds(this.GetSong(uri));
-            }
-        }
-
-        internal void SomethingChanged()
-        {
-            foreach (var l in listeners) {
-                l.SomethingChanged();
             }
         }
     }

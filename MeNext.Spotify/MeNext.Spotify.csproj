@@ -56,6 +56,7 @@
     <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PlaylistTrackResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\TracksResult.cs" />
     <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialImageResult.cs" />
+    <Compile Include="SpotifyMusicService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SpotifyMetadata\" />
