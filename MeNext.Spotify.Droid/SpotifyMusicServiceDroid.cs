@@ -70,8 +70,12 @@ namespace MeNext.Spotify.Droid
 
             set
             {
-                if (this.Player != null) {
-                    this.Player.PlaybackState.IsPlaying = value;
+                if (this.Player != null && this.Player.PlaybackState.IsPlaying != value) {
+                    if (value) {
+                        this.Player.Resume(this.listener.operationCallback);
+                    } else {
+                        this.Player.Pause(this.listener.operationCallback);
+                    }
                 }
             }
         }
