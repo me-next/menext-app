@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7FD4B2B8-DDD5-4CF1-8A4B-3E2C08FE3378}</ProjectGuid>
+    <ProjectGuid>{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}</ProjectGuid>
     <ProjectTypeGuids>{10368E6C-D01B-4462-8E8B-01FC667A7035};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>MeNext.Spotify.Droid.Auth</RootNamespace>
-    <AssemblyName>MeNext.Spotify.Droid.Auth</AssemblyName>
+    <RootNamespace>MeNext.Spotify.Droid.Playback</RootNamespace>
+    <AssemblyName>MeNext.Spotify.Droid.Playback</AssemblyName>
     <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
@@ -54,10 +54,7 @@
     <TransformFile Include="Transforms\Metadata.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="libs\" />
-  </ItemGroup>
-  <ItemGroup>
-    <LibraryProjectZip Include="Jars\spotify-android-auth-1.0.0.aar" />
+    <LibraryProjectZip Include="Jars\spotify-player-24-noconnect-2.20b.aar" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
 </Project>

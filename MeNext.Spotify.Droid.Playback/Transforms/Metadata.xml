@@ -7,9 +7,4 @@
   This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
   <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
   -->
-	<!--	
-	This fixes a compile-time binding error
-	Thanks: http://stackoverflow.com/questions/29451400/xamarin-java-binding-project-unable-to-change-visibility-of-local-interface
-	-->
-	<remove-node path="/api/package[@name='com.spotify.sdk.android.authentication']/interface[@name='AuthenticationClient.AuthenticationClientListener']" />
 </metadata>

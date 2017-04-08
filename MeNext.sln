@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.Spotify.Droid.Auth",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.Spotify.Droid", "MeNext.Spotify.Droid\MeNext.Spotify.Droid.csproj", "{6E5EF8EF-309E-4DF6-86F6-596F9FE16834}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeNext.Spotify.Droid.Playback", "MeNext.Spotify.Droid.Playback\MeNext.Spotify.Droid.Playback.csproj", "{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,18 @@ Global
 		{6E5EF8EF-309E-4DF6-86F6-596F9FE16834}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{6E5EF8EF-309E-4DF6-86F6-596F9FE16834}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{6E5EF8EF-309E-4DF6-86F6-596F9FE16834}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Release|iPhone.Build.0 = Release|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

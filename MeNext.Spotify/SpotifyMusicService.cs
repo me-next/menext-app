@@ -9,6 +9,22 @@ namespace MeNext.Spotify
         protected WebApi webApi { get; }
         private readonly List<IMusicServiceListener> listeners = new List<IMusicServiceListener>();
 
+        public string ClientId
+        {
+            get
+            {
+                return "b79f545d6c24407aa6bed17af62275d6";
+            }
+        }
+
+        public string SpotifyCallback
+        {
+            get
+            {
+                return "menext-spotify://callback";
+            }
+        }
+
         protected SpotifyMusicService()
         {
             // Default web api without any special access
