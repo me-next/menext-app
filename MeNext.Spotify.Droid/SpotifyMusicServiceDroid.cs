@@ -25,6 +25,11 @@ namespace MeNext.Spotify.Droid
             this.listener = new PlayerListener(this);
         }
 
+        internal void OnNewAccessToken(string accessToken)
+        {
+            this.webApi.updateAccessToken(accessToken);
+        }
+
         public void OnResume()
         {
             this.listener.OnResume();
@@ -124,5 +129,6 @@ namespace MeNext.Spotify.Droid
                 this.playingSong = song;
             }
         }
+
     }
 }

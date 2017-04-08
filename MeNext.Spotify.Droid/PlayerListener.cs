@@ -26,8 +26,8 @@ namespace MeNext.Spotify.Droid
 
         public PlayerListener(SpotifyMusicServiceDroid sms)
         {
-            this.operationCallback = new OperationCallback();
             this.sms = sms;
+            this.operationCallback = new OperationCallback(this);
         }
 
         // == Initialisation == //
@@ -47,6 +47,8 @@ namespace MeNext.Spotify.Droid
                 this.Player.AddNotificationCallback(this);
                 this.Player.AddConnectionStateCallback(this);
             }
+
+            this.sms.SomethingChanged();
         }
 
         // == Authentication == //
@@ -83,6 +85,7 @@ namespace MeNext.Spotify.Droid
                     Log.Debug("PlayerListener", "Auth result: " + response.GetType());
                 }
             }
+            this.sms.SomethingChanged();
         }
 
         void OnAuthenticationComplete(AuthenticationResponse response)
@@ -102,6 +105,8 @@ namespace MeNext.Spotify.Droid
             } else {
                 this.Player.Login(response.AccessToken);
             }
+            this.sms.OnNewAccessToken(response.AccessToken);
+            this.sms.SomethingChanged();
         }
 
         // == Callback methods == //
@@ -109,21 +114,25 @@ namespace MeNext.Spotify.Droid
         public void OnLoggedIn()
         {
             Log.Debug("PlayerListener", "Login complete");
+            this.sms.SomethingChanged();
         }
 
         public void OnLoggedOut()
         {
             Log.Debug("PlayerListener", "Logout complete");
+            this.sms.SomethingChanged();
         }
 
         public void OnLoginFailed(Com.Spotify.Sdk.Android.Player.Error error)
         {
             Log.Debug("PlayerListener", "*** Login error: " + error);
+            this.sms.SomethingChanged();
         }
 
         public void OnTemporaryError()
         {
             Log.Debug("PlayerListener", "*** Temporary error (what does that mean??)");
+            this.sms.SomethingChanged();
         }
 
         public void OnConnectionMessage(string msg)
@@ -146,6 +155,8 @@ namespace MeNext.Spotify.Droid
                 this.Player.RemoveNotificationCallback(this);
                 this.Player.RemoveConnectionStateCallback(this);
             }
+
+            this.sms.SomethingChanged();
         }
 
         internal void OnDestroy()
@@ -164,12 +175,13 @@ namespace MeNext.Spotify.Droid
             // Otherwise you'll end up with mysterious errors when running in the Turkish locale.
             // See: http://java.sys-con.com/node/46241
             Log.Debug("PlayerListener", "Playback Event: " + pEvent);
-            // TODO Update UI?
+            this.sms.SomethingChanged();
         }
 
         public void OnPlaybackError(Com.Spotify.Sdk.Android.Player.Error error)
         {
             Log.Debug("PlayerListener", "*** Playback error: " + error);
+            this.sms.SomethingChanged();
         }
 
         /// <summary>
@@ -205,25 +217,35 @@ namespace MeNext.Spotify.Droid
                                              this.listener.GetNetworkConnectivity(this.listener.sms.mainActivity));
                 player.AddNotificationCallback(this.listener);
                 player.AddConnectionStateCallback(this.listener);
-                // TODO Update UI?
+                this.listener.sms.SomethingChanged();
             }
 
             public void OnError(Throwable error)
             {
                 Log.Debug("PlayerInitObserver", "*** Error: " + error.Message);
+                this.listener.sms.SomethingChanged();
             }
         }
 
         public class OperationCallback : Java.Lang.Object, IPlayerOperationCallback
         {
+            private readonly PlayerListener listener;
+
+            public OperationCallback(PlayerListener listener)
+            {
+                this.listener = listener;
+            }
+
             public void OnError(Com.Spotify.Sdk.Android.Player.Error error)
             {
                 Log.Debug("OperationCallback", "*** Error: " + error);
+                this.listener.sms.SomethingChanged();
             }
 
             public void OnSuccess()
             {
                 Log.Debug("OperationCallback", "OK!");
+                this.listener.sms.SomethingChanged();
             }
         }
 
@@ -245,6 +267,7 @@ namespace MeNext.Spotify.Droid
                     Log.Debug("NetworkStateWatcher", "Network state changed: " + connectivity);
                     player.SetConnectivityStatus(this.listener.operationCallback, connectivity);
                 }
+                this.listener.sms.SomethingChanged();
             }
         }
     }
