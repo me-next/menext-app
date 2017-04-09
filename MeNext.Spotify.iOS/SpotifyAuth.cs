@@ -42,7 +42,7 @@ namespace MeNext.Spotify.iOS
 
             // ClientID and RedirectURL come from http://developer.spotify.com/my-applications
             // TODO Move out of the service
-            auth.ClientID = "b79f545d6c24407aa6bed17af62275d6";
+            auth.ClientID = service.ClientId;
 
             // Request permission to do stuff
             // We should leave anything we don't use commented out
@@ -59,12 +59,11 @@ namespace MeNext.Spotify.iOS
                 SpotifyConstants.SPTAuthUserReadPrivateScope,             // Gives access to user's country
                 //SpotifyConstants.SPTAuthUserReadTopScope,
                 //SpotifyConstants.SPTAuthUserReadBirthDateScope,
-                //SpotifyConstants.SPTAuthUserReadEmailScope
+                SpotifyConstants.SPTAuthUserReadEmailScope
             };
 
             // Callback
-            // TODO: Move out of the service
-            auth.RedirectURL = new Foundation.NSUrl("menext-spotify://callback");
+            auth.RedirectURL = new Foundation.NSUrl(service.SpotifyCallback);
 
             // Enables SPTAuth to automatically store the session object for future use.
             auth.SessionUserDefaultsKey = @"SpotifySession";

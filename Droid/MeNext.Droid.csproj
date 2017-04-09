@@ -18,6 +18,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <AndroidTlsProvider></AndroidTlsProvider>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +29,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+<AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +40,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -113,6 +115,22 @@
     <ProjectReference Include="..\MusicService\MusicService.csproj">
       <Project>{39433743-3793-40F6-92E5-5504AAFDD1AC}</Project>
       <Name>MusicService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MeNext.Spotify.Droid\MeNext.Spotify.Droid.csproj">
+      <Project>{6E5EF8EF-309E-4DF6-86F6-596F9FE16834}</Project>
+      <Name>MeNext.Spotify.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MeNext.Spotify.Droid.Auth\MeNext.Spotify.Droid.Auth.csproj">
+      <Project>{7FD4B2B8-DDD5-4CF1-8A4B-3E2C08FE3378}</Project>
+      <Name>MeNext.Spotify.Droid.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MeNext.Spotify.Droid.Playback\MeNext.Spotify.Droid.Playback.csproj">
+      <Project>{D04BD259-9AC3-4DDB-91BE-175FBCBEC8FF}</Project>
+      <Name>MeNext.Spotify.Droid.Playback</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MeNext.Spotify\MeNext.Spotify.csproj">
+      <Project>{FA839F74-9C98-40DB-894A-8F7A9B6D43DB}</Project>
+      <Name>MeNext.Spotify</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

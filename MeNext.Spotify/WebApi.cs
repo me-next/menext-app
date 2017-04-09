@@ -26,7 +26,6 @@ namespace MeNext.Spotify
 
         // Access tokens
         private string accessToken;
-        private string tokenType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.Spotify.WebApi"/> class. This constructor only
@@ -44,10 +43,9 @@ namespace MeNext.Spotify
         /// </summary>
         /// <param name="accessToken">Access token.</param>
         /// <param name="tokenType">Token type.</param>
-        public void updateAccessToken(string accessToken, string tokenType)
+        public void updateAccessToken(string accessToken)
         {
             this.accessToken = accessToken;
-            this.tokenType = tokenType;
             http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
         }
 

@@ -11,17 +11,14 @@ namespace MeNext
         private SearchBar searchBar;
         private Label resultsLabel;
         private SongListModel model;
-        private bool liveSearch;
         private MainController controller;
 
         public SearchView(MainController controller)
         {
             this.controller = controller;
 
-            // TODO: clean up this testing code
             NavigationPage.SetHasNavigationBar(this, false);
             ISong selectedSong = null;
-            liveSearch = false;
 
             resultsLabel = new Label
             {
@@ -32,8 +29,7 @@ namespace MeNext
             Button playNextButton = new Button
             {
                 Text = "Add to PlayNext",
-                BackgroundColor = Color.Orange,
-                HorizontalOptions = LayoutOptions.StartAndExpand
+                HorizontalOptions = LayoutOptions.StartAndExpand,
             };
             playNextButton.Clicked += (sender, e) =>
             {
@@ -47,21 +43,19 @@ namespace MeNext
             Button suggestionButton = new Button
             {
                 Text = "Add to Suggestions",
-                BackgroundColor = Color.Blue,
-                HorizontalOptions = LayoutOptions.EndAndExpand
+                HorizontalOptions = LayoutOptions.EndAndExpand,
             };
             suggestionButton.Clicked += (sender, e) =>
-            {
-                if (selectedSong == null) {
-                    return;
-                }
-                //TODO: add song to actual suggestion queue
-                Debug.WriteLine("adding song to suggestions: " + selectedSong.Name);
+                {
+                    if (selectedSong == null) {
+                        return;
+                    }
+                    Debug.WriteLine("adding song to suggestions: " + selectedSong.Name);
 
-                controller.RequestAddToSuggestions(selectedSong);
-            };
+                    controller.RequestAddToSuggestions(selectedSong);
+                };
 
-            StackLayout queueButtons = new StackLayout
+            var queueButtons = new StackLayout
             {
                 Padding = 3,
                 Orientation = StackOrientation.Horizontal,
@@ -74,42 +68,29 @@ namespace MeNext
             model = new SongListModel(new List<ISong>());
             SongListView songList = new SongListView(model, new BasicSongCellFactory());
             songList.OnSongSelected += (song) =>
-            {
-                Debug.WriteLine("selected song: " + song.Name);
-                selectedSong = song;
-            };
+                    {
+                        Debug.WriteLine("selected song: " + song.Name);
+                        selectedSong = song;
+                    };
 
             searchBar = new SearchBar
             {
                 Placeholder = "Enter search term",
-                SearchCommand = new Command(() => SearchForSong(searchBar.Text))
+                SearchCommand = new Command(() => SearchForSong(searchBar.Text)),
+
+                // TODO: Remove this workaround when Xamarin gets fixed
+                // Without this line, the search bar is invisible in Android 7
+                // See https://bugzilla.xamarin.com/show_bug.cgi?id=43975
+                HeightRequest = 30
             };
             searchBar.TextChanged += (sender, e) => TextChanged(searchBar.Text);
 
-            //button for testing, can be removed/repurposed later
-            Button toggleLive = new Button
-            {
-                Text = "Toggle Live Searching",
-                BackgroundColor = Color.Red,
-                HorizontalOptions = LayoutOptions.Center
-            };
-            toggleLive.Clicked += (sender, e) =>
-            {
-                liveSearch = !liveSearch;
-                if (liveSearch) {
-                    toggleLive.BackgroundColor = Color.Green;
-                } else {
-                    toggleLive.BackgroundColor = Color.Red;
-                }
-            };
-
-            Content = new StackLayout
+            this.Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
                     queueButtons,
                     searchBar,
-                    toggleLive,
                     resultsLabel,
                     songList,
                 }
@@ -122,13 +103,10 @@ namespace MeNext
         /// </summary>
         public void SearchForSong(string text)
         {
-            //TODO: get songs from music service
-
             resultsLabel.Text = "";
 
             List<ISong> noSongs = new List<ISong>();
 
-            //IMusicService service = new SampleMusicService.SampleMusicService();
             IResultList<ISong> results = controller.musicService.SearchSong(text);
 
             if (results == null || results.Items == null || results.Items.Count == 0) {
@@ -146,9 +124,8 @@ namespace MeNext
         /// </summary>
         private void TextChanged(string text)
         {
-            if (liveSearch) {
-                SearchForSong(text);
-            }
+            // TODO: Make this more efficient so we can have live searching
+            // SearchForSong(text);
         }
 
     }
