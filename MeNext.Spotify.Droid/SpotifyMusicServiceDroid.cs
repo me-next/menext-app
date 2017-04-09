@@ -118,8 +118,7 @@ namespace MeNext.Spotify.Droid
 
         public override void Logout()
         {
-            // TODO
-            throw new NotImplementedException();
+            this.Player.Logout();
         }
 
         public override void PlaySong(ISong song, double position = 0)
