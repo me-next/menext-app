@@ -34,7 +34,7 @@ namespace MeNext.Spotify.iOS
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
               {
                   var auth = SPTAuth.DefaultInstance;
-                  this.webApi.updateAccessToken(auth.Session.AccessToken, auth.Session.TokenType);
+                  this.webApi.updateAccessToken(auth.Session.AccessToken);
               });
 
             // TODO: Handle situation where session is invalidated

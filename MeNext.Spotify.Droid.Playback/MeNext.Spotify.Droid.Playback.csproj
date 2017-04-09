@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MeNext.Spotify.Droid.Playback</RootNamespace>
     <AssemblyName>MeNext.Spotify.Droid.Playback</AssemblyName>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>

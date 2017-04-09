@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MeNext.Spotify.Droid</RootNamespace>
     <AssemblyName>MeNext.Spotify.Droid</AssemblyName>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>

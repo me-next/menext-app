@@ -33,7 +33,7 @@ namespace MeNext
             {
                 Text = "Add to PlayNext",
                 BackgroundColor = Color.Orange,
-                HorizontalOptions = LayoutOptions.StartAndExpand
+                //HorizontalOptions = LayoutOptions.StartAndExpand
             };
             playNextButton.Clicked += (sender, e) =>
             {
@@ -55,13 +55,12 @@ namespace MeNext
                 if (selectedSong == null) {
                     return;
                 }
-                //TODO: add song to actual suggestion queue
                 Debug.WriteLine("adding song to suggestions: " + selectedSong.Name);
 
                 controller.RequestAddToSuggestions(selectedSong);
             };
 
-            StackLayout queueButtons = new StackLayout
+            var queueButtons = new StackLayout
             {
                 Padding = 3,
                 Orientation = StackOrientation.Horizontal,
@@ -86,30 +85,12 @@ namespace MeNext
             };
             searchBar.TextChanged += (sender, e) => TextChanged(searchBar.Text);
 
-            //button for testing, can be removed/repurposed later
-            Button toggleLive = new Button
-            {
-                Text = "Toggle Live Searching",
-                BackgroundColor = Color.Red,
-                HorizontalOptions = LayoutOptions.Center
-            };
-            toggleLive.Clicked += (sender, e) =>
-            {
-                liveSearch = !liveSearch;
-                if (liveSearch) {
-                    toggleLive.BackgroundColor = Color.Green;
-                } else {
-                    toggleLive.BackgroundColor = Color.Red;
-                }
-            };
-
-            Content = new StackLayout
+            this.Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
                     queueButtons,
                     searchBar,
-                    toggleLive,
                     resultsLabel,
                     songList,
                 }
@@ -122,13 +103,10 @@ namespace MeNext
         /// </summary>
         public void SearchForSong(string text)
         {
-            //TODO: get songs from music service
-
             resultsLabel.Text = "";
 
             List<ISong> noSongs = new List<ISong>();
 
-            //IMusicService service = new SampleMusicService.SampleMusicService();
             IResultList<ISong> results = controller.musicService.SearchSong(text);
 
             if (results == null || results.Items == null || results.Items.Count == 0) {
@@ -146,9 +124,8 @@ namespace MeNext
         /// </summary>
         private void TextChanged(string text)
         {
-            if (liveSearch) {
-                SearchForSong(text);
-            }
+            // TODO: Make this more efficient so we can have live searching
+            // SearchForSong(text);
         }
 
     }

@@ -2,6 +2,7 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Util;
 using MeNext.Spotify.Droid;
 using Xamarin.Forms;
 
@@ -10,10 +11,17 @@ namespace MeNext.Droid
     [Activity(Label = "MeNext", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        public static MainController Controller;
+
         private SpotifyMusicServiceDroid sms;
+
         protected override void OnCreate(Bundle bundle)
         {
+            // We should only be making this activity once
+            System.Diagnostics.Debug.Assert(Controller == null);
+
             this.sms = new SpotifyMusicServiceDroid(this);
+            Controller = new MainController(this.sms);
 
             InitPolling();
 
@@ -24,7 +32,7 @@ namespace MeNext.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            LoadApplication(new App(new MainController(this.sms)));
+            LoadApplication(new App(Controller));
         }
 
         protected override void OnResume()
