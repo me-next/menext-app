@@ -1,48 +1,78 @@
 ﻿using System;
+using System.Collections.Generic;
 using MeNext.MusicService;
 using Xamarin.Forms;
 
 namespace MeNext.Layout
 {
-	/// <summary>
-	/// The main tabbed page layout with stuff on it
-	/// </summary>
-	public class MainPage : TabbedPage
-	{
-		public IMusicService MusicService { get; set; }
-		public MainController MainController { get; set; }
+    /// <summary>
+    /// The main tabbed page layout with stuff on it
+    /// </summary>
+    public class MainPage : TabbedPage, IUIChangeListener
+    {
+        public IMusicService MusicService { get; set; }
+        public MainController mainController { get; set; }
 
-		public MainPage()
-		{
-			// Backend stuff
-			MusicService = new SampleMusicService.SampleMusicService();
-			MainController = new MainController(MusicService);
-			MainController.RequestJoinEvent("testevent");		// TODO: Remove when we have UI for this
+        private List<NavigationPage> pages = new List<NavigationPage>();
+        private bool tabsShown;
 
-			// UI Stuff
-			this.Title = "MeNext";
+        public MainPage(MainController mainController)
+        {
+            this.mainController = mainController;
+            this.tabsShown = false;
 
-			var homeScreen = new NavigationPage(new HomeScreen());
-			homeScreen.Title = "Home";
-			//homeScreen.Icon = "homeScreenIcon.png";  If we make this icon
-			Children.Add(homeScreen);
+            // UI Stuff
+            this.Title = "MeNext";
 
-			var playingScreen = new NavigationPage(new PlayingScreen());
-			playingScreen.Title = "Playing"; 
-			//playingScreen.Icon = "playingScreenIcon.png";  If we make this icon
-			Children.Add(playingScreen);
+            var homeScreen = new NavigationPage(new HomeScreen(mainController));
+            homeScreen.Title = "Home";
+            //homeScreen.Icon = "homeScreenIcon.png";
+            this.Children.Add(homeScreen);
 
-			var libraryScreen = new NavigationPage(new PlaceholderScreen());
-			libraryScreen.Title = "Library";
-			//libraryScreen.Icon = "libraryScreenIcon.png";  If we make this icon
-			Children.Add(libraryScreen);
+            //var testScreen = new NavigationPage(new TestingScreen(mainController));
+            //testScreen.Title = "Testing";
+            //Children.Add(testScreen);
 
-			var queueScreen = new NavigationPage(new QueueView());
-			queueScreen.Title = "Queue";
-			//queueScreen.Icon = "queueScreenIcon.png";
-			Children.Add(queueScreen);
+            var playingScreen = new NavigationPage(new PlayingScreen(mainController));
+            playingScreen.Title = "Playing";
+            //playingScreen.Icon = "playingScreenIcon.png";
+            pages.Add(playingScreen);
 
-		}
-	}
+            var libraryScreen = new NavigationPage(new TestingScreen(mainController));
+            libraryScreen.Title = "Library";
+            //libraryScreen.Icon = "libraryScreenIcon.png";
+            pages.Add(libraryScreen);
+
+            var searchScreen = new NavigationPage(new SearchView(mainController));
+            searchScreen.Title = "Search";
+            //searchScreen.Icon = "searchScreenIcon.png";
+            pages.Add(searchScreen);
+
+            var queueScreen = new NavigationPage(new QueueView(mainController));
+            queueScreen.Title = "Queue";
+            //queueScreen.Icon = "queueScreenIcon.png";
+            pages.Add(queueScreen);
+
+            this.mainController.AddStatusListener(this);
+        }
+
+        public void SomethingChanged()
+        {
+            // Enable or disable available tabs
+            if (mainController.InEvent != this.tabsShown) {
+                this.tabsShown = mainController.InEvent;
+
+                if (this.tabsShown) {
+                    foreach (var page in this.pages) {
+                        this.Children.Add(page);
+                    }
+                } else {
+                    foreach (var page in this.pages) {
+                        this.Children.Remove(page);
+                    }
+                }
+            }
+        }
+    }
 }
 

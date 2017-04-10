@@ -5,12 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{64DA42D4-2FF5-4D2C-B686-B3E67FD2B1B2}</ProjectGuid>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <UseMSBuildEngine>true</UseMSBuildEngine>
     <OutputType>Library</OutputType>
     <RootNamespace>MeNext</RootNamespace>
     <AssemblyName>MeNext</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,8 +35,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Layout\MainPage.cs" />
-    <Compile Include="Layout\HomeScreen.cs" />
-    <Compile Include="Layout\PlaceholderScreen.cs" />
     <Compile Include="Layout\LayoutConsts.cs" />
     <Compile Include="Layout\PlayingScreen.cs" />
     <Compile Include="Layout\JoinEvent.cs" />
@@ -46,7 +43,6 @@
     <Compile Include="Playing\PlayController.cs" />
     <Compile Include="Playing\TaskMessages\StartPollMessage.cs" />
     <Compile Include="Playing\TaskMessages\StopPollMessage.cs" />
-    <Compile Include="Playing\TaskMessages\StatusMessage.cs" />
     <Compile Include="Playing\Poller.cs" />
     <Compile Include="Playing\TaskMessages\CancelledMessage.cs" />
     <Compile Include="Playing\Results\JoinEventResult.cs" />
@@ -56,29 +52,50 @@
     <Compile Include="Playing\Results\LeaveEventResult.cs" />
     <Compile Include="Layout\QueueView.cs" />
     <Compile Include="Layout\SongListView.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Net\API.cs" />
+    <Compile Include="Layout\SearchView.cs" />
+    <Compile Include="Net\JoinEvent.cs" />
+    <Compile Include="Playing\Responses\CreateEventResponse.cs" />
+    <Compile Include="Playing\Responses\PullResponse.cs" />
+    <Compile Include="Layout\TestingScreen.cs" />
+    <Compile Include="Layout\JoinedEvent.cs" />
+    <Compile Include="Layout\HomeScreen.cs" />
+    <Compile Include="Layout\IUIChangeListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
     <Folder Include="Playing\" />
     <Folder Include="Playing\TaskMessages\" />
     <Folder Include="Playing\Results\" />
+    <Folder Include="Net\" />
+    <Folder Include="Playing\Responses\" />
   </ItemGroup>
-  <Import Project="..\music-service\ExampleMusicService\ExampleMusicService.projitems" Label="Shared" Condition="Exists('..\music-service\ExampleMusicService\ExampleMusicService.projitems')" />
-  <Import Project="..\music-service\MusicService\MusicService.projitems" Label="Shared" Condition="Exists('..\music-service\MusicService\MusicService.projitems')" />
+  <ItemGroup>
+    <Reference Include="Xamarin.Forms.Core">
+      <HintPath>..\packages\Xamarin.Forms.2.3.3.193\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform">
+      <HintPath>..\packages\Xamarin.Forms.2.3.3.193\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml">
+      <HintPath>..\packages\Xamarin.Forms.2.3.3.193\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\portable-net45+win8+wpa81+wp8\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SpotifyAPI">
+      <HintPath>..\packages\SpotifyAPI-NET.2.13.1\lib\SpotifyAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicService\MusicService.csproj">
+      <Project>{39433743-3793-40F6-92E5-5504AAFDD1AC}</Project>
+      <Name>MusicService</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
 </Project>

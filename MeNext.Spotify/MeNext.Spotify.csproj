@@ -1,0 +1,86 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FA839F74-9C98-40DB-894A-8F7A9B6D43DB}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <UseMSBuildEngine>true</UseMSBuildEngine>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MeNext.Spotify</RootNamespace>
+    <AssemblyName>MeNext.Spotify</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebApi.cs" />
+    <Compile Include="SpotifyMetadata\Tools\MetadataFactory.cs" />
+    <Compile Include="SpotifyMetadata\Tools\Util.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\IResultWithList.cs" />
+    <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifyAlbum.cs" />
+    <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifyArtist.cs" />
+    <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifyPlaylist.cs" />
+    <Compile Include="SpotifyMetadata\MusicServiceImpls\SpotifySong.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\SearchResult.cs" />
+    <Compile Include="SpotifyMetadata\MusicServiceImpls\ISpotifyMetadata.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\PagingObjectResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\IMetadataResult.cs" />
+    <Compile Include="SpotifyMetadata\SearchResults\PagingWrapper.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\AlbumResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\ArtistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\PlaylistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\MainResults\TrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialAlbumResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialArtistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialPlaylistResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialTrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\AlbumsResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\ArtistsResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\SavedTrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\PartialTracksResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PlaylistTrackResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\AmalgomateResults\TracksResult.cs" />
+    <Compile Include="SpotifyMetadata\JsonResults\PartialResults\PartialImageResult.cs" />
+    <Compile Include="SpotifyMusicService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SpotifyMetadata\" />
+    <Folder Include="SpotifyMetadata\Tools\" />
+    <Folder Include="SpotifyMetadata\JsonResults\" />
+    <Folder Include="SpotifyMetadata\MusicServiceImpls\" />
+    <Folder Include="SpotifyMetadata\SearchResults\" />
+    <Folder Include="SpotifyMetadata\JsonResults\MainResults\" />
+    <Folder Include="SpotifyMetadata\JsonResults\PartialResults\" />
+    <Folder Include="SpotifyMetadata\JsonResults\AmalgomateResults\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicService\MusicService.csproj">
+      <Project>{39433743-3793-40F6-92E5-5504AAFDD1AC}</Project>
+      <Name>MusicService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\portable-net45+win8+wpa81+wp8\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>
