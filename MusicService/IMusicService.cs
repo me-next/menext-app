@@ -201,6 +201,16 @@ namespace MeNext.MusicService
         }
 
         /// <summary>
+        /// Gets or sets the volume, on a scale from 0-1
+        /// </summary>
+        /// <value>The volume.</value>
+        double Volume
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Suggests that the list of songs be buffered.
         /// This cancels any existing buffer requests.
         /// This is just a performance suggestion so the implementation can optimise music playing. It might do nothing.

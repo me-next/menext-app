@@ -194,6 +194,7 @@ namespace MeNext.Spotify
         public abstract bool Playing { get; set; }
         public abstract double PlayingPosition { get; set; }
         public abstract ISong PlayingSong { get; }
+        public abstract double Volume { get; set; }
 
         public abstract void Login();
         public abstract void Logout();
