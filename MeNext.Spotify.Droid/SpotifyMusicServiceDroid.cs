@@ -111,6 +111,19 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        public override double Volume
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public override void Login()
         {
             this.listener.OpenLoginWindow();

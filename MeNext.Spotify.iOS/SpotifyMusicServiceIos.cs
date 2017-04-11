@@ -119,6 +119,25 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        public override double Volume
+        {
+            get
+            {
+                if (this.CanPlayNow) {
+                    return this.sd.Player.Volume;
+                }
+                return 0d;
+            }
+
+            set
+            {
+                Debug.Assert(value >= 0 && value <= 1);
+                if (this.CanPlayNow) {
+                    this.sd.Player.SetVolume(value, (NSError error) => { });
+                }
+            }
+        }
+
         public override void PlaySong(ISong song, double position = 0)
         {
             Debug.WriteLine("Trying to play song: " + song.Name, "service");
