@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
-    public class ResultsGroup<T> : BetterObservableCollection<ResultItemWrapper> where T : IMetadata
+    public class ResultsGroup<T> : BetterObservableCollection<ResultItemData> where T : IMetadata
     {
         public string Title { get; private set; }
         public ResultItemFactory<T> Factory { get; private set; }

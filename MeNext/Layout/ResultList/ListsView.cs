@@ -51,39 +51,18 @@ namespace MeNext
             //});
         }
 
-        // Do not call if using result list
         public void UpdateLists(params IEnumerable<T>[] itemses)
         {
             for (int i = 0; i < itemses.Length; ++i) {
                 var items = itemses[i];
                 var group = this.allGroups[i];
-                var wrappedItems = new List<ResultItemWrapper>();
+                var wrappedItems = new List<ResultItemData>();
                 foreach (var item in items) {
                     var wrappedItem = group.Factory.GetResultItem(item);
-                    wrappedItems.Add(new ResultItemWrapper(wrappedItem));
+                    wrappedItems.Add(wrappedItem);
                 }
                 group.SetAll(wrappedItems);
             }
-            //var items = new List<MinimalGroupWrapper<ResultItemWrapper<T>>>();
-            //foreach (var wrapper in wrappedLists) {
-            //    var factory = wrapper.Factory;
-            //    var newWrapped = new BetterObservableCollection<ResultItemWrapper<T>>();
-            //    foreach (var x in wrapper.Items) {
-            //        var item = factory.GetResultItem(x);
-            //        newWrapped.Add(new ResultItemWrapper<T>(item));
-            //    }
-            //    var newWrapper = new MinimalGroupWrapper<ResultItemWrapper<T>>(wrapper.Title, newWrapped);
-            //    items.Add(newWrapper);
-            //}
-            //this.allGroups.SetAll(items);
-
-            //Debug.WriteLine("Set groups!");
-            //foreach (var x in this.allGroups) {
-            //    Debug.WriteLine("Group: " + x.Title);
-            //    foreach (var y in x.Items) {
-            //        Debug.WriteLine("\tItem: " + y.ResultItem.Title);
-            //    }
-            //}
         }
 
         //// TODO: Handle result lists where pages can contain 0 items
@@ -141,20 +120,6 @@ namespace MeNext
 
         //}
 
-    }
-
-    /// <summary>
-    /// This wrapper allows us to use the Xamarin property reflection witchcraft to pass the entire ResultItem instead
-    /// of binding all of its properties separately, which is tedious and more brittle.
-    /// </summary>
-    public class ResultItemWrapper
-    {
-        public ResultItemData ResultItem { get; private set; }
-
-        public ResultItemWrapper(ResultItemData resultItem)
-        {
-            this.ResultItem = resultItem;
-        }
     }
 
 

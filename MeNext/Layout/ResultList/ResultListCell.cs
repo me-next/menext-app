@@ -6,6 +6,9 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    // Special thanks to
+    // https://github.com/xamarin/xamarin-forms-samples/blob/master/UserInterface/ListView/BindingContextChanged/BindingContextChanged/CustomCell.cs
+
     /// <summary>
     /// Represents a single row within a results list
     /// </summary>
@@ -24,7 +27,6 @@ namespace MeNext
 
         public ResultListCell()
         {
-            Debug.WriteLine("!! CREATING CELL !!");
             this.titleLabel = new Label();
             this.subtitleLabel = new Label();
 
@@ -54,27 +56,23 @@ namespace MeNext
             };
         }
 
+        // This is called when the backing data for the cell changes
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            Debug.WriteLine("!! BINDING CONTEXT CHANGED !!");
 
             if (BindingContext != null) {
-                Debug.WriteLine(BindingContext);
+                // Save the binding context
+                var resultItem = (ResultItemData) BindingContext;
 
-                var resultItem = ((ResultItemWrapper) BindingContext)?.ResultItem;
+                // Update stuff
+                this.titleLabel.Text = resultItem.Title;
+                this.subtitleLabel.Text = resultItem.Subtitle;
 
-                if (resultItem == null) {
-                    Debug.WriteLine("*** ERROR: ResultItem is null");
-                } else {
-                    this.titleLabel.Text = resultItem.Title;
-                    this.subtitleLabel.Text = resultItem.Subtitle;
+                this.taskButton.IsVisible = (resultItem.Suggest != SuggestSetting.DISABLE_SUGGEST);
+                this.taskButton.Text = GetSuggestIcon(resultItem.Suggest);
 
-                    this.taskButton.IsVisible = (resultItem.Suggest != SuggestSetting.DISABLE_SUGGEST);
-                    this.taskButton.Text = GetSuggestIcon(resultItem.Suggest);
-
-                    // TODO Menu
-                }
+                // TODO Menu
             }
         }
 
