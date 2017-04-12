@@ -20,6 +20,8 @@ namespace MeNext
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
 
+        public static int BUTTON_WIDTH = Device.OnPlatform<int>(30, 50, 0);
+
         private Label titleLabel;
         private Label subtitleLabel;
         private Button taskButton;
@@ -40,6 +42,7 @@ namespace MeNext
             this.taskButton = new Button
             {
                 Text = SUGGESTIONS_ADD,
+                WidthRequest = BUTTON_WIDTH,
                 Command = new Command((obj) =>
                 {
                     Debug.WriteLine("Task!");
@@ -49,6 +52,7 @@ namespace MeNext
             this.menuButton = new Button
             {
                 Text = MENU_ICON,
+                WidthRequest = BUTTON_WIDTH,
                 Command = new Command((obj) =>
                 {
                     Debug.WriteLine("Menu!");
