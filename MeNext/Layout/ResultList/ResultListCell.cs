@@ -27,7 +27,10 @@ namespace MeNext
 
         public ResultListCell()
         {
-            this.titleLabel = new Label();
+            this.titleLabel = new Label
+            {
+                FontAttributes = FontAttributes.Bold
+            };
             this.subtitleLabel = new Label();
 
             this.taskButton = new Button
@@ -52,7 +55,21 @@ namespace MeNext
             {
                 Padding = new Thickness(0, 5),
                 Orientation = StackOrientation.Horizontal,
-                Children = { titleLabel, subtitleLabel, taskButton, menuButton }
+                HorizontalOptions = LayoutOptions.StartAndExpand,
+                Children = {
+                    new StackLayout
+                    {
+                        Orientation = StackOrientation.Vertical,
+                        Children = { titleLabel, subtitleLabel }
+                    },
+                    new StackLayout
+                    {
+                        Orientation = StackOrientation.Horizontal,
+                        HorizontalOptions = LayoutOptions.EndAndExpand,
+                        Children = { taskButton, menuButton }
+                    }
+
+                }
             };
         }
 
