@@ -16,7 +16,7 @@ namespace MeNext
     /// </summary>
     public interface IPullUpdateObserver
     {
-        void onNewPullData(PullResponse data);
+        void OnNewPullData(PullResponse data);
     }
 
     /// <summary>
@@ -477,7 +477,7 @@ namespace MeNext
         private void UpdatePullObservers(PullResponse data)
         {
             foreach (var observer in this.PullObservers) {
-                observer.onNewPullData(data);
+                observer.OnNewPullData(data);
             }
         }
 

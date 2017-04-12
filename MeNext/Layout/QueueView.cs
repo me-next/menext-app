@@ -7,89 +7,69 @@ using MeNext.MusicService;
 
 namespace MeNext
 {
-    public class QueueView : ContentPage
+    /// <summary>
+    /// Represents the Queue tab which contains the Suggestion and Play next queues
+    /// </summary>
+    public class QueueView : ContentPage, IPullUpdateObserver
     {
         private MainController mainController;
+        private ListsView<ISong> songList;
 
         public QueueView(MainController mainController)
         {
-            // TODO: clean up this testing code
-            this.Title = "Queue Placeholder";
+            this.Title = "Queue";
             this.mainController = mainController;
-
-            List<ISong> songs = new List<ISong>
-            {
-                //new SampleMusicService.SampleSong("A"),
-                //new SampleMusicService.SampleSong("B"),
-            };
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            // suggestion queue model observes the pulls
-            var model = new SuggestionQueueModel(songs, mainController);
-            mainController.RegisterObserver(model);
+            this.mainController.RegisterObserver(this);
 
-            var songList = new SongListView(model, new BasicSongCellFactory());
-            songList.OnSongSelected += (song) =>
-            {
-                Debug.WriteLine("selected song: " + song.Name);
-            };
+            var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory());
+            var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory());
 
-            //int songCounter = 0;
-            //var addButton = new Button { Text = "addSong" };
-            //addButton.Clicked += (sender, e) =>
+            this.songList = new ListsView<ISong>(playNextQueue, suggestionQueue);
+
+            //var songList = new SongListView(model, new BasicSongCellFactory());
+            //songList.OnSongSelected += (song) =>
             //{
-            //    var song = new SampleMusicService.SampleSong("song" + songCounter);
-            //    model.Add(song);
-            //    songCounter++;
-
-            //    Debug.WriteLine("adding song: " + song.Name);
+            //    Debug.WriteLine("selected song: " + song.Name);
             //};
 
             Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
-                    //addButton,
-                    new Label { Text = "queue holder" },
-                    songList,
+                    this.songList,
                 }
             };
         }
-    }
 
-    /// <summary>
-    /// Suggestion queue model does suggestion queue specific work. 
-    /// </summary>
-    public class SuggestionQueueModel : SongListModel
-    {
-        private MainController mainController;
-
-        public SuggestionQueueModel(List<ISong> songs, MainController mainController) : base(songs)
+        public void OnNewPullData(PullResponse data)
         {
-            this.mainController = mainController;
-        }
-
-        /// <summary>
-        /// Called by MainController when new pull data comes in. This builds the model from the pull data. 
-        /// </summary>
-        /// <param name="data">Data.</param>
-        public override void onNewPullData(PullResponse data)
-        {
-            // TODO: use ISongs, will need spotify lookup to get more detailed song info. 
             var queue = data.SuggestQueue;
-            var songs = new List<ISong>();
+
+            var songUids = new List<string>();
 
             // look up the metadata with spotify for each song
-            foreach (var elem in queue.Songs) {
-                var songID = elem.ID;
-
-                // TODO: lookup all the songs at once
-                var song = mainController.musicService.GetSong(songID);
-                songs.Add(song);
+            foreach (var song in queue.Songs) {
+                songUids.Add(song.ID);
             }
 
-            SetAll(songs);
+            var songs = mainController.musicService.GetSongs(songUids);
+
+            this.UpdateSongLists(songs, songs);
+
+            // TODO: Update the play next queue insetad of just reusing the suggestion queue
         }
+
+        private void UpdateSongLists(IEnumerable<ISong> playNext, IEnumerable<ISong> suggestions)
+        {
+            this.songList.UpdateLists(playNext, suggestions);
+            //this.songList.UpdateLists(
+            //    new ResultsGroup<ISong>("Play Next", playNext, new SongItemFactory()),
+            //    new ResultsGroup<ISong>("Suggestions", suggestions, new SongItemFactory())
+            //);
+        }
+
     }
 }
