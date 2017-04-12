@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MeNext.MusicService;
 using SpotifyAPI.Web;
 
@@ -55,7 +55,7 @@ namespace MeNext
         private PlayingResponse previousPullData;
         private PlayingResponse currentPullData;
 
-        public void onNewPullData(PullResponse data)
+        public void OnNewPullData(PullResponse data)
         {
             // TODO: implement properly
 

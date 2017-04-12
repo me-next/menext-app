@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MeNext.MusicService;
@@ -77,13 +77,13 @@ namespace MeNext
                 //Debug.WriteLine(song.Artists[0].Name);
 
                 Debug.WriteLine("Searching");
-                var playlists = musicService.UserLibraryPlaylists;
-                foreach (var p in playlists.Items) {
-                    Debug.WriteLine("\n== " + p.Name + " ==");
-                    foreach (var s in new ResultListWrapper<ISong>(p.Songs)) {
-                        Debug.WriteLine(s.Name);
-                    }
-                }
+                //var playlists = musicService.UserLibraryPlaylists;
+                //foreach (var p in playlists.Items) {
+                //    Debug.WriteLine("\n== " + p.Name + " ==");
+                //    foreach (var s in new ResultListGroup<ISong>(p.Songs)) {
+                //        Debug.WriteLine(s.Name);
+                //    }
+                //}
 
 
 

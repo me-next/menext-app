@@ -61,6 +61,13 @@
     <Compile Include="Layout\JoinedEvent.cs" />
     <Compile Include="Layout\HomeScreen.cs" />
     <Compile Include="Layout\IUIChangeListener.cs" />
+    <Compile Include="Layout\ResultList\ListsView.cs" />
+    <Compile Include="Layout\ResultList\ResultsGroup.cs" />
+    <Compile Include="Layout\ResultList\ResultItemData.cs" />
+    <Compile Include="Layout\ResultList\ResultListCell.cs" />
+    <Compile Include="Layout\ResultList\BetterObservableCollection.cs" />
+    <Compile Include="Layout\ResultList\ResultItemFactory.cs" />
+    <Compile Include="Layout\ResultList\ResultFactories\SongItemFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
@@ -69,6 +76,8 @@
     <Folder Include="Playing\Results\" />
     <Folder Include="Net\" />
     <Folder Include="Playing\Responses\" />
+    <Folder Include="Layout\ResultList\" />
+    <Folder Include="Layout\ResultList\ResultFactories\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

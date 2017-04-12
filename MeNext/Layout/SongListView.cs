@@ -81,7 +81,7 @@ namespace MeNext
             this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        public virtual void onNewPullData(PullResponse data)
+        public virtual void OnNewPullData(PullResponse data)
         {
             throw new NotImplementedException();
         }
