@@ -15,29 +15,25 @@ namespace MeNext
     /// OR (2) display a single incomplete list whose values are loaded dynamically. One cannot have multiple
     /// dynamically loaded lists.
     /// </summary>
-    public class ListsView<T> : ListView where T : IMetadata
+    public class ResultListView<T> : ListView where T : IMetadata
     {
-        //private IResultList<T> resultList;
-        //private BetterObservableCollection<ResultItemWrapper<T>> resultCollection;
-        //ResultItemFactory<T> resultItemFactory;
+        private IResultList<T> resultList;
+        private BetterObservableCollection<ResultItemData> resultCollection;
+        private ResultItemFactory<T> resultItemFactory;
 
-        private List<ResultsGroup<T>> allGroups;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:MeNext.QueuesView`1"/> class. This constructor is for
-        /// multiple lists of elements, represented by GroupWrappers.
-        /// </summary>
-        /// <param name="controller">The main controller</param>
-        /// <param name="groups">The list of GroupWrappers</param>
-        public ListsView(MainController controller, params ResultsGroup<T>[] groups)
+        public ResultListView(MainController controller, ResultItemFactory<T> resultItemFactory)
         {
+            this.resultItemFactory = resultItemFactory;
             this.HasUnevenRows = true;
 
-            this.IsGroupingEnabled = true;
-            this.GroupDisplayBinding = new Binding("Title");
+            this.resultCollection = new BetterObservableCollection<ResultItemData>();
+            this.ItemsSource = this.resultCollection;
 
-            this.allGroups = new List<ResultsGroup<T>>(groups);
-            this.ItemsSource = this.allGroups;
+            this.ItemTemplate = new DataTemplate(() =>
+            {
+                return new ResultListCell(controller);
+            });
 
             // Disable selected items
             this.ItemSelected += (sender, e) =>
@@ -48,30 +44,21 @@ namespace MeNext
                 this.SelectedItem = null;
             };
 
-            this.ItemTemplate = new DataTemplate(() =>
+            this.ItemAppearing += (sender, e) =>
             {
-                return new ResultListCell(controller);
-            });
+                //vaItem;
+            };
         }
 
-        /// <summary>
-        /// Updates the list contents of all the groups, parallel to the groups supplied during construction.
-        /// </summary>
-        /// <param name="itemses">The lists of group contents</param>
-        public void UpdateLists(params IEnumerable<T>[] itemses)
+        public void UpdateResultList(IResultList<T> resultList)
         {
-            Debug.Assert(itemses.Length == this.allGroups.Count);
-            for (int i = 0; i < itemses.Length; ++i) {
-                var items = itemses[i];
-                var group = this.allGroups[i];
-                var wrappedItems = new List<ResultItemData>();
-                foreach (var item in items) {
-                    var wrappedItem = group.Factory.GetResultItem(item);
-                    wrappedItems.Add(wrappedItem);
-                }
-                group.SetAll(wrappedItems);
-            }
+            this.resultList = resultList;
+
+            // TODO: Combine this into 1 op so we don't get the flicker
+            this.resultCollection.Clear();
+            this.AddCurrentPage();
         }
+
 
         //// TODO: Handle result lists where pages can contain 0 items
         ///// <summary>
@@ -105,12 +92,7 @@ namespace MeNext
         //    }
         //}
 
-        //// Do not call if using groups
-        //public void UpdateResultList(IResultList<T> resultList)
-        //{
-        //    Debug.Assert(this.allGroups == null);
-        //    // TODO
-        //}
+
 
         //public void LoadMore()
         //{
@@ -128,6 +110,33 @@ namespace MeNext
 
         //}
 
+        private void AddNextPage()
+        {
+            if (this.resultList.HasNextPage) {
+                this.resultList = this.resultList.NextPage;
+                this.AddCurrentPage();
+            }
+        }
+
+        private void AddCurrentPage()
+        {
+            // Keep going until we find a page with > 0 elements or run out of pages
+            while (this.resultList.Items.Count == 0) {
+                if (this.resultList.HasNextPage) {
+                    this.resultList = this.resultList.NextPage;
+                } else {
+                    return;
+                }
+            }
+            // Add all the items in the page
+            var wrappedItems = new List<ResultItemData>();
+            foreach (var item in this.resultList.Items) {
+                var wrappedItem = this.resultItemFactory.GetResultItem(item);
+                wrappedItems.Add(wrappedItem);
+            }
+
+            this.resultCollection.AddMultiple(wrappedItems);
+        }
     }
 
 

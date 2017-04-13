@@ -12,7 +12,7 @@ namespace MeNext
 
     /// <summary>
     /// Represents a single row within a results list. It currently special cases ISong for the suggestion button which,
-    /// while not great OO practice, makes it easier to cache UI elements.
+    /// while not great OO practice, but makes it easier to cache UI elements.
     /// </summary>
     public class ResultListCell : ViewCell, IUIChangeListener
     {
@@ -151,7 +151,7 @@ namespace MeNext
 
         private void UpdateSuggestionButton()
         {
-            if (!this.suggestButton.IsVisible) {
+            if (!this.suggestButton.IsVisible || this.controller.LatestPull == null) {
                 return;
             }
             var pull = this.controller.LatestPull;
