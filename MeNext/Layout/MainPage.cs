@@ -29,31 +29,7 @@ namespace MeNext.Layout
             //homeScreen.Icon = "homeScreenIcon.png";
             this.Children.Add(homeScreen);
 
-            //var testScreen = new NavigationPage(new TestingScreen(mainController));
-            //testScreen.Title = "Testing";
-            //Children.Add(testScreen);
-
-            var playingScreen = new NavigationPage(new PlayingScreen(mainController));
-            playingScreen.Title = "Playing";
-            //playingScreen.Icon = "playingScreenIcon.png";
-            pages.Add(playingScreen);
-
-            var libraryScreen = new NavigationPage(new TestingScreen(mainController));
-            libraryScreen.Title = "Library";
-            //libraryScreen.Icon = "libraryScreenIcon.png";
-            pages.Add(libraryScreen);
-
-            var searchScreen = new NavigationPage(new SearchView(mainController));
-            searchScreen.Title = "Search";
-            //searchScreen.Icon = "searchScreenIcon.png";
-            pages.Add(searchScreen);
-
-            var queueScreen = new NavigationPage(new QueueView(mainController));
-            queueScreen.Title = "Queue";
-            //queueScreen.Icon = "queueScreenIcon.png";
-            pages.Add(queueScreen);
-
-            this.mainController.RegisterUiChangeListener(this);
+            this.mainController.RegisterUiListenerDangerous(this);
         }
 
         public void SomethingChanged()
@@ -63,6 +39,26 @@ namespace MeNext.Layout
                 this.tabsShown = mainController.InEvent;
 
                 if (this.tabsShown) {
+                    var playingScreen = new NavigationPage(new PlayingScreen(mainController));
+                    playingScreen.Title = "Playing";
+                    //playingScreen.Icon = "playingScreenIcon.png";
+                    pages.Add(playingScreen);
+
+                    var libraryScreen = new NavigationPage(new TestingScreen(mainController));
+                    libraryScreen.Title = "Library";
+                    //libraryScreen.Icon = "libraryScreenIcon.png";
+                    pages.Add(libraryScreen);
+
+                    var searchScreen = new NavigationPage(new SearchView(mainController));
+                    searchScreen.Title = "Search";
+                    //searchScreen.Icon = "searchScreenIcon.png";
+                    pages.Add(searchScreen);
+
+                    var queueScreen = new NavigationPage(new QueueView(mainController));
+                    queueScreen.Title = "Queue";
+                    //queueScreen.Icon = "queueScreenIcon.png";
+                    pages.Add(queueScreen);
+
                     foreach (var page in this.pages) {
                         this.Children.Add(page);
                     }
@@ -70,6 +66,7 @@ namespace MeNext.Layout
                     foreach (var page in this.pages) {
                         this.Children.Remove(page);
                     }
+                    this.pages.Clear();
                 }
             }
         }

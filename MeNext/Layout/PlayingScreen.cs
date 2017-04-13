@@ -23,7 +23,7 @@ namespace MeNext
             layout.Children.Add(new Button
             {
                 Text = "<<",
-                Command = new Command(() => mainController.RequestPrevious())
+                Command = new Command(() => mainController.Event.RequestPrevious())
             });
 
             var playCommand = new Command(() =>
@@ -39,14 +39,14 @@ namespace MeNext
             layout.Children.Add(new Button
             {
                 Text = ">>",
-                Command = new Command(() => mainController.RequestSkip())
+                Command = new Command(() => mainController.Event.RequestSkip())
             });
 
             layout.Children.Add(this.songTitle = new Label { Text = "" });
 
             Content = layout;
 
-            mainController.RegisterUiChangeListener(this);
+            mainController.Event.RegisterUiListener(this);
         }
 
         public void SomethingChanged()

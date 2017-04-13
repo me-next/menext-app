@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MeNext;
@@ -121,7 +121,7 @@ namespace MeNext
             this.View = grid;
 
             // This should be the last thing we do to avoid race conditions
-            this.controller.RegisterUiChangeListener(this);
+            this.controller.Event.RegisterUiListener(this);
         }
 
         // This is called when the backing data for the cell changes
@@ -151,10 +151,10 @@ namespace MeNext
 
         private void UpdateSuggestionButton()
         {
-            if (!this.suggestButton.IsVisible || this.controller.LatestPull == null) {
+            if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
                 return;
             }
-            var pull = this.controller.LatestPull;
+            var pull = this.controller.Event.LatestPull;
             var suggestions = new List<SongResponse>(pull.SuggestQueue.Songs);
             // TODO This could get slow w/ a ton of songs. Shared hashmap might be better.
             var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
@@ -180,19 +180,19 @@ namespace MeNext
         {
             switch (s) {
                 case SuggestSetting.SUGGEST:
-                    controller.RequestAddToSuggestions(song);
+                    controller.Event.RequestAddToSuggestions(song);
                     break;
 
                 case SuggestSetting.VOTE_LIKE:
-                    controller.RequestThumbDown(song);
+                    controller.Event.RequestThumbDown(song);
                     break;
 
                 case SuggestSetting.VOTE_DISLIKE:
-                    controller.RequestThumbNeutral(song);
+                    controller.Event.RequestThumbNeutral(song);
                     break;
 
                 case SuggestSetting.VOTE_NEUTRAL:
-                    controller.RequestThumbUp(song);
+                    controller.Event.RequestThumbUp(song);
                     break;
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace MeNext.MusicService
 {
     /// <summary>
@@ -15,6 +15,6 @@ namespace MeNext.MusicService
         /// <summary>
         /// Called whenever something changed and we might need to update any of the UI
         /// </summary>
-        void SomethingChanged();
+        void MusicServiceChange();
     }
 }

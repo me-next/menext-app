@@ -22,7 +22,7 @@ namespace MeNext
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            this.mainController.RegisterPullObserver(this);
+            this.mainController.Event.RegisterPullObserver(this);
 
             var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory());
             var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory());
