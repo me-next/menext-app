@@ -27,32 +27,31 @@ namespace MeNext
         /// Initializes a new instance of the <see cref="T:MeNext.QueuesView`1"/> class. This constructor is for
         /// multiple lists of elements, represented by GroupWrappers.
         /// </summary>
+        /// <param name="controller">The main controller</param>
         /// <param name="groups">The list of GroupWrappers</param>
-        public ListsView(params ResultsGroup<T>[] groups)
+        public ListsView(MainController controller, params ResultsGroup<T>[] groups)
         {
             this.HasUnevenRows = true;
 
             this.IsGroupingEnabled = true;
-            this.GroupDisplayBinding = new Binding("Title");  // TODO
-
-            //this.allGroups = new BetterObservableCollection<MinimalGroupWrapper<ResultItemWrapper<T>>>();
+            this.GroupDisplayBinding = new Binding("Title");
 
             this.allGroups = new List<ResultsGroup<T>>(groups);
             this.ItemsSource = this.allGroups;
 
             this.ItemTemplate = new DataTemplate(() =>
             {
-                return new ResultListCell();
+                return new ResultListCell(controller);
             });
-
-            //this.GroupHeaderTemplate = new DataTemplate(() =>
-            //{
-            //    return ell();
-            //});
         }
 
+        /// <summary>
+        /// Updates the list contents of all the groups, parallel to the groups supplied during construction.
+        /// </summary>
+        /// <param name="itemses">The lists of group contents</param>
         public void UpdateLists(params IEnumerable<T>[] itemses)
         {
+            Debug.Assert(itemses.Length == this.allGroups.Count);
             for (int i = 0; i < itemses.Length; ++i) {
                 var items = itemses[i];
                 var group = this.allGroups[i];

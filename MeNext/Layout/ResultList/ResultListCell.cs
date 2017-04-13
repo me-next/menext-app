@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using MeNext;
 using MeNext.MusicService;
@@ -10,25 +11,32 @@ namespace MeNext
     // https://github.com/xamarin/xamarin-forms-samples/blob/master/UserInterface/ListView/BindingContextChanged/BindingContextChanged/CustomCell.cs
 
     /// <summary>
-    /// Represents a single row within a results list
+    /// Represents a single row within a results list. It currently special cases ISong for the suggestion button which,
+    /// while not great OO practice, makes it easier to cache UI elements.
     /// </summary>
-    public class ResultListCell : ViewCell
+    public class ResultListCell : ViewCell, IUIChangeListener
     {
         public const string MENU_ICON = "⋮";
         public const string SUGGESTIONS_ADD = "+";
-        public const string VOTE_YES = "\ud83d\udfdf";
+        public const string VOTE_YES = "\ud83d\ude0a";
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
 
         public static int BUTTON_WIDTH = Device.OnPlatform<int>(30, 50, 0);
 
+        private ResultItemData resultItem;
+
         private Label titleLabel;
         private Label subtitleLabel;
-        private Button taskButton;
+        private Button suggestButton;
         private Button menuButton;
 
-        public ResultListCell()
+        private MainController controller;
+
+        public ResultListCell(MainController controller)
         {
+            this.controller = controller;
+
             this.titleLabel = new Label
             {
                 FontAttributes = FontAttributes.Bold,
@@ -39,13 +47,13 @@ namespace MeNext
                 LineBreakMode = LineBreakMode.TailTruncation
             };
 
-            this.taskButton = new Button
+            this.suggestButton = new Button
             {
                 Text = SUGGESTIONS_ADD,
                 WidthRequest = BUTTON_WIDTH,
                 Command = new Command((obj) =>
                 {
-                    Debug.WriteLine("Task!");
+                    this.HandleSuggestion(resultItem.Suggest, (ISong) resultItem.Item);
                 }),
             };
 
@@ -56,6 +64,9 @@ namespace MeNext
                 Command = new Command((obj) =>
                 {
                     Debug.WriteLine("Menu!");
+                    if (resultItem.MenuCommand != null && resultItem.MenuCommand.CanExecute(resultItem)) {
+                        resultItem.MenuCommand.Execute(resultItem);
+                    }
                 }),
             };
 
@@ -74,12 +85,10 @@ namespace MeNext
                     {
                         Orientation = StackOrientation.Horizontal,
                         HorizontalOptions = LayoutOptions.EndAndExpand,
-                        Children = { taskButton, menuButton }
+                        Children = { suggestButton, menuButton }
                     }
-
                 }
             };
-
 
             var columns = new ColumnDefinitionCollection();
             columns.Add(new ColumnDefinition { Width = GridLength.Star });
@@ -97,7 +106,7 @@ namespace MeNext
             {
                 Orientation = StackOrientation.Horizontal,
                 HorizontalOptions = LayoutOptions.EndAndExpand,
-                Children = { taskButton, menuButton },
+                Children = { suggestButton, menuButton },
                 MinimumWidthRequest = 500,
             };
 
@@ -110,6 +119,9 @@ namespace MeNext
             grid.Children.Add(buttons, 1, 0);
 
             this.View = grid;
+
+            // This should be the last thing we do to avoid race conditions
+            this.controller.RegisterUiChangeListener(this);
         }
 
         // This is called when the backing data for the cell changes
@@ -119,16 +131,69 @@ namespace MeNext
 
             if (BindingContext != null) {
                 // Save the binding context
-                var resultItem = (ResultItemData) BindingContext;
+                this.resultItem = (ResultItemData) BindingContext;
 
                 // Update stuff
                 this.titleLabel.Text = resultItem.Title;
                 this.subtitleLabel.Text = resultItem.Subtitle;
 
-                this.taskButton.IsVisible = (resultItem.Suggest != SuggestSetting.DISABLE_SUGGEST);
-                this.taskButton.Text = GetSuggestIcon(resultItem.Suggest);
+                this.suggestButton.IsVisible = (resultItem.Suggest != SuggestSetting.DISABLE_SUGGEST);
+                this.UpdateSuggestionButton();
+
+                if (this.suggestButton.IsVisible) {
+                    // Make sure we can cast to an ISong if we have any setting other than disabling suggestions
+                    Debug.Assert(resultItem.Item as ISong != null);
+                }
 
                 // TODO Menu
+            }
+        }
+
+        private void UpdateSuggestionButton()
+        {
+            if (!this.suggestButton.IsVisible) {
+                return;
+            }
+            var pull = this.controller.LatestPull;
+            var suggestions = new List<SongResponse>(pull.SuggestQueue.Songs);
+            // TODO This could get slow w/ a ton of songs. Shared hashmap might be better.
+            var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
+            if (item != null) {
+                // The song has already been suggested
+                if (item.Vote == 1) {
+                    resultItem.Suggest = SuggestSetting.VOTE_LIKE;
+                } else if (item.Vote == -1) {
+                    resultItem.Suggest = SuggestSetting.VOTE_DISLIKE;
+                } else {
+                    resultItem.Suggest = SuggestSetting.VOTE_NEUTRAL;
+                }
+            } else {
+                // The song is not yet suggested
+                resultItem.Suggest = SuggestSetting.SUGGEST;
+            }
+
+            // Update the icon
+            this.suggestButton.Text = GetSuggestIcon(resultItem.Suggest);
+        }
+
+        private void HandleSuggestion(SuggestSetting s, ISong song)
+        {
+            switch (s) {
+                case SuggestSetting.SUGGEST:
+                    controller.RequestAddToSuggestions(song);
+                    break;
+
+                case SuggestSetting.VOTE_LIKE:
+                    controller.RequestThumbDown(song);
+                    break;
+
+                case SuggestSetting.VOTE_DISLIKE:
+                    controller.RequestThumbNeutral(song);
+                    break;
+
+                case SuggestSetting.VOTE_NEUTRAL:
+                    controller.RequestThumbUp(song);
+                    break;
             }
         }
 
@@ -150,6 +215,11 @@ namespace MeNext
                 default:
                     return "ERROR";
             }
+        }
+
+        public void SomethingChanged()
+        {
+            this.UpdateSuggestionButton();
         }
     }
 

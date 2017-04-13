@@ -22,12 +22,12 @@ namespace MeNext
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            this.mainController.RegisterObserver(this);
+            this.mainController.RegisterPullObserver(this);
 
             var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory());
             var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory());
 
-            this.songList = new ListsView<ISong>(playNextQueue, suggestionQueue);
+            this.songList = new ListsView<ISong>(mainController, playNextQueue, suggestionQueue);
 
             //var songList = new SongListView(model, new BasicSongCellFactory());
             //songList.OnSongSelected += (song) =>

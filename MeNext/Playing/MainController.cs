@@ -75,6 +75,11 @@ namespace MeNext
         private List<IPullUpdateObserver> PullObservers;
 
         /// <summary>
+        /// The most recent poll response
+        /// </summary>
+        public PullResponse LatestPull { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.MusicController"/> class.
         /// </summary>
         /// <param name="musicService">The music service we should be interfacing with</param>
@@ -87,11 +92,13 @@ namespace MeNext
 
             // set up the play controller
             this.playController = new PlayController(this.musicService);
-            RegisterObserver(playController);
+            RegisterPullObserver(playController);
 
             this.api = new API("http://menext.danielcentore.com:8080");
 
             this.UserKey = RandomString(6);
+
+            Debug.WriteLine("User key: " + this.UserKey);
 
             // TODO Username?
             this.UserName = "bob";
@@ -251,7 +258,7 @@ namespace MeNext
             // TODO: songFinished with actual song
             var task = Task.Run(async () =>
              {
-                return await api.SongFinished(this.EventSlug, this.UserKey, this.musicService.PlayingSong.UniqueId);
+                 return await api.SongFinished(this.EventSlug, this.UserKey, this.musicService.PlayingSong.UniqueId);
              });
 
             if (task.IsFaulted) {
@@ -376,7 +383,16 @@ namespace MeNext
         public void RequestThumbDown(ISong song)
         {
             Debug.Assert(this.InEvent);
-            // TODO
+            var task = Task.Run(async () =>
+            {
+                return await api.SuggestionDownvote(this.EventSlug, this.UserKey, song.UniqueId);
+            });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Failed to thumb down!" + task.Exception.ToString());
+            }
+
+            Debug.WriteLine("Thumb'd down");
         }
 
         /// <summary>
@@ -476,16 +492,18 @@ namespace MeNext
         /// <param name="data">Data retrieved from the pull.</param>
         private void UpdatePullObservers(PullResponse data)
         {
+            this.LatestPull = data;
             foreach (var observer in this.PullObservers) {
                 observer.OnNewPullData(data);
             }
+            this.SomethingChanged();
         }
 
         /// <summary>
         /// Registers an observer on the pull.
         /// </summary>
         /// <param name="observer">Observer.</param>
-        public void RegisterObserver(IPullUpdateObserver observer)
+        public void RegisterPullObserver(IPullUpdateObserver observer)
         {
             // TODO: membership checking
             PullObservers.Add(observer);
@@ -524,7 +542,8 @@ namespace MeNext
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        internal void AddStatusListener(IUIChangeListener listener)
+        // This is ALSO called when there is a new pull
+        internal void RegisterUiChangeListener(IUIChangeListener listener)
         {
             listeners.Add(listener);
         }

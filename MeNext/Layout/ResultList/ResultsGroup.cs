@@ -16,16 +16,4 @@ namespace MeNext
             this.Factory = factory;
         }
     }
-
-    //public class MinimalGroupWrapper<T>
-    //{
-    //    public string Title { get; private set; }
-    //    public BetterObservableCollection<T> Items { get; private set; }
-
-    //    public MinimalGroupWrapper(string title, BetterObservableCollection<T> items)
-    //    {
-    //        this.Title = title;
-    //        this.Items = items;
-    //    }
-    //}
 }

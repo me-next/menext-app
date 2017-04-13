@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MeNext.MusicService;
 using Xamarin.Forms;
@@ -53,7 +53,7 @@ namespace MeNext.Layout
             //queueScreen.Icon = "queueScreenIcon.png";
             pages.Add(queueScreen);
 
-            this.mainController.AddStatusListener(this);
+            this.mainController.RegisterUiChangeListener(this);
         }
 
         public void SomethingChanged()

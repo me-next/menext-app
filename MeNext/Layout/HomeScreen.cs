@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Xamarin.Forms;
 
@@ -57,7 +57,7 @@ namespace MeNext
 
             Content = layout;
 
-            mc.AddStatusListener(this);
+            mc.RegisterUiChangeListener(this);
             this.SomethingChanged();
         }
 

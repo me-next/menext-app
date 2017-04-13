@@ -46,7 +46,7 @@ namespace MeNext
 
             Content = layout;
 
-            mainController.AddStatusListener(this);
+            mainController.RegisterUiChangeListener(this);
         }
 
         public void SomethingChanged()
