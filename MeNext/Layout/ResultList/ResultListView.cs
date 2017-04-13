@@ -56,7 +56,7 @@ namespace MeNext
             };
         }
 
-        public void UpdateResultList(IResultList<T> resultList)
+        public void UpdateResultList(IResultList<T> resultList, bool jumpToTop = true)
         {
             this.resultList = resultList;
 
@@ -64,6 +64,11 @@ namespace MeNext
             // Although it doesn't really seem to be noticable...
             this.resultCollection.Clear();
             this.AddCurrentPage();
+
+            // Jump back to top of list
+            if (this.resultCollection.Count > 0 && jumpToTop) {
+                this.ScrollTo(this.resultCollection[0], ScrollToPosition.Start, false);
+            }
         }
 
         private void AddNextPage()
