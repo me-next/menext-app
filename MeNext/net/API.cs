@@ -86,9 +86,28 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        public async Task<string> SkipSong(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/skip/{0}/{1}/{2}", eid, uid, sid));
+            Debug.WriteLine("Skip song uri:" + uri.ToString());
+            return await FireRequest(uri);
+        }
+
         public async Task<string> SuggestionDownvote(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/suggestDown/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
+        public async Task<string> SuggestionUpvote(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/suggestUp/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
+        public async Task<string> SuggestionClearvote(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/suggestClearvote/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
 

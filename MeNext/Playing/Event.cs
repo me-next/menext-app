@@ -41,8 +41,6 @@ namespace MeNext
 
         private MainController controller;
 
-        private PlayController playController;
-
         private API Api
         {
             get
@@ -63,8 +61,10 @@ namespace MeNext
             this.controller = controller;
 
             // set up the play controller
-            this.playController = new PlayController(this.controller.musicService);
-            RegisterPullObserver(this.playController);
+            if (this.IsHost) {
+                var playController = new PlayController(this.controller.musicService);
+                RegisterPullObserver(playController);
+            }
 
             this.controller.InformSomethingChanged();
         }
@@ -90,7 +90,24 @@ namespace MeNext
         /// </summary>
         public void RequestSkip()
         {
-            // TODO: songFinished with actual song
+            var task = Task.Run(async () =>
+             {
+                 return await Api.SkipSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingSong.UniqueId);
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting skip:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested next song");
+        }
+
+        /// <summary>
+        /// Requests that we skip the current song
+        /// </summary>
+        public void SongEnded()
+        {
             var task = Task.Run(async () =>
              {
                  return await Api.SongFinished(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingSong.UniqueId);
@@ -200,7 +217,10 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestThumbUp(ISong song)
         {
-            // TODO
+            Task.Run(async () =>
+            {
+                return await Api.SuggestionUpvote(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>
@@ -209,16 +229,10 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestThumbDown(ISong song)
         {
-            var task = Task.Run(async () =>
+            Task.Run(async () =>
             {
                 return await Api.SuggestionDownvote(this.Slug, this.controller.UserKey, song.UniqueId);
             });
-
-            if (task.IsFaulted) {
-                Debug.WriteLine("Failed to thumb down!" + task.Exception.ToString());
-            }
-
-            Debug.WriteLine("Thumb'd down");
         }
 
         /// <summary>
@@ -227,7 +241,10 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestThumbNeutral(ISong song)
         {
-            // TODO
+            Task.Run(async () =>
+            {
+                return await Api.SuggestionClearvote(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>

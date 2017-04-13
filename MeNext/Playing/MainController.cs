@@ -193,13 +193,7 @@ namespace MeNext
         public void SongEnds(ISong song)
         {
             Debug.WriteLine("== SONG ENDED ==");
-            // Tell the server we want to play the next song.
-            // As host, we will have permission to do this.
-
-            // TODO Use song ended endpoint?
-            if (this.InEvent) {
-                this.Event.RequestSkip();
-            }
+            this.Event?.SongEnded();
         }
 
         /// <summary>
