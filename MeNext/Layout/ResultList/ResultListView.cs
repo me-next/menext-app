@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 
 using MeNext.MusicService;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MeNext
 {
@@ -44,9 +45,14 @@ namespace MeNext
                 this.SelectedItem = null;
             };
 
-            this.ItemAppearing += (sender, e) =>
+            this.ItemAppearing += async (sender, e) =>
             {
-                //vaItem;
+                await Task.Run(() =>
+                {
+                    if (e.Item == resultCollection[resultCollection.Count - 1]) {
+                        this.AddNextPage();
+                    }
+                });
             };
         }
 
@@ -54,61 +60,11 @@ namespace MeNext
         {
             this.resultList = resultList;
 
-            // TODO: Combine this into 1 op so we don't get the flicker
+            // TODO: Combine this into 1 op so we don't get a flicker
+            // Although it doesn't really seem to be noticable...
             this.resultCollection.Clear();
             this.AddCurrentPage();
         }
-
-
-        //// TODO: Handle result lists where pages can contain 0 items
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="T:MeNext.QueuesView`1"/> class. This constructor is for a
-        ///// single result list, which will be loaded lazily as the user scrolls.
-        ///// </summary>
-        ///// <param name="resultList">Result list.</param>
-        //public ListsView(IResultList<T> resultList, ResultItemFactory<T> resultItemFactory)
-        //{
-        //    this.GenericSettings();
-        //    this.allGroups = null;
-        //    this.resultItemFactory = resultItemFactory;
-        //    this.resultList = resultList;
-        //    this.resultCollection = new BetterObservableCollection<ResultItemWrapper<T>>();
-
-        //    // Adds the current page of results
-        //    this.addCurrentPage();
-
-        //    //this.ItemAppearing += (sender, e) =>
-        //    //{
-        //    //    var cue.Item;
-        //    //};
-        //}
-
-        //private void addCurrentPage()
-        //{
-        //    var items = new List<ResultItemWrapper<T>>();
-        //    foreach (var x in this.resultList.Items) {
-        //        var item = this.resultItemFactory.GetResultItem(x);
-        //        items.Add(new ResultItemWrapper<T>(item));
-        //    }
-        //}
-
-
-
-        //public void LoadMore()
-        //{
-        //    if (currentList != null && currentList.FirstResult.HasNextPage) {
-        //        this.currentResult = this.currentResult.NextPage;
-        //        // TODO Add the header
-        //    } else if (resultLists.Count > 0) {
-        //        this.currentList = resultLists.Dequeue();
-        //        this.currentResult = this.currentList.FirstResult;
-        //    } else {
-        //        // Nothing else to load
-        //        return;
-        //    }
-        //    // TODO: Add the items ist
-
-        //}
 
         private void AddNextPage()
         {
