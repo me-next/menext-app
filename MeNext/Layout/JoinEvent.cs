@@ -9,7 +9,12 @@ namespace MeNext
         private Entry eventIDEntry;
         public JoinEvent(MainController mc)
         {
-            var layout = new StackLayout();
+            this.Title = "Join event";
+            var layout = new StackLayout
+            {
+                Padding = LayoutConsts.DEFAULT_PADDING
+            };
+
             eventIDEntry = new Entry { Placeholder = "Event Id" };
             eventIDEntry.TextChanged += (object sender, TextChangedEventArgs e) =>
             {
@@ -17,7 +22,6 @@ namespace MeNext
             };
 
             var joinCommand = new Command<commandClass>(JoinCommand);
-            layout.Children.Add(new Label { Text = "Join Event" });
             layout.Children.Add(eventIDEntry);
             layout.Children.Add(new Button
             {

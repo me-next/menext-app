@@ -69,6 +69,7 @@
     <Compile Include="Layout\ResultList\ResultFactories\SongItemFactory.cs" />
     <Compile Include="Layout\ResultList\ResultListView.cs" />
     <Compile Include="Playing\Event.cs" />
+    <Compile Include="Layout\FullWrapperView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />

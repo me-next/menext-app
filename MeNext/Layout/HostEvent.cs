@@ -10,11 +10,10 @@ namespace MeNext
         int permissions = 3;
         public HostEvent(MainController mc)
         {
+            this.Title = "Host event";
             var layout = new StackLayout
             {
-                Children = {
-                    new Label { Text = "Host Event!\n" }
-                }
+                Padding = LayoutConsts.DEFAULT_PADDING,
             };
             var permissionText = "Suggest Song";
             var suggButt = new Button { Text = permissionText, BackgroundColor = Color.Green };

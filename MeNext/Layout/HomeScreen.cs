@@ -19,7 +19,7 @@ namespace MeNext
         private Button leaveEvent;
         private Label loginSpotifyWhy;
 
-        public HomeScreen(MainController mc)
+        public HomeScreen(MainController mc, NavigationPage nav)
         {
             this.mc = mc;
             var musicService = mc.musicService;
@@ -36,13 +36,13 @@ namespace MeNext
             layout.Children.Add(joinEvent = new Button
             {
                 Text = "Join Event",
-                Command = new Command(() => Navigation.PushAsync(new JoinEvent(mc)))
+                Command = new Command(() => nav.Navigation.PushAsync(new JoinEvent(mc)))
             });
 
             layout.Children.Add(hostEvent = new Button
             {
                 Text = "Host Event",
-                Command = new Command(() => Navigation.PushAsync(new HostEvent(mc)))
+                Command = new Command(() => nav.Navigation.PushAsync(new HostEvent(mc)))
             });
 
             layout.Children.Add(leaveEvent = new Button

@@ -16,15 +16,16 @@ namespace MeNext.Layout
         private List<NavigationPage> pages = new List<NavigationPage>();
         private bool tabsShown;
 
-        public MainPage(MainController mainController)
+        public MainPage(MainController mainController, NavigationPage nav)
         {
             this.mainController = mainController;
             this.tabsShown = false;
 
             // UI Stuff
+            NavigationPage.SetHasNavigationBar(this, false);
             this.Title = "MeNext";
 
-            var homeScreen = new NavigationPage(new HomeScreen(mainController));
+            var homeScreen = new NavigationPage(new HomeScreen(mainController, nav));
             homeScreen.Title = "Home";
             //homeScreen.Icon = "homeScreenIcon.png";
             this.Children.Add(homeScreen);
