@@ -7,11 +7,11 @@ namespace MeNext
     public class PlayingScreen : ContentPage, IUIChangeListener
     {
         private readonly Label songTitle;
-        private readonly IMusicService service;
+        private readonly MainController mainController;
 
         public PlayingScreen(MainController mainController)
         {
-            this.service = mainController.musicService;
+            this.mainController = mainController;
 
             this.Title = "Now Playing";
             NavigationPage.SetHasNavigationBar(this, false);
@@ -49,8 +49,11 @@ namespace MeNext
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                if (this.service.PlayingSong != null) {
-                    this.songTitle.Text = this.service.PlayingSong.Name + " (" + this.service.PlayingPosition + "s)";
+                var playing = this.mainController.Event?.LatestPull?.Playing?.CurrentSongID;
+                if (playing != null) {
+                    var song = this.mainController.musicService.GetSong(playing);
+                    this.songTitle.Text = song.Name;
+                    // TODO Other metadata
                 } else {
                     this.songTitle.Text = "Nothing Playing";
                 }

@@ -92,7 +92,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-                 return await Api.SkipSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingSong.UniqueId);
+                 if (this.LatestPull != null) {
+                     return await Api.SkipSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
@@ -110,7 +113,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-                 return await Api.SongFinished(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingSong.UniqueId);
+                 if (this.LatestPull != null) {
+                     return await Api.SongFinished(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
