@@ -51,7 +51,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Playing\Results\LeaveEventResult.cs" />
     <Compile Include="Layout\QueueView.cs" />
-    <Compile Include="Layout\SongListView.cs" />
     <Compile Include="Net\API.cs" />
     <Compile Include="Layout\SearchView.cs" />
     <Compile Include="Net\JoinEvent.cs" />
@@ -70,6 +69,7 @@
     <Compile Include="Layout\ResultList\ResultListView.cs" />
     <Compile Include="Playing\Event.cs" />
     <Compile Include="Layout\FullWrapperView.cs" />
+    <Compile Include="Playing\Data\SuggestionQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
@@ -80,6 +80,7 @@
     <Folder Include="Playing\Responses\" />
     <Folder Include="Layout\ResultList\" />
     <Folder Include="Layout\ResultList\ResultFactories\" />
+    <Folder Include="Playing\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
