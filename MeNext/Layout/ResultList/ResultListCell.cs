@@ -154,9 +154,8 @@ namespace MeNext
             if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
                 return;
             }
-            var pull = this.controller.Event.LatestPull;
-            var suggestions = new List<SongResponse>(pull.SuggestQueue.Songs);
-            // TODO This could get slow w/ a ton of songs. Shared hashmap might be better.
+            var suggestions = this.controller.Event.SuggestionQueue.Songs;
+
             var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
             if (item != null) {
                 // The song has already been suggested

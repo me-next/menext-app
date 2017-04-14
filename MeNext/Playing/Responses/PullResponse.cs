@@ -22,6 +22,10 @@ namespace MeNext
 
         [JsonProperty(PropertyName = "vote")]
         public int Vote;
+
+        // TODO BACKEND
+        public int TotalVotes;
+        public long TimeAdded;
     }
 
     public class QueueResponse

@@ -39,6 +39,8 @@ namespace MeNext
         /// </summary>
         public PullResponse LatestPull { get; private set; }
 
+        public SuggestionQueue SuggestionQueue { get; private set; }
+
         private MainController controller;
 
         private API Api
@@ -59,6 +61,8 @@ namespace MeNext
             this.changeID = 0;
 
             this.controller = controller;
+
+            this.SuggestionQueue = new SuggestionQueue();
 
             // set up the play controller
             if (this.IsHost) {
@@ -355,7 +359,9 @@ namespace MeNext
         /// <param name="data">Data retrieved from the pull.</param>
         private void UpdatePullObservers(PullResponse data)
         {
-            this.LatestPull = data;
+            // This needs to be done before we inform anybody else
+            // In case they use some of our processed data
+            HandleNewPull(data);
 
             // We use a copy so listeners we call can create objects which register new listeners
             var copy = new List<IPullUpdateObserver>(this.PullObservers);
@@ -364,6 +370,12 @@ namespace MeNext
                 observer.OnNewPullData(data);
             }
             this.controller.InformSomethingChanged();
+        }
+
+        void HandleNewPull(PullResponse data)
+        {
+            this.LatestPull = data;
+            this.SuggestionQueue.UpdateQueue(this.LatestPull.SuggestQueue);
         }
 
         /// <summary>
@@ -389,6 +401,7 @@ namespace MeNext
         {
             listeners.Add(listener);
         }
+
 
     }
 }
