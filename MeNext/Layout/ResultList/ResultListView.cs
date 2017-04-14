@@ -25,8 +25,9 @@ namespace MeNext
 
         public ResultListView(MainController controller, ResultItemFactory<T> resultItemFactory)
         {
+            this.RowHeight = LayoutConsts.ROW_HEIGHT;
+
             this.resultItemFactory = resultItemFactory;
-            this.HasUnevenRows = true;
 
             this.resultCollection = new BetterObservableCollection<ResultItemData>();
             this.ItemsSource = this.resultCollection;

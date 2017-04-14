@@ -32,10 +32,9 @@ namespace MeNext
                 Placeholder = "Enter search term",
                 SearchCommand = new Command(() => SearchForSong(searchBar.Text)),
 
-                // TODO: Remove this workaround when Xamarin gets fixed
                 // Without this line, the search bar is invisible in Android 7
                 // See https://bugzilla.xamarin.com/show_bug.cgi?id=43975
-                HeightRequest = 30
+                HeightRequest = 40
             };
             searchBar.TextChanged += (sender, e) => TextChanged(searchBar.Text);
 

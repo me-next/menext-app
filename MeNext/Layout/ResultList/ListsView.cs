@@ -31,8 +31,7 @@ namespace MeNext
         /// <param name="groups">The list of GroupWrappers</param>
         public ListsView(MainController controller, params ResultsGroup<T>[] groups)
         {
-            this.HasUnevenRows = true;
-
+            this.RowHeight = LayoutConsts.ROW_HEIGHT;
             this.IsGroupingEnabled = true;
             this.GroupDisplayBinding = new Binding("Title");
 

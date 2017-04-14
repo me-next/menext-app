@@ -18,11 +18,9 @@ namespace MeNext
     {
         public const string MENU_ICON = "⋮";
         public const string SUGGESTIONS_ADD = "+";
-        public const string VOTE_YES = "\ud83d\ude0a";
+        public const string VOTE_YES = "\ud83d\ude00";
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
-
-        public static int BUTTON_WIDTH = Device.OnPlatform<int>(30, 50, 0);
 
         private ResultItemData resultItem;
 
@@ -40,17 +38,22 @@ namespace MeNext
             this.titleLabel = new Label
             {
                 FontAttributes = FontAttributes.Bold,
-                LineBreakMode = LineBreakMode.TailTruncation
+                LineBreakMode = LineBreakMode.TailTruncation,
+                Text = "Placeholder",
+                FontSize = LayoutConsts.TITLE_FONT_SIZE
             };
             this.subtitleLabel = new Label
             {
-                LineBreakMode = LineBreakMode.TailTruncation
+                LineBreakMode = LineBreakMode.TailTruncation,
+                Text = "Placeholder",
+                FontSize = LayoutConsts.SUBTITLE_FONT_SIZE
             };
 
             this.suggestButton = new Button
             {
                 Text = SUGGESTIONS_ADD,
-                WidthRequest = BUTTON_WIDTH,
+                FontSize = LayoutConsts.ICON_SIZE,
+                WidthRequest = LayoutConsts.BUTTON_WIDTH,
                 Command = new Command((obj) =>
                 {
                     this.HandleSuggestion(resultItem.Suggest, (ISong) resultItem.Item);
@@ -60,7 +63,9 @@ namespace MeNext
             this.menuButton = new Button
             {
                 Text = MENU_ICON,
-                WidthRequest = BUTTON_WIDTH,
+                FontSize = LayoutConsts.ICON_SIZE,
+                WidthRequest = LayoutConsts.BUTTON_WIDTH,
+                Margin = LayoutConsts.RIGHT_BUTTON_MARGIN,
                 Command = new Command((obj) =>
                 {
                     Debug.WriteLine("Menu!");
@@ -72,27 +77,34 @@ namespace MeNext
 
             this.View = new StackLayout
             {
-                Padding = new Thickness(0, 5),
+                Padding = new Thickness(10),
                 Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.StartAndExpand,
+                HorizontalOptions = LayoutOptions.Center,
                 Children = {
                     new StackLayout
                     {
                         Orientation = StackOrientation.Vertical,
-                        Children = { titleLabel, subtitleLabel }
-                    },
+                        Children = { titleLabel, subtitleLabel
+    }
+},
                     new StackLayout
                     {
                         Orientation = StackOrientation.Horizontal,
                         HorizontalOptions = LayoutOptions.EndAndExpand,
                         Children = { suggestButton, menuButton }
-                    }
+                    },
                 }
             };
 
             var columns = new ColumnDefinitionCollection();
-            columns.Add(new ColumnDefinition { Width = GridLength.Star });
-            columns.Add(new ColumnDefinition { Width = GridLength.Auto });
+            columns.Add(new ColumnDefinition
+            {
+                Width = GridLength.Star
+            });
+            columns.Add(new ColumnDefinition
+            {
+                Width = GridLength.Auto
+            });
             var rows = new RowDefinitionCollection();
             rows.Add(new RowDefinition { Height = GridLength.Auto });
 
