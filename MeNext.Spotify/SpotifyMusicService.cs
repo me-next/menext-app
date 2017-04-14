@@ -199,5 +199,7 @@ namespace MeNext.Spotify
         public abstract void Login();
         public abstract void Logout();
         public abstract void PlaySong(ISong song, double position = 0);
+
+        public abstract void SetIsHost(bool isHost);
     }
 }

@@ -64,6 +64,9 @@ namespace MeNext
 
             this.SuggestionQueue = new SuggestionQueue();
 
+            // Let the music controller know whether or not it is currently hosting
+            this.controller.musicService.SetIsHost(this.IsHost);
+
             // set up the play controller
             if (this.IsHost) {
                 var playController = new PlayController(this.controller.musicService);

@@ -66,4 +66,9 @@ namespace MeNext.iOS
             });
         }
     }
+
+    public class MyViewController : UIViewController
+    {
+
+    }
 }

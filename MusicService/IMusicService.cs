@@ -233,5 +233,12 @@ namespace MeNext.MusicService
         /// Requests that the user be logged out of the service
         /// </summary>
         void Logout();
+
+        /// <summary>
+        /// Used to inform the music service about whether or not it is hosting.
+        /// </summary>
+        /// <returns><c>true</c>, if it is hosting, <c>false</c> otherwise.</returns>
+        /// <param name="isHost">If set to <c>true</c> is host.</param>
+        void SetIsHost(bool isHost);
     }
 }
