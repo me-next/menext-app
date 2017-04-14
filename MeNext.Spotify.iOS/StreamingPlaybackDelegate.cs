@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using AVFoundation;
+using MediaPlayer;
 using MeNext.Spotify.iOS.Playback;
+using UIKit;
 
 namespace MeNext.Spotify.iOS
 {
@@ -12,6 +14,44 @@ namespace MeNext.Spotify.iOS
         public StreamingPlaybackDelegate(SpotifyMusicServiceIos service)
         {
             this.service = service;
+
+
+        }
+
+        public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
+        {
+            var song = service.GetSong(trackUri);
+
+            // TODO: This is only working w/ old versions of iOS
+            // See https://forums.xamarin.com/discussion/93235/mpnowplayinginfocenter-defaultcenter-null-in-simulator/p1
+            // Just going to leave this partially implemented until a resolution is found
+            if (MPNowPlayingInfoCenter.DefaultCenter != null) {
+                Debug.WriteLine("iOS Now Playing Centre Not Null");
+
+                var artists = "";
+                foreach (var artist in song.Artists) {
+                    artists += ", " + artist.Name;
+                }
+                if (artists.Length > 0) {
+                    artists = artists.Substring(2);
+                }
+
+                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo
+                {
+                    AlbumTitle = song.Album.Name,
+                    AlbumTrackNumber = song.TrackNumber,
+                    Artist = artists,
+                    //Artwork = ..., TODO
+                    ElapsedPlaybackTime = 0,
+                    ExternalContentIdentifier = song.UniqueId,
+                    MediaType = MPNowPlayingInfoMediaType.Audio,
+                    PlaybackDuration = song.Duration,
+                    PlaybackRate = 1,
+                    Title = song.Name,
+                };
+            } else {
+                Debug.WriteLine("iOS Now Playing Centre Null");
+            }
         }
 
         public override void AudioStreamingDidStopPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
@@ -30,15 +70,6 @@ namespace MeNext.Spotify.iOS
         public override void AudioStreamingDidChangePlaybackStatus(SPTAudioStreamingController audioStreaming, bool isPlaying)
         {
             Debug.WriteLine("Playback changed: " + isPlaying, "playback");
-
-            if (isPlaying) {
-                // This makes it so we can actually hear audio
-                // I hate how long it took to figure this out
-                AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
-                AVAudioSession.SharedInstance().SetActive(true);
-            } else {
-                AVAudioSession.SharedInstance().SetActive(false);
-            }
 
             service.SomethingChanged();
         }

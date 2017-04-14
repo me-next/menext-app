@@ -203,6 +203,10 @@ namespace MeNext
         /// </summary>
         public void InformSomethingChanged()
         {
+            if (!this.InEvent) {
+                this.musicService.SetIsHost(false);
+            }
+
             Device.BeginInvokeOnMainThread(() =>
             {
                 // We use a copy so listeners we call can create objects which register new listeners

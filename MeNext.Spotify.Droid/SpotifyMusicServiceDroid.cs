@@ -142,5 +142,9 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        public override void SetIsHost(bool isHost)
+        {
+            // TODO: Do something?
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using AVFoundation;
 using Foundation;
 using MeNext.MusicService;
 using MeNext.Spotify.iOS.Auth;
@@ -172,6 +173,20 @@ namespace MeNext.Spotify.iOS
                 Debug.WriteLine("Logged out.", "auth");
             } else {
                 Debug.WriteLine("We weren't actually logged in though...", "auth");
+            }
+        }
+
+        public override void SetIsHost(bool isHost)
+        {
+            if (isHost) {
+                // This makes it so we can actually hear audio
+                // I hate how long it took to figure this out
+                AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
+                AVAudioSession.SharedInstance().SetActive(true);
+                UIApplication.SharedApplication.BeginReceivingRemoteControlEvents();
+            } else {
+                UIApplication.SharedApplication.EndReceivingRemoteControlEvents();
+                AVAudioSession.SharedInstance().SetActive(false);
             }
         }
     }

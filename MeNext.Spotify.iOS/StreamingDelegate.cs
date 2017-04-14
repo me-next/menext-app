@@ -62,8 +62,6 @@ namespace MeNext.Spotify.iOS
             Debug.Write("Logged in successfully!", "stream");
 
             this.Player.SetVolume(1, (arg0) => { });
-            AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
-            AVAudioSession.SharedInstance().SetActive(true);
 
             this.service.SomethingChanged();
         }
