@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 
 namespace MeNext
 {
-
     /// <summary>
     /// Pull update observer gets data from pulls.
     /// </summary>
@@ -24,34 +23,11 @@ namespace MeNext
     /// </summary>
     public class MainController : IMusicServiceListener
     {
-        public IMusicService musicService;   // // TODO Make this private. It is only public for kludgy testing.
-        private PlayController playController;
-        private API api;
+        public IMusicService musicService;
+
+        public API Api { get; private set; }
         private static Random random = new Random();
         private List<IUIChangeListener> listeners = new List<IUIChangeListener>();
-
-        /// <summary>
-        /// Used for cancelling polling. We should generally just stop polling instead.
-        /// </summary>
-        private CancellationToken CancelToken { get; set; }
-
-        /// <summary>
-        /// Is there presently an active event?
-        /// </summary>
-        /// <value><c>true</c> if in event; otherwise, <c>false</c>.</value>
-        public bool InEvent { get; private set; }
-
-        /// <summary>
-        /// Are we the host for the current event? Assumes there is an active event.
-        /// </summary>
-        /// <value><c>true</c> if is host; otherwise, <c>false</c>.</value>
-        public bool IsHost { get; private set; }
-
-        /// <summary>
-        /// The current event's slug. Assumes there is an active event.
-        /// </summary>
-        /// <value>The event slug.</value>
-        public string EventSlug { get; private set; }
 
         /// <summary>
         /// The display name for the user
@@ -65,14 +41,25 @@ namespace MeNext
         public string UserKey { get; private set; }
 
         /// <summary>
-        /// The change identifier.
+        /// Used for cancelling polling. We should generally just stop polling instead.
         /// </summary>
-        private UInt64 changeID;
+        private CancellationToken CancelToken { get; set; }
 
         /// <summary>
-        /// The pull observers.
+        /// Is there presently an active event?
         /// </summary>
-        private List<IPullUpdateObserver> PullObservers;
+        /// <value><c>true</c> if in event; otherwise, <c>false</c>.</value>
+        public bool InEvent
+        {
+            get
+            {
+                return (this.Event != null);
+            }
+        }
+
+        public Event Event { get; private set; }
+
+        public NavigationPage NavPage { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.MusicController"/> class.
@@ -81,24 +68,17 @@ namespace MeNext
         public MainController(IMusicService musicService)
         {
             this.musicService = musicService;
-            this.PullObservers = new List<IPullUpdateObserver>();
 
             this.musicService.AddStatusListener(this);
 
-            // set up the play controller
-            this.playController = new PlayController(this.musicService);
-            RegisterObserver(playController);
-
-            this.api = new API("http://menext.danielcentore.com:8080");
+            this.Api = new API("http://menext.danielcentore.com:8080");
 
             this.UserKey = RandomString(6);
 
             // TODO Username?
             this.UserName = "bob";
 
-            this.changeID = 0;
-
-            this.InEvent = false;
+            Debug.WriteLine("User key: " + this.UserKey);
         }
 
         /// <summary>
@@ -113,7 +93,7 @@ namespace MeNext
             Debug.WriteLine("Requesting to join an event...");
             var task = Task.Run(async () =>
              {
-                 return await api.JoinParty(slug, this.UserKey, this.UserName);
+                 return await Api.JoinParty(slug, this.UserKey, this.UserName);
              });
 
             var json = task.Result;
@@ -125,7 +105,8 @@ namespace MeNext
                 return JoinEventResult.FAIL_GENERIC;
             }
 
-            _ConfigureForEvent(this.UserKey, false, slug);
+            this.Event = new Event(this, slug, false);
+            this.Event.StartPolling();
 
             Debug.WriteLine("Joined event\'" + slug + "\'");
             return JoinEventResult.SUCCESS;
@@ -135,14 +116,13 @@ namespace MeNext
         /// Attempts to create an event
         /// </summary>
         /// <returns>The result of the attempt.</returns>
-        /// <param name="slug">The event name.</param>
-        public CreateEventResult RequestCreateEvent(string slug)
+        public CreateEventResult RequestCreateEvent()
         {
             Debug.Assert(!this.InEvent);
 
             var task = Task.Run(async () =>
             {
-                return await api.CreateParty(this.UserKey, this.UserName);
+                return await Api.CreateParty(this.UserKey, this.UserName);
             });
             var json = task.Result;
             Debug.WriteLine("Json: " + json);
@@ -155,9 +135,9 @@ namespace MeNext
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
 
+            this.Event = new Event(this, result.EventID, true);
+            this.Event.StartPolling();
 
-            Debug.WriteLine("Created event \'" + slug + "\'\n");
-            _ConfigureForEvent(this.UserKey, true, result.EventID);
             return CreateEventResult.SUCCESS;
         }
 
@@ -168,14 +148,14 @@ namespace MeNext
         public EndEventResult RequestEndEvent()
         {
             Debug.Assert(this.InEvent);
-            _StopPolling();
+            this.Event.StopPolling();
 
             // TODO Send stuff to server, wait for response, and use real response below
 
-            if (IsHost)
+            if (this.Event.IsHost)
                 this.musicService.Playing = false;
-            this.InEvent = false;
-            this.SomethingChanged();
+            this.Event = null;
+            this.InformSomethingChanged();
             return EndEventResult.SUCCESS;
         }
 
@@ -186,309 +166,27 @@ namespace MeNext
         public LeaveEventResult LeaveEvent()
         {
             Debug.Assert(this.InEvent);
-            _StopPolling();
+            this.Event.StopPolling();
 
             // If we are the host, leaving the event is equivalent to ending it.
-            if (IsHost) {
+            if (this.Event.IsHost) {
                 EndEventResult eer = RequestEndEvent();
                 if (eer == EndEventResult.FAIL_NETWORK)
                     return LeaveEventResult.FAIL_NETWORK;
                 if (eer != EndEventResult.SUCCESS)
                     return LeaveEventResult.FAIL_GENERIC;
 
-                this.InEvent = false;
+                this.Event = null;
                 return LeaveEventResult.SUCCESS;
             }
 
             // TODO Send stuff to server, wait for response, and use real response below
 
 
-            this.InEvent = false;
+            this.Event = null;
 
-            this.SomethingChanged();
+            this.InformSomethingChanged();
             return LeaveEventResult.SUCCESS;
-        }
-
-        /// <summary>
-        /// Sets up stuff whenever we join or create an event
-        /// </summary>
-        /// <param name="userKey">User key.</param>
-        /// <param name="isHost">If set to <c>true</c> is host.</param>
-        /// <param name="eventSlug">Event slug.</param>
-        private void _ConfigureForEvent(string userKey, bool isHost, string eventSlug)
-        {
-            this.UserKey = userKey;
-            this.IsHost = isHost;
-            this.EventSlug = eventSlug;
-            this.InEvent = true;
-            _StartPolling();
-            this.SomethingChanged();
-        }
-
-        /// <summary>
-        /// Requests that we resume the current song. Continue playing if it is already playing.
-        /// </summary>
-        public void RequestPlay()
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we pause. We should stay paused if it is already paused.
-        /// </summary>
-        public void RequestPause()
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we skip the current song
-        /// </summary>
-        public void RequestSkip()
-        {
-            // TODO: songFinished with actual song
-            var task = Task.Run(async () =>
-             {
-                return await api.SongFinished(this.EventSlug, this.UserKey, this.musicService.PlayingSong.UniqueId);
-             });
-
-            if (task.IsFaulted) {
-                Debug.WriteLine("Error requesting skip:" + task.Exception.ToString());
-                return;
-            }
-
-            Debug.WriteLine("Requested next song");
-        }
-
-        /// <summary>
-        /// Requests that we jump back to the previous song
-        /// </summary>
-        public void RequestPrevious()
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we adjust the volume
-        /// </summary>
-        /// <param name="vol">The volume on a scale from 0-1</param>
-        public void RequestVolume(double vol)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we seek to a position within the song.
-        /// </summary>
-        /// <param name="pos">The position (seconds)</param>
-        public void RequestSeek(double pos)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we add a song to the suggestions queue. If it already exists, do nothing.
-        /// </summary>
-        /// <param name="song">Song.</param>
-        public void RequestAddToSuggestions(ISong song)
-        {
-            var task = Task.Run(async () =>
-            {
-                return await api.SuggestAddSong(this.EventSlug, this.UserKey, song.UniqueId);
-            });
-
-            if (task.IsFaulted) {
-                Debug.WriteLine("Failed to add song to suggestions!" + task.Exception.ToString());
-            }
-
-            Debug.WriteLine("Added " + song.UniqueId + " to suggestions");
-        }
-
-        /// <summary>
-        /// Requests that we remove a song from the suggestions queue. If it doesn't exist, do nothing.
-        /// </summary>
-        /// <param name="song">Song.</param>
-        public void RequestRemoveFromSuggestions(ISong song)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we add a song to the play next queue at the specified index. If the song already exists
-        /// in the play next queue, do nothing.
-        /// </summary>
-        /// <param name="song">Song.</param>
-        /// <param name="index">
-        /// The index to insert the song at. 0=Next Song, 1=Song after that, etc. -1=Last Song,-2=song before that,
-        /// etc.
-        /// </param>
-        public void RequestAddToPlayNext(ISong song, int index = -1)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that we remove a song from the play next queue.
-        /// </summary>
-        /// <param name="song">Song.</param>
-        public void RequestRemoveFromPlayNext(ISong song)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Atomic operation which is functionally equivalent to:
-        /// <code>
-        /// RequestRemoveFromPlayNext(song);
-        /// RequestAddToPlayNext(song, index);
-        /// </code>
-        /// </summary>
-        /// <param name="song">Song.</param>
-        /// <param name="index">Index.</param>
-        public void MoveWithinPlayNext(ISong song, int index)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that the current user thumbs up the song.
-        /// </summary>
-        /// <param name="song">Song.</param>
-        public void RequestThumbUp(ISong song)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that the current user thumbs down the song.
-        /// </summary>
-        /// <param name="song">Song.</param>
-        public void RequestThumbDown(ISong song)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that the current user's thumb up or down information is cleared for the song.	
-        /// </summary>
-        /// <param name="song">Song.</param>
-        public void RequestThumbNeutral(ISong song)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that the current event be given permissions
-        /// </summary>
-        /// <param name="permissions">integer where each bit is a bool for a parameter. 0-5</param>
-        /// Assumes that the Event begins with Play Next and Suggest Allowed but everything else not allowed.
-        public void RequestEventPermissions(int permissions)
-        {
-            //set the permissions for the Event
-            //1 is Suggest
-            //2 is Play Next
-            //4 is Play Now
-            //8 is Play Volume
-            //16 is Play Skip
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that a user be given permissions.
-        /// </summary>
-        /// <param name="username">Username.</param>
-        public void RequestUserPermissions(string username /* TODO: permissions structure */)
-        {
-            Debug.Assert(this.InEvent);
-            // TODO
-        }
-
-        /// <summary>
-        /// Begins polling the server for the latest info
-        /// </summary>
-        private void _StartPolling()
-        {
-            Debug.Assert(this.InEvent);
-            var message = new StartPollMessage(EventSlug, UserKey);
-            MessagingCenter.Send(message, "StartPollMessage");
-        }
-
-        /// <summary>
-        /// Stops polling the server
-        /// </summary>
-        private void _StopPolling()
-        {
-            Debug.Assert(this.InEvent);
-            var message = new StopPollMessage();
-            MessagingCenter.Send(message, "StopPollMessage");
-        }
-
-        /// <summary>
-        /// Poll this instance. The main controller tracks the change ID. 
-        /// 
-        /// The deserialized server response is sent to observers, who are responsible for acting on the info. 
-        /// </summary>
-        public void Poll()
-        {
-            var task = Task.Run(async () =>
-            {
-                return await api.Pull(this.UserKey, this.EventSlug, this.changeID);
-            });
-
-            var json = task.Result;
-
-            // if there is no data, continue on
-            if (json.Length == 0) {
-                return;
-            }
-
-            if (task.IsFaulted) {
-                Debug.WriteLine("*** Failed to pull: " + task.Exception.ToString());
-            }
-
-            // try to parse the pull
-            Debug.WriteLine("Pull json: " + json + ". " + json.Length);
-
-            var result = JsonConvert.DeserializeObject<PullResponse>(json);
-
-            // update ourself
-            this.changeID = result.Change;
-
-            UpdatePullObservers(result);
-        }
-
-        /// <summary>
-        /// Updates the pull observers.
-        /// </summary>
-        /// <param name="data">Data retrieved from the pull.</param>
-        private void UpdatePullObservers(PullResponse data)
-        {
-            foreach (var observer in this.PullObservers) {
-                observer.OnNewPullData(data);
-            }
-        }
-
-        /// <summary>
-        /// Registers an observer on the pull.
-        /// </summary>
-        /// <param name="observer">Observer.</param>
-        public void RegisterObserver(IPullUpdateObserver observer)
-        {
-            // TODO: membership checking
-            PullObservers.Add(observer);
         }
 
         /// <summary>
@@ -497,24 +195,38 @@ namespace MeNext
         public void SongEnds(ISong song)
         {
             Debug.WriteLine("== SONG ENDED ==");
-            // Tell the server we want to play the next song.
-            // As host, we will have permission to do this.
-
-            // TODO: recover from missing a skip...
-            this.RequestSkip();
+            this.Event?.SongEnded();
         }
 
         /// <summary>
         /// Called whenever anything has changed which might require a UI update
         /// </summary>
-        public void SomethingChanged()
+        public void InformSomethingChanged()
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                foreach (var listener in listeners) {
+                // We use a copy so listeners we call can create objects which register new listeners
+                var copy = new List<IUIChangeListener>(listeners);
+
+                foreach (var listener in copy) {
                     listener.SomethingChanged();
                 }
+
+                this.Event?.SomethingChangedDangerous();
             });
+        }
+
+        /// <summary>
+        /// Registers the a user interface might need refresh listener.
+        /// DO NOT USE THIS METHOD IF YOUR OBJECT IS TO BE GARBAGE COLLECTED BETWEEN EVENTS.
+        /// In fact, we assert that this is never called while an event is in progress.
+        /// Instead, use MainController.Event.RegisterUiListener(..)
+        /// </summary>
+        /// <param name="listener">Listener.</param>
+        internal void RegisterUiListenerDangerous(IUIChangeListener listener)
+        {
+            Debug.Assert(!this.InEvent);
+            listeners.Add(listener);
         }
 
         public static string RandomString(int length)
@@ -524,9 +236,9 @@ namespace MeNext
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        internal void AddStatusListener(IUIChangeListener listener)
+        public void MusicServiceChange()
         {
-            listeners.Add(listener);
+            this.InformSomethingChanged();
         }
     }
 }

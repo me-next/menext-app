@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
@@ -22,12 +22,12 @@ namespace MeNext
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            this.mainController.RegisterObserver(this);
+            this.mainController.Event.RegisterPullObserver(this);
 
             var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory());
             var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory());
 
-            this.songList = new ListsView<ISong>(playNextQueue, suggestionQueue);
+            this.songList = new ListsView<ISong>(mainController, playNextQueue, suggestionQueue);
 
             //var songList = new SongListView(model, new BasicSongCellFactory());
             //songList.OnSongSelected += (song) =>
@@ -46,12 +46,10 @@ namespace MeNext
 
         public void OnNewPullData(PullResponse data)
         {
-            var queue = data.SuggestQueue;
-
             var songUids = new List<string>();
 
             // look up the metadata with spotify for each song
-            foreach (var song in queue.Songs) {
+            foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
                 songUids.Add(song.ID);
             }
 
@@ -65,10 +63,6 @@ namespace MeNext
         private void UpdateSongLists(IEnumerable<ISong> playNext, IEnumerable<ISong> suggestions)
         {
             this.songList.UpdateLists(playNext, suggestions);
-            //this.songList.UpdateLists(
-            //    new ResultsGroup<ISong>("Play Next", playNext, new SongItemFactory()),
-            //    new ResultsGroup<ISong>("Suggestions", suggestions, new SongItemFactory())
-            //);
         }
 
     }

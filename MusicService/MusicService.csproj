@@ -41,6 +41,7 @@
     <Compile Include="IMetadata.cs" />
     <Compile Include="ResultListEnumerator.cs" />
     <Compile Include="ResultListWrapper.cs" />
+    <Compile Include="SimpleResultList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

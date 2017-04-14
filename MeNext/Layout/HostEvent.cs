@@ -10,30 +10,29 @@ namespace MeNext
         int permissions = 3;
         public HostEvent(MainController mc)
         {
+            this.Title = "Host event";
             var layout = new StackLayout
             {
-                Children = {
-                    new Label { Text = "Host Event!\n" }
-                }
+                Padding = LayoutConsts.DEFAULT_PADDING,
             };
             var permissionText = "Suggest Song";
-            var suggButt = new Button { Text = permissionText, BackgroundColor = Color.Green};
+            var suggButt = new Button { Text = permissionText, BackgroundColor = Color.Green };
             suggButt.Clicked += (sender, e) => AddPermission(sender, e, 1, mc);
             layout.Children.Add(suggButt);
             permissionText = "Play Next";
-            var nextButt = new Button { Text = permissionText, BackgroundColor = Color.Green};
+            var nextButt = new Button { Text = permissionText, BackgroundColor = Color.Green };
             nextButt.Clicked += (sender, e) => AddPermission(sender, e, 2, mc);
-            layout.Children.Add(nextButt); 
+            layout.Children.Add(nextButt);
             permissionText = "Play Now";
-            var nowButt = new Button { Text = permissionText, BackgroundColor = Color.Red};
+            var nowButt = new Button { Text = permissionText, BackgroundColor = Color.Red };
             nowButt.Clicked += (sender, e) => AddPermission(sender, e, 4, mc);
             layout.Children.Add(nowButt);
             permissionText = "Volume Control";
-            var volButt = new Button { Text = permissionText, BackgroundColor = Color.Red};
+            var volButt = new Button { Text = permissionText, BackgroundColor = Color.Red };
             volButt.Clicked += (sender, e) => AddPermission(sender, e, 8, mc);
             layout.Children.Add(volButt);
             permissionText = "Skip";
-            var skipButt = new Button { Text = permissionText, BackgroundColor = Color.Red};
+            var skipButt = new Button { Text = permissionText, BackgroundColor = Color.Red };
             skipButt.Clicked += (sender, e) => AddPermission(sender, e, 16, mc);
             layout.Children.Add(skipButt);
             var hostCommand = new Command<MainController>(HostCommand);
@@ -47,12 +46,12 @@ namespace MeNext
         }
         void HostCommand(MainController mc)
         {
-            JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent("Test"));
-            if (joinEvent.EventResult.ToString() == "SUCCESS") 
-            {
-                mc.RequestEventPermissions(permissions);
-                Navigation.PopAsync();
-                Navigation.PushAsync(new JoinedEvent(mc));
+            JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent());
+            Navigation.PopAsync();
+            if (joinEvent.EventResult.ToString() == "SUCCESS") {
+                mc.Event.RequestEventPermissions(permissions);
+                //Navigation.PopAsync();
+                //Navigation.PushAsync(new JoinedEvent(mc));
             }
         }
         public Tuple<string, string, string> HostParty()
@@ -67,16 +66,16 @@ namespace MeNext
             Tuple<string, string, string> reTuple = Tuple.Create(errormsg, partyID, parsedJSON);
             return reTuple;
         }
-        public void AddPermission(object sender, EventArgs e, int val, MainController mc) 
+        public void AddPermission(object sender, EventArgs e, int val, MainController mc)
         {
             var thisButt = (Button) sender;
             var modifier = 0;
-            if(thisButt.BackgroundColor.Equals(Color.Red)) {
+            if (thisButt.BackgroundColor.Equals(Color.Red)) {
                 thisButt.BackgroundColor = Color.Green;
                 modifier = 1;
 
-            } else if(thisButt.BackgroundColor.Equals(Color.Green)) {
-               thisButt.BackgroundColor = Color.Red;
+            } else if (thisButt.BackgroundColor.Equals(Color.Green)) {
+                thisButt.BackgroundColor = Color.Red;
                 modifier = -1;
             }
             Debug.WriteLine("old_permissions = " + permissions);

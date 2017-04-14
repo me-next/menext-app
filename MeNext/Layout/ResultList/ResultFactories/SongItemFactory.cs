@@ -13,12 +13,18 @@ namespace MeNext
 
         public ResultItemData GetResultItem(ISong from)
         {
+            var artists = "";
+            foreach (var artist in from.Artists) {
+                artists += ", " + artist.Name;
+            }
+            if (artists.Length > 0) {
+                artists = artists.Substring(2);
+            }
+
             return new ResultItemData(from)
             {
                 Title = from.Name,
-                // TODO List all the artists, not just the first one
-                Subtitle = from.Artists[0].Name + " " + BULLET + " " + from.Album.Name,
-                // TODO Make this follow what it actually is
+                Subtitle = artists + " " + BULLET + " " + from.Album.Name,
                 Suggest = SuggestSetting.SUGGEST,
                 TapCommand = null,
             };

@@ -37,7 +37,7 @@ namespace MeNext
                 for (;;) {
                     token.ThrowIfCancellationRequested();
 
-                    mainController.Poll();
+                    mainController.Event.Poll();
 
                     await Task.Delay(MS_PER_POLL);
                 }

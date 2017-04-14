@@ -42,6 +42,8 @@ namespace MeNext.Spotify
             foreach (var artist in result.artists) {
                 this.factory.CacheSubmit(artist);
             }
+
+            this.factory.CacheSubmit(result.album);
         }
 
         public IAlbum Album

@@ -51,14 +51,12 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Playing\Results\LeaveEventResult.cs" />
     <Compile Include="Layout\QueueView.cs" />
-    <Compile Include="Layout\SongListView.cs" />
     <Compile Include="Net\API.cs" />
     <Compile Include="Layout\SearchView.cs" />
     <Compile Include="Net\JoinEvent.cs" />
     <Compile Include="Playing\Responses\CreateEventResponse.cs" />
     <Compile Include="Playing\Responses\PullResponse.cs" />
     <Compile Include="Layout\TestingScreen.cs" />
-    <Compile Include="Layout\JoinedEvent.cs" />
     <Compile Include="Layout\HomeScreen.cs" />
     <Compile Include="Layout\IUIChangeListener.cs" />
     <Compile Include="Layout\ResultList\ListsView.cs" />
@@ -68,6 +66,11 @@
     <Compile Include="Layout\ResultList\BetterObservableCollection.cs" />
     <Compile Include="Layout\ResultList\ResultItemFactory.cs" />
     <Compile Include="Layout\ResultList\ResultFactories\SongItemFactory.cs" />
+    <Compile Include="Layout\ResultList\ResultListView.cs" />
+    <Compile Include="Playing\Event.cs" />
+    <Compile Include="Layout\FullWrapperView.cs" />
+    <Compile Include="Playing\Data\SuggestionQueue.cs" />
+    <Compile Include="Layout\LibraryView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
@@ -78,6 +81,7 @@
     <Folder Include="Playing\Responses\" />
     <Folder Include="Layout\ResultList\" />
     <Folder Include="Layout\ResultList\ResultFactories\" />
+    <Folder Include="Playing\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

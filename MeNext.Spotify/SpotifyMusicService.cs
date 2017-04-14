@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MeNext.MusicService;
 
@@ -146,7 +146,7 @@ namespace MeNext.Spotify
         public void SomethingChanged()
         {
             foreach (var l in listeners) {
-                l.SomethingChanged();
+                l.MusicServiceChange();
             }
         }
 
