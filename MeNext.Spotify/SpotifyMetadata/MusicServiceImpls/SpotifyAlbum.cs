@@ -34,6 +34,14 @@ namespace MeNext.Spotify
             }
         }
 
+        internal SpotifyAlbum(MetadataFactory factory, PartialAlbumResult result)
+        {
+            this.factory = factory;
+            this.uri = result.uri;
+            this.songUids = null;
+            this.name = result.name;
+        }
+
         public string Name
         {
             get
@@ -46,6 +54,7 @@ namespace MeNext.Spotify
         {
             get
             {
+                // TODO: If this is null we need to obtain them
                 return factory.GetSongs(songUids);
             }
         }

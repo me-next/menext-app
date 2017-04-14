@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MeNext.MusicService;
 
@@ -15,6 +15,14 @@ namespace MeNext.Spotify
         private List<string> albumUids;
 
         internal SpotifyArtist(MetadataFactory factory, ArtistResult result)
+        {
+            this.factory = factory;
+            this.name = result.name;
+            this.uri = result.uri;
+            this.albumUids = null;
+        }
+
+        public SpotifyArtist(MetadataFactory factory, PartialArtistResult result)
         {
             this.factory = factory;
             this.name = result.name;
