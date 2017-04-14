@@ -13,7 +13,8 @@ namespace MeNext.Layout
         public FullWrapperView(MainController mainController)
         {
             NavigationPage.SetHasNavigationBar(this, false);
-            this.PushAsync(new MainPage(mainController, this));
+            mainController.NavPage = this;
+            this.PushAsync(new MainPage(mainController));
         }
     }
 }

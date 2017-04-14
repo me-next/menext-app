@@ -59,6 +59,8 @@ namespace MeNext
 
         public Event Event { get; private set; }
 
+        public NavigationPage NavPage { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.MusicController"/> class.
         /// </summary>

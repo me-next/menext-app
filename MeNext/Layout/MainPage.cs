@@ -16,7 +16,7 @@ namespace MeNext.Layout
         private List<NavigationPage> pages = new List<NavigationPage>();
         private bool tabsShown;
 
-        public MainPage(MainController mainController, NavigationPage nav)
+        public MainPage(MainController mainController)
         {
             this.mainController = mainController;
             this.tabsShown = false;
@@ -25,7 +25,7 @@ namespace MeNext.Layout
             NavigationPage.SetHasNavigationBar(this, false);
             this.Title = "MeNext";
 
-            var homeScreen = new NavigationPage(new HomeScreen(mainController, nav));
+            var homeScreen = new NavigationPage(new HomeScreen(mainController, mainController.NavPage));
             homeScreen.Title = "Home";
             //homeScreen.Icon = "homeScreenIcon.png";
             this.Children.Add(homeScreen);
@@ -45,7 +45,7 @@ namespace MeNext.Layout
                     //playingScreen.Icon = "playingScreenIcon.png";
                     pages.Add(playingScreen);
 
-                    var libraryScreen = new NavigationPage(new TestingScreen(mainController));
+                    var libraryScreen = new NavigationPage(new LibraryView(mainController));
                     libraryScreen.Title = "Library";
                     //libraryScreen.Icon = "libraryScreenIcon.png";
                     pages.Add(libraryScreen);

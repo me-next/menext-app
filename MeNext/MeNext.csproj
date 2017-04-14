@@ -70,6 +70,7 @@
     <Compile Include="Playing\Event.cs" />
     <Compile Include="Layout\FullWrapperView.cs" />
     <Compile Include="Playing\Data\SuggestionQueue.cs" />
+    <Compile Include="Layout\LibraryView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
