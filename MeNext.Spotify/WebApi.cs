@@ -62,7 +62,11 @@ namespace MeNext.Spotify
             encoded = encoded.Replace("%22", "\"");    // Kludge to maintain
             return encoded;
         }
-
+        /// <summary>
+        /// Searches for a specified song. 
+        /// </summary>
+        /// <returns>The song.</returns>
+        /// <param name="rawQuery">Raw query to be encoded and sent in a request.</param>
         public IResultList<ISong> SearchSong(string rawQuery)
         {
             Debug.WriteLine("Searching for: {0}", rawQuery);
@@ -90,12 +94,18 @@ namespace MeNext.Spotify
             // TODO
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// Gets the users library songs.
+        /// </summary>
+        /// <returns>The users library songs.</returns>
         public IResultList<ISong> GetUserLibrarySongs()
         {
             return PagingUri<ISong, SavedTrackResult>(BASE_ADDRESS + "/me/tracks", false);
         }
-
+        /// <summary>
+        /// Gets the users library playlists.
+        /// </summary>
+        /// <returns>The users library playlists.</returns>
         public IResultList<IPlaylist> GetUserLibraryPlaylists()
         {
             return PagingUri<IPlaylist, PartialPlaylistResult>(BASE_ADDRESS + "/me/playlists", false);
@@ -180,14 +190,22 @@ namespace MeNext.Spotify
             }
             return false;
         }
-
+        /// <summary>
+        /// Gets the json response from a requestion without the base address.
+        /// </summary>
+        /// <returns>The json response.</returns>
+        /// <param name="uriEnd">URI without base address.</param>
         public async Task<string> GetJson(string uriEnd)
         {
             Debug.Assert(uriEnd[0] == '/');
 
             return await GetJsonFullUri(BASE_ADDRESS + uriEnd);
         }
-
+        /// <summary>
+        /// Gets the json with a full URI.
+        /// </summary>
+        /// <returns>The json response.</returns>
+        /// <param name="fullUri">a full URI with base address.</param>
         public async Task<string> GetJsonFullUri(string fullUri)
         {
             Debug.WriteLine("::Getting URI: {0}", fullUri);

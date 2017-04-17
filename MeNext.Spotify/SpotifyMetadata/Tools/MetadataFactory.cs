@@ -127,21 +127,25 @@ namespace MeNext.Spotify
             return result;
         }
 
+        //Gets songs based on list of song ids
         public List<ISong> GetSongs(IList<string> uids)
         {
             return GetMany<SpotifySong, ISong>(uids);
         }
 
+        //Gets albums based on list of album ids
         public List<IAlbum> GetAlbums(IList<string> uids)
         {
             return GetMany<SpotifyAlbum, IAlbum>(uids);
         }
 
+        //Gets artists based on list of artists ids
         public List<IArtist> GetArtists(IList<string> uids)
         {
             return GetMany<SpotifyArtist, IArtist>(uids);
         }
 
+        //Gets playlists based on list of playlist ids
         public List<IPlaylist> GetPlaylists(IList<string> uids)
         {
             return GetMany<SpotifyPlaylist, IPlaylist>(uids);
@@ -156,21 +160,25 @@ namespace MeNext.Spotify
             return GetMany<T, Q>(list)[0];
         }
 
+        //Gets one song based on given song id
         public ISong GetSong(string uid)
         {
             return GetOne<SpotifySong, ISong>(uid);
         }
 
+        //Gets an album based on given album id
         public IAlbum GetAlbum(string uid)
         {
             return GetOne<SpotifyAlbum, IAlbum>(uid);
         }
 
+        //Gets an artist based on given artist id
         public IArtist GetArtist(string uid)
         {
             return GetOne<SpotifyArtist, IArtist>(uid);
         }
 
+        //Gets a playlist based on given playlist id
         public IPlaylist GetPlaylist(string uid)
         {
             return GetOne<SpotifyPlaylist, IPlaylist>(uid);
