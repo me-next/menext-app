@@ -64,7 +64,6 @@ namespace MeNext
             };
 
             //TODO: add seeking/time slider
-
             this.songTitle = new Label { Text = "", Margin = new Thickness(0, 30, 0, 0), HorizontalOptions = LayoutOptions.CenterAndExpand };
             this.artistLabel = new Label { Text = "", HorizontalOptions = LayoutOptions.CenterAndExpand };
             this.albumTitle = new Label { Text = "", Margin = new Thickness(0, 0, 0, 30), HorizontalOptions = LayoutOptions.CenterAndExpand };
@@ -117,6 +116,22 @@ namespace MeNext
                     this.playButton.Image = "play_icon_50px.png";
                 }
             });
+        }
+        /// <summary>
+        /// Play or Pause depending on the status of the Event.
+        /// </summary>
+        public void PlayPause()
+        {
+            //Music is playing
+            if (this.mainController.musicService.Playing) {
+                pauseButt.IsVisible = true;
+                playButt.IsVisible = false;
+                mainController.Event.RequestPlay();
+            } else { //No music playing.
+                pauseButt.IsVisible = false;
+                playButt.IsVisible = true;
+                mainController.Event.RequestPause();
+            }
         }
     }
 }
