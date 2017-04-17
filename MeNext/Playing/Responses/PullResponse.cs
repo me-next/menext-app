@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace MeNext
 {
     /// <summary>
-    /// Parses a pull json resonse
+    /// Parses a pull json response.
     /// </summary>
     public class PullResponse
     {
@@ -18,7 +18,7 @@ namespace MeNext
         public PlayingResponse Playing;
     }
     /// <summary>
-    /// Parses a song jsons resonse
+    /// Parses a song json response.
     /// </summary>
     public class SongResponse
     {
@@ -41,7 +41,7 @@ namespace MeNext
         public SongResponse[] Songs;
     }
     /// <summary>
-    /// Parses a Playing json resons
+    /// Parses a playing json response
     /// </summary>
     public class PlayingResponse
     {

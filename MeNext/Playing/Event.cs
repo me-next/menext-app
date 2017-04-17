@@ -267,12 +267,12 @@ namespace MeNext
         /// Assumes that the Event begins with Play Next and Suggest Allowed but everything else not allowed.
         public void RequestEventPermissions()
         {
-            //set the permissions for the Event
-            //1 is Suggest
-            //2 is Play Next
-            //4 is Play Now
-            //8 is Play Volume
-            //16 is Play Skip
+            // set the permissions for the Event
+            // 1 is Suggest
+            // 2 is Play Next
+            // 4 is Play Now
+            // 8 is Play Volume
+            // 16 is Play Skip
             // TODO
         }
 
@@ -306,7 +306,6 @@ namespace MeNext
 
         /// <summary>
         /// Poll this instance. The main controller tracks the change ID. 
-        /// 
         /// The deserialized server response is sent to observers, who are responsible for acting on the info. 
         /// </summary>
         public void Poll()

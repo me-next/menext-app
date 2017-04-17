@@ -35,12 +35,12 @@ namespace MeNext
         }
 
         /// <summary>
-        /// Pulls a request from the server.
+        /// Pulls the results down from the server.
         /// </summary>
         /// <param name="uid">User id.</param>
         /// <param name="eid">Event id.</param>
         /// <param name="changeID">Change identifier.</param>
-        /// <returns>The server response string.</returns>
+        /// <returns>The server response.</returns>
         public async Task<string> Pull(string uid, string eid, UInt64 changeID)
         {
             var uri = new Uri(string.Format("/pull/{0}/{1}/{2}", uid, eid, changeID));

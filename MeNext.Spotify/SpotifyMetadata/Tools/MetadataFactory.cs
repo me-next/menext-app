@@ -21,7 +21,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Submits a chunk of our metadata to the cache
+        /// Submits a chunk of our metadata to the cache.
         /// </summary>
         /// <param name="data">The metadata.</param>
         public void CacheSubmit(IMetadata data)
@@ -63,7 +63,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Obtains the actual objects from the interwebs
+        /// Obtains the actual objects from the interwebs.
         /// </summary>
         /// <returns>The metadata objects.</returns>
         /// <param name="uids">Uids.</param>
@@ -127,25 +127,41 @@ namespace MeNext.Spotify
             return result;
         }
 
-        //Gets songs based on list of song ids
+        /// <summary>
+        /// Gets songs based on list of song ids.
+        /// </summary>
+        /// <returns>The songs.</returns>
+        /// <param name="uids">Song ids.</param>
         public List<ISong> GetSongs(IList<string> uids)
         {
             return GetMany<SpotifySong, ISong>(uids);
         }
 
-        //Gets albums based on list of album ids
+        /// <summary>
+        /// Gets albums based on list of album ids.
+        /// </summary>
+        /// <returns>The albums.</returns>
+        /// <param name="uids">Album ids.</param>
         public List<IAlbum> GetAlbums(IList<string> uids)
         {
             return GetMany<SpotifyAlbum, IAlbum>(uids);
         }
 
-        //Gets artists based on list of artists ids
+        /// <summary>
+        /// Gets artists based on list of artists ids.
+        /// </summary>
+        /// <returns>The artists.</returns>
+        /// <param name="uids">Artist ids.</param>
         public List<IArtist> GetArtists(IList<string> uids)
         {
             return GetMany<SpotifyArtist, IArtist>(uids);
         }
 
-        //Gets playlists based on list of playlist ids
+        /// <summary>
+        /// Gets playlists based on list of playlist ids.
+        /// </summary>
+        /// <returns>The playlists.</returns>
+        /// <param name="uids">Playlist ids.</param>
         public List<IPlaylist> GetPlaylists(IList<string> uids)
         {
             return GetMany<SpotifyPlaylist, IPlaylist>(uids);
@@ -160,25 +176,41 @@ namespace MeNext.Spotify
             return GetMany<T, Q>(list)[0];
         }
 
-        //Gets one song based on given song id
+        /// <summary>
+        /// Gets one song based on given song id.
+        /// </summary>
+        /// <returns>The song.</returns>
+        /// <param name="uid">Uid.</param>
         public ISong GetSong(string uid)
         {
             return GetOne<SpotifySong, ISong>(uid);
         }
 
-        //Gets an album based on given album id
+        /// <summary>
+        /// Gets an album based on given album id.
+        /// </summary>
+        /// <returns>The album.</returns>
+        /// <param name="uid">Album id.</param>
         public IAlbum GetAlbum(string uid)
         {
             return GetOne<SpotifyAlbum, IAlbum>(uid);
         }
 
-        //Gets an artist based on given artist id
+        /// <summary>
+        /// Gets an artist based on given artist id.
+        /// </summary>
+        /// <returns>The artist.</returns>
+        /// <param name="uid">Artist id.</param>
         public IArtist GetArtist(string uid)
         {
             return GetOne<SpotifyArtist, IArtist>(uid);
         }
 
-        //Gets a playlist based on given playlist id
+        /// <summary>
+        /// Gets a playlist based on given playlist id.
+        /// </summary>
+        /// <returns>The playlist.</returns>
+        /// <param name="uid">Playlist id.</param>
         public IPlaylist GetPlaylist(string uid)
         {
             return GetOne<SpotifyPlaylist, IPlaylist>(uid);

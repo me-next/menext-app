@@ -92,7 +92,7 @@ namespace MeNext.Spotify.Droid
         }
 
         /// <summary>
-        /// When authentication has completed
+        /// Called when authentication has completed.
         /// </summary>
         /// <param name="response">Response.</param>
         void OnAuthenticationComplete(AuthenticationResponse response)
@@ -154,7 +154,6 @@ namespace MeNext.Spotify.Droid
             Log.Debug("PlayerListener", "*** Temporary error (what does that mean??)");
             this.sms.SomethingChanged();
         }
-
 
         public void OnConnectionMessage(string msg)
         {

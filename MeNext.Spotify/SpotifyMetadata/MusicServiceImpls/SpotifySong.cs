@@ -16,7 +16,7 @@ namespace MeNext.Spotify
     {
         private const int MAX_RESULTS_PER_QUERY = 50;
         private const string ENDPOINT_MULTIPLE = "tracks";
-        //Important metadata for song
+        // Important metadata for song
         private MetadataFactory factory;
         private string uri;
         private string name;
@@ -141,7 +141,7 @@ namespace MeNext.Spotify
         /// <summary>
         /// Get a list of songs from a queue of song ids
         /// </summary>
-        /// <returns>The songs.</returns>
+        /// <returns>A list of the songs.</returns>
         /// <param name="factory">Factory.</param>
         /// <param name="sids">Song ids.</param>
         internal static List<SpotifySong> ObtainSongs(MetadataFactory factory, Queue<string> sids)

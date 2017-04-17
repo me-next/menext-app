@@ -48,7 +48,7 @@ namespace MeNext
         {
             var songUids = new List<string>();
 
-            // look up the metadata with spotify for each song
+            // Look up the metadata with spotify for each song.
             foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
                 songUids.Add(song.ID);
             }

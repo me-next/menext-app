@@ -164,7 +164,7 @@ namespace MeNext.Spotify.Droid
         }
 
         /// <summary>
-        /// Plays the song. Defaults to beginning
+        /// Plays the song. Defaults to the start of the song.
         /// </summary>
         /// <param name="song">Song to play.</param>
         /// <param name="position">Position in song.</param>
