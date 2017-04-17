@@ -8,13 +8,21 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Class that represents a spotify playlist and its metadata
+    /// </summary>
     public class SpotifyPlaylist : IPlaylist, ISpotifyMetadata
     {
         private MetadataFactory factory;
         private string uri;
         private string name;
         private IResultList<ISong> page1;
-
+        /// <summary>
+        /// Initializes a new instance of the Spotify playlist class.
+        /// </summary>
+        /// <param name="factory">Factory.</param>
+        /// <param name="result">Result.</param>
+        /// <param name="webApi">Web API.</param>
         internal SpotifyPlaylist(MetadataFactory factory, PlaylistResult result, WebApi webApi)
         {
             this.factory = factory;
@@ -44,6 +52,7 @@ namespace MeNext.Spotify
             this.page1 = wrap;
         }
 
+        //Returns the playlist's name
         public string Name
         {
             get
@@ -52,6 +61,7 @@ namespace MeNext.Spotify
             }
         }
 
+        //Returns the playlist's songs
         public IResultList<ISong> Songs
         {
             get
@@ -60,6 +70,7 @@ namespace MeNext.Spotify
             }
         }
 
+        //Returns the playlist's uid
         public string UniqueId
         {
             get

@@ -14,7 +14,10 @@ namespace MeNext.Droid
         public static MainController Controller;
 
         private SpotifyMusicServiceDroid sms;
-
+        /// <summary>
+        /// On create do this.
+        /// </summary>
+        /// <param name="bundle">Bundle for initializing.</param>
         protected override void OnCreate(Bundle bundle)
         {
             // We should only be making this activity once
@@ -34,7 +37,9 @@ namespace MeNext.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App(Controller));
         }
-
+        /// <summary>
+        /// On resuming the app
+        /// </summary>
         protected override void OnResume()
         {
             base.OnResume();
@@ -46,13 +51,17 @@ namespace MeNext.Droid
             base.OnActivityResult(requestCode, resultCode, data);
             this.sms.OnActivityResult(requestCode, resultCode, data);
         }
-
+        /// <summary>
+        /// On pausing the App.
+        /// </summary>
         protected override void OnPause()
         {
             base.OnPause();
             this.sms.OnPause();
         }
-
+        /// <summary>
+        /// On fully closing the app.
+        /// </summary>
         protected override void OnDestroy()
         {
             // Super OnDestroy was called second in the example code
