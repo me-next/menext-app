@@ -82,7 +82,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the artist.
+        /// Gets an artist.
         /// </summary>
         /// <returns>The artist.</returns>
         /// <param name="uid">artist id.</param>
@@ -92,7 +92,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the playlist.
+        /// Gets a playlist.
         /// </summary>
         /// <returns>The playlist.</returns>
         /// <param name="uid">playlist id.</param>
@@ -102,7 +102,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the song.
+        /// Gets a song.
         /// </summary>
         /// <returns>The song.</returns>
         /// <param name="uid">song id.</param>
@@ -112,7 +112,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the songs.
+        /// Gets a list of songs.
         /// </summary>
         /// <returns>The songs.</returns>
         /// <param name="uids">list of song Ids.</param>
@@ -122,7 +122,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the artists.
+        /// Gets a list of artists.
         /// </summary>
         /// <returns>The artists.</returns>
         /// <param name="uids">list of artist ids.</param>
@@ -132,7 +132,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the albums.
+        /// Gets a list of albums.
         /// </summary>
         /// <returns>The albums.</returns>
         /// <param name="uids">list of album ids> .</param>
@@ -142,7 +142,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the playlists.
+        /// Gets a list of playlists.
         /// </summary>
         /// <returns>The playlists.</returns>
         /// <param name="uids">list of playlist ids.</param>
@@ -152,7 +152,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for the album.
+        /// Searchs for an album.
         /// </summary>
         /// <returns>The album.</returns>
         /// <param name="query">Query for album.</param>
@@ -162,7 +162,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for the artist.
+        /// Searchs for an artist.
         /// </summary>
         /// <returns>The artist.</returns>
         /// <param name="query">Query for artist.</param>
@@ -172,7 +172,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for the playlists.
+        /// Searchs for a playlists.
         /// </summary>
         /// <returns>The playlist.</returns>
         /// <param name="query">Query for playlist.</param>
@@ -182,7 +182,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs the song.
+        /// Searchs a song.
         /// </summary>
         /// <returns>The song.</returns>
         /// <param name="query">Query for song.</param>
@@ -192,7 +192,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Adds the status listener.
+        /// Adds a status listener.
         /// </summary>
         /// <param name="listener">Listener to add.</param>
         public void AddStatusListener(IMusicServiceListener listener)
@@ -201,7 +201,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Removes the status listener.
+        /// Removes a status listener.
         /// </summary>
         /// <param name="listener">Listener to remove.</param>
         public void RemoveStatusListener(IMusicServiceListener listener)
@@ -210,9 +210,9 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Songs the ends.
+        /// Updates listeners when song ends
         /// </summary>
-        /// <param name="uri">URI .</param>
+        /// <param name="uri">Song's id.</param>
         public void SongEnds(string uri)
         {
             var x = this.GetSong(uri);

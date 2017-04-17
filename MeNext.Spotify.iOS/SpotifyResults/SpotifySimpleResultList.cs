@@ -43,7 +43,7 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Gets the first result index.
+        /// Gets the index of the first result within the list.
         /// </summary>
         /// <value>The first result.</value>
         public int FirstResult
@@ -55,7 +55,7 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Gets the last result index.
+        /// Gets the index of the last result within the list.
         /// </summary>
         /// <value>The last result.</value>
         public int LastResult

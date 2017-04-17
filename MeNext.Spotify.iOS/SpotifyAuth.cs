@@ -86,10 +86,10 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Opens the URL.
+        /// Called when the application is opened by a URL.
         /// </summary>
-        /// <returns><c>true</c>, if URL was opened, <c>false</c> otherwise.</returns>
-        /// <param name="url">URL.</param>
+        /// <returns><c>true</c>, if the app was opened successfully, <c>false</c> otherwise.</returns>
+        /// <param name="url">URL that app is opened from.</param>
         public bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
         {
             Debug.WriteLine("OpenUrl called with url: " + url.AbsoluteString, "auth");

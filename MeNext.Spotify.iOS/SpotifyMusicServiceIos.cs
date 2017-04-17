@@ -87,7 +87,7 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Gets or sets the playing position.
+        /// Gets or sets the playing position in seconds.
         /// </summary>
         /// <value>The playing position.</value>
         public override double PlayingPosition
@@ -138,7 +138,7 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Gets or sets the volume.
+        /// Gets or sets the volume on a scale of 0-1.
         /// </summary>
         /// <value>The volume.</value>
         public override double Volume
@@ -161,10 +161,10 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Plays the song at given position.
+        /// Plays the song at given position in seconds.
         /// </summary>
         /// <param name="song">Song.</param>
-        /// <param name="position">Position.  Defaults to beginning, 0</param>
+        /// <param name="position">Position. Defaults to beginning = 0.</param>
         public override void PlaySong(ISong song, double position = 0)
         {
             Debug.WriteLine("Trying to play song: " + song.Name, "service");
@@ -184,14 +184,18 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        //Login to spotify
+        /// <summary>
+        /// Login to spotify.
+        /// </summary>
         public override void Login()
         {
             Debug.WriteLine("Login request received in music service", "auth");
             SpotifyAuth.Login();
         }
 
-        //Logout of spotify
+        /// <summary>
+        /// Logout of spotify.
+        /// </summary>
         public override void Logout()
         {
             // TODO: Test
@@ -204,6 +208,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Allows the host to hear music playing.
+        /// </summary>
+        /// <param name="isHost">If set to <c>true</c> is host.</param>
         public override void SetIsHost(bool isHost)
         {
             if (isHost) {

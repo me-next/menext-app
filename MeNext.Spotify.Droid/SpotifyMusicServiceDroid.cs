@@ -20,7 +20,7 @@ namespace MeNext.Spotify.Droid
         private ISong playingSong;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:MeNext.Spotify.Droid.SpotifyMusicServiceDroid"/> class.
+        /// Initializes a new instance of the Spotify music service droid class.
         /// </summary>
         /// <param name="mainActivity">Main activity.</param>
         public SpotifyMusicServiceDroid(Activity mainActivity)
@@ -103,7 +103,7 @@ namespace MeNext.Spotify.Droid
         }
 
         /// <summary>
-        /// Gets or sets the playing position.
+        /// Gets or sets the playing position in seconds.
         /// </summary>
         /// <value>The playing position.</value>
         public override double PlayingPosition
@@ -137,7 +137,7 @@ namespace MeNext.Spotify.Droid
         }
 
         /// <summary>
-        /// Gets or sets the volume.
+        /// Gets or sets the volume on a scale from 0-1.
         /// </summary>
         /// <value>The volume.</value>
         public override double Volume
@@ -164,7 +164,7 @@ namespace MeNext.Spotify.Droid
         }
 
         /// <summary>
-        /// Plays the song.  Defaults to beginning
+        /// Plays the song. Defaults to beginning
         /// </summary>
         /// <param name="song">Song to play.</param>
         /// <param name="position">Position in song.</param>
