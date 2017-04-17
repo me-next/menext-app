@@ -3,6 +3,9 @@
 using Newtonsoft.Json;
 namespace MeNext
 {
+    /// <summary>
+    /// Parses a pull json resonse
+    /// </summary>
     public class PullResponse
     {
         [JsonProperty(PropertyName = "suggest")]
@@ -14,7 +17,9 @@ namespace MeNext
         [JsonProperty(PropertyName = "playing")]
         public PlayingResponse Playing;
     }
-
+    /// <summary>
+    /// Parses a song jsons resonse
+    /// </summary>
     public class SongResponse
     {
         [JsonProperty(PropertyName = "id")]
@@ -27,13 +32,17 @@ namespace MeNext
         public int TotalVotes;
         public long TimeAdded;
     }
-
+    /// <summary>
+    /// Parses a queue json response
+    /// </summary>
     public class QueueResponse
     {
         [JsonProperty(PropertyName = "songs")]
         public SongResponse[] Songs;
     }
-
+    /// <summary>
+    /// Parses a Playing json resons
+    /// </summary>
     public class PlayingResponse
     {
         [JsonProperty(PropertyName = "CurrentSongId")]

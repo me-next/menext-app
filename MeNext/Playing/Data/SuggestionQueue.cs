@@ -36,7 +36,11 @@ namespace MeNext
             // Remove songs which were once present but alas, no longer are
             Songs.RemoveAll((oldSong) => queueSongs.Find((newSong) => oldSong.ID == newSong.ID) == null);
         }
-
+        /// <summary>
+        /// Sorts the suggestion queue.
+        /// Sorts based on the selected option of popularity, newest first, or oldest first
+        /// </summary>
+        /// <param name="how">How.</param>
         public void SortMe(SortOptions how)
         {
             switch (how) {
@@ -54,7 +58,9 @@ namespace MeNext
             }
         }
     }
-
+    /// <summary>
+    /// Options for sorting
+    /// </summary>
     public enum SortOptions
     {
         OLDEST_FIRST, NEWEST_FIRST, POPULARITY
