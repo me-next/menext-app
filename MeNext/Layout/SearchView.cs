@@ -6,6 +6,10 @@ using MeNext.MusicService;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Search view.
+    /// Contains a list of searched songs and an entry for song info to search.
+    /// </summary>
     public class SearchView : ContentPage
     {
         private SearchBar searchBar;
