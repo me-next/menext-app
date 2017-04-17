@@ -19,6 +19,10 @@ namespace MeNext.Spotify.Droid
         internal Activity mainActivity;
         private ISong playingSong;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:MeNext.Spotify.Droid.SpotifyMusicServiceDroid"/> class.
+        /// </summary>
+        /// <param name="mainActivity">Main activity.</param>
         public SpotifyMusicServiceDroid(Activity mainActivity)
         {
             this.mainActivity = mainActivity;
@@ -50,6 +54,10 @@ namespace MeNext.Spotify.Droid
             this.listener.OnDestroy();
         }
 
+        /// <summary>
+        /// Gets the player.
+        /// </summary>
+        /// <value>The player.</value>
         private SpotifyPlayer Player
         {
             get
@@ -58,6 +66,10 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:MeNext.Spotify.Droid.SpotifyMusicServiceDroid"/> logged in.
+        /// </summary>
+        /// <value><c>true</c> if logged in; otherwise, <c>false</c>.</value>
         public override bool LoggedIn
         {
             get
@@ -66,6 +78,11 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:MeNext.Spotify.Droid.SpotifyMusicServiceDroid"/>
+        /// is playing a song.
+        /// </summary>
+        /// <value><c>true</c> if playing; otherwise, <c>false</c>.</value>
         public override bool Playing
         {
             get
@@ -85,6 +102,10 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        /// <summary>
+        /// Gets or sets the playing position.
+        /// </summary>
+        /// <value>The playing position.</value>
         public override double PlayingPosition
         {
             get
@@ -103,6 +124,10 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        /// <summary>
+        /// Gets the playing song.
+        /// </summary>
+        /// <value>The playing song.</value>
         public override ISong PlayingSong
         {
             get
@@ -111,6 +136,10 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        /// <summary>
+        /// Gets or sets the volume.
+        /// </summary>
+        /// <value>The volume.</value>
         public override double Volume
         {
             get
@@ -134,6 +163,11 @@ namespace MeNext.Spotify.Droid
             this.Player.Logout();
         }
 
+        /// <summary>
+        /// Plays the song.  Defaults to beginning
+        /// </summary>
+        /// <param name="song">Song to play.</param>
+        /// <param name="position">Position in song.</param>
         public override void PlaySong(ISong song, double position = 0)
         {
             if (this.Player != null) {

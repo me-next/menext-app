@@ -42,6 +42,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets the first result index.
+        /// </summary>
+        /// <value>The first result.</value>
         public int FirstResult
         {
             get
@@ -50,6 +54,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets the last result index.
+        /// </summary>
+        /// <value>The last result.</value>
         public int LastResult
         {
             get
@@ -58,6 +66,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:MeNext.Spotify.iOS.SpotifySimpleResultList`1"/> has a next page.
+        /// </summary>
+        /// <value><c>true</c> if has a next page; otherwise, <c>false</c>.</value>
         public bool HasNextPage
         {
             get
@@ -66,6 +78,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets the items.
+        /// </summary>
+        /// <value>The items in a list.</value>
         public List<K> Items
         {
             get
@@ -74,6 +90,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets the next page.
+        /// </summary>
+        /// <value>The next page.</value>
         public IResultList<K> NextPage
         {
             get
@@ -82,6 +102,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets the previous page.
+        /// </summary>
+        /// <value>The previous page.</value>
         public IResultList<K> PreviousPage
         {
             get

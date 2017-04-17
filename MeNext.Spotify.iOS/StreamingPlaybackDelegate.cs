@@ -18,8 +18,10 @@ namespace MeNext.Spotify.iOS
 
         }
 
+        //Music has started playing.  Update the service accordingly.
         public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
+            //Get playing song
             var song = service.GetSong(trackUri);
 
             // TODO: This is only working w/ old versions of iOS
@@ -54,6 +56,7 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        //Handle songs ending.
         public override void AudioStreamingDidStopPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
             Debug.WriteLine("Track ended: " + trackUri, "playback");
@@ -61,12 +64,14 @@ namespace MeNext.Spotify.iOS
             service.SongEnds(trackUri);
         }
 
+        //Update ui since position changed.
         public override void AudioStreamingDidChangePosition(SPTAudioStreamingController audioStreaming, double position)
         {
             //Debug.WriteLine("Position: " + position);
             service.SomethingChanged();
         }
 
+        //Update ui since playback status changed
         public override void AudioStreamingDidChangePlaybackStatus(SPTAudioStreamingController audioStreaming, bool isPlaying)
         {
             Debug.WriteLine("Playback changed: " + isPlaying, "playback");

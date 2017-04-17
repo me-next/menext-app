@@ -12,9 +12,11 @@ using UIKit;
 namespace MeNext.Spotify.iOS
 {
     // VERSION: Spotify iOS SDK Beta 25
-    // TODO Document
     // Based mostly on https://github.com/spotify/ios-sdk/tree/2db9f565b45e683b4bb62c1ee1bdc34660f07c8f/Demo%20Projects/Simple%20Track%20Playback/Simple%20Track%20Playback
     // With a special mention of https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
+    /// <summary>
+    /// Spotify music service specifically for IOS.
+    /// </summary>
     public class SpotifyMusicServiceIos : SpotifyMusicService
     {
         private readonly StreamingDelegate sd;
@@ -55,7 +57,10 @@ namespace MeNext.Spotify.iOS
 
         // =========================== //
 
-
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:MeNext.Spotify.iOS.SpotifyMusicServiceIos"/> is playing.
+        /// </summary>
+        /// <value><c>true</c> if playing; otherwise, <c>false</c>.</value>
         public override bool Playing
         {
             get
@@ -81,6 +86,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets or sets the playing position.
+        /// </summary>
+        /// <value>The playing position.</value>
         public override double PlayingPosition
         {
             get
@@ -104,6 +113,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets the currently playing song.
+        /// </summary>
+        /// <value>The playing song.</value>
         public override ISong PlayingSong
         {
             get
@@ -112,6 +125,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:MeNext.Spotify.iOS.SpotifyMusicServiceIos"/> is logged in.
+        /// </summary>
+        /// <value><c>true</c> if logged in; otherwise, <c>false</c>.</value>
         public override bool LoggedIn
         {
             get
@@ -120,6 +137,10 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Gets or sets the volume.
+        /// </summary>
+        /// <value>The volume.</value>
         public override double Volume
         {
             get
@@ -139,6 +160,11 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Plays the song at given position.
+        /// </summary>
+        /// <param name="song">Song.</param>
+        /// <param name="position">Position.  Defaults to beginning, 0</param>
         public override void PlaySong(ISong song, double position = 0)
         {
             Debug.WriteLine("Trying to play song: " + song.Name, "service");
@@ -158,12 +184,14 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        //Login to spotify
         public override void Login()
         {
             Debug.WriteLine("Login request received in music service", "auth");
             SpotifyAuth.Login();
         }
 
+        //Logout of spotify
         public override void Logout()
         {
             // TODO: Test

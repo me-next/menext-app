@@ -57,6 +57,7 @@ namespace MeNext.Spotify.iOS
             });
         }
 
+        //Logged in! Update UI to reflect that.
         public override void AudioStreamingDidLogin(SPTAudioStreamingController audioStreaming)
         {
             Debug.Write("Logged in successfully!", "stream");
@@ -66,16 +67,19 @@ namespace MeNext.Spotify.iOS
             this.service.SomethingChanged();
         }
 
+        //Logged out.  Update the UI accordingly.
         public override void AudioStreamingDidLogout(SPTAudioStreamingController audioStreaming)
         {
             this.service.SomethingChanged();
         }
 
+        //Error handling.
         public override void AudioStreamingDidReceiveError(SPTAudioStreamingController audioStreaming, NSError error)
         {
             Debug.WriteLine("*** Error: " + error.Description, "stream");
         }
 
+        //Message handling
         public override void AudioStreamingDidReceiveMessage(SPTAudioStreamingController audioStreaming, string message)
         {
             Debug.WriteLine("Message: " + message, "stream");
