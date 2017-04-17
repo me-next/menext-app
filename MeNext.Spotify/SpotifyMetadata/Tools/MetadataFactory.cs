@@ -158,21 +158,33 @@ namespace MeNext.Spotify
 
         public ISong GetSong(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifySong, ISong>(uid);
         }
 
         public IAlbum GetAlbum(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifyAlbum, IAlbum>(uid);
         }
 
         public IArtist GetArtist(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifyArtist, IArtist>(uid);
         }
 
         public IPlaylist GetPlaylist(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifyPlaylist, IPlaylist>(uid);
         }
     }

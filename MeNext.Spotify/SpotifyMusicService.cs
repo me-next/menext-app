@@ -9,6 +9,9 @@ namespace MeNext.Spotify
         protected WebApi webApi { get; }
         private readonly List<IMusicServiceListener> listeners = new List<IMusicServiceListener>();
 
+        // NO TRAILING SLASH
+        public const string TOKEN_REFRESH = "https://stark-shelf-18616.herokuapp.com";
+
         public string ClientId
         {
             get

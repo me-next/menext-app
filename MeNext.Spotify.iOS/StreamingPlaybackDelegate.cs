@@ -20,6 +20,10 @@ namespace MeNext.Spotify.iOS
 
         public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
+            if (trackUri == null) {
+                // Some wonkiness going on
+                return;
+            }
             var song = service.GetSong(trackUri);
 
             // TODO: This is only working w/ old versions of iOS

@@ -141,6 +141,9 @@ namespace MeNext.Spotify.iOS
 
         public override void PlaySong(ISong song, double position = 0)
         {
+            if (song == null) {
+                return;
+            }
             Debug.WriteLine("Trying to play song: " + song.Name, "service");
             if (this.CanPlayNow) {
                 sd.Player.PlaySpotifyURI(song.UniqueId, 0, position, (NSError error1) =>

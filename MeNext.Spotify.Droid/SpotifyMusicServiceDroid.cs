@@ -136,6 +136,9 @@ namespace MeNext.Spotify.Droid
 
         public override void PlaySong(ISong song, double position = 0)
         {
+            if (song == null) {
+                return;
+            }
             if (this.Player != null) {
                 this.Player.PlayUri(this.listener.operationCallback, song.UniqueId, 0, (int) (position * 1000));
                 this.playingSong = song;
