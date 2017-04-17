@@ -7,6 +7,9 @@ namespace MeNext
     public class PlayingScreen : ContentPage, IUIChangeListener
     {
         private readonly Label songTitle;
+        //TODO: make album art work
+        //private Image albumArt;
+        //private readonly int artSize;
         private readonly MainController mainController;
 
         public PlayingScreen(MainController mainController)
@@ -15,32 +18,50 @@ namespace MeNext
 
             this.Title = "Now Playing";
             NavigationPage.SetHasNavigationBar(this, false);
-            var layout = new StackLayout
+
+            var prevButton = new Button
             {
-                Padding = LayoutConsts.DEFAULT_PADDING
+                Image = "previous_icon_50px.png",
+                Command = new Command(() => mainController.Event.RequestPrevious())
             };
 
-            layout.Children.Add(new Button
+            var playButton = new Button
             {
-                Text = "<<",
-                Command = new Command(() => mainController.Event.RequestPrevious())
-            });
-
-            layout.Children.Add(new Button
-            {
-                Text = "Play/Pause",
+                Image = "play_icon_50px.png",
+                //TODO: add functionality, including switching image
                 Command = new Command(() => { })
-            });
+            };
 
-            layout.Children.Add(new Button
+            var nextButton = new Button
             {
-                Text = ">>",
+                Image = "next_icon_50px.png",
                 Command = new Command(() => mainController.Event.RequestSkip())
-            });
+            };
 
-            layout.Children.Add(this.songTitle = new Label { Text = "" });
+            var buttons = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Children = {
+                    prevButton,
+                    playButton,
+                    nextButton
+                }
+            };
 
-            Content = layout;
+            this.songTitle = new Label { Text = "", HorizontalOptions = LayoutOptions.CenterAndExpand };
+            //this.artSize = (int)(this.Width * 0.7);
+            //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
+
+            this.Content = new StackLayout
+            {
+                Padding = LayoutConsts.DEFAULT_PADDING,
+                Children = {
+                    //this.albumArt,
+                    this.songTitle,
+                    buttons
+                }
+            };
 
             mainController.Event.RegisterUiListener(this);
         }
@@ -53,9 +74,11 @@ namespace MeNext
                 if (playing != null) {
                     var song = this.mainController.musicService.GetSong(playing);
                     this.songTitle.Text = song.Name;
+                    //this.albumArt = (Image)song.Album.GetAlbumArt(artSize, artSize);
                     // TODO Other metadata
                 } else {
                     this.songTitle.Text = "Nothing Playing";
+                    //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
                 }
             });
         }

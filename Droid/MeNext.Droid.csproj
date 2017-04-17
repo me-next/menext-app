@@ -153,6 +153,10 @@
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable\next_icon_50px.png" />
+    <AndroidResource Include="Resources\drawable\pause_icon_50px.png" />
+    <AndroidResource Include="Resources\drawable\play_icon_50px.png" />
+    <AndroidResource Include="Resources\drawable\previous_icon_50px.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Playing\" />
