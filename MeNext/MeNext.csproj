@@ -71,6 +71,9 @@
     <Compile Include="Layout\FullWrapperView.cs" />
     <Compile Include="Playing\Data\SuggestionQueue.cs" />
     <Compile Include="Layout\LibraryView.cs" />
+    <Compile Include="Layout\ResultList\MenuCommand.cs" />
+    <Compile Include="Layout\ResultList\IMenuHandler.cs" />
+    <Compile Include="Layout\ResultList\SongMenuHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />

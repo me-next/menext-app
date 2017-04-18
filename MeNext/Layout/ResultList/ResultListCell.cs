@@ -12,7 +12,7 @@ namespace MeNext
 
     /// <summary>
     /// Represents a single row within a results list. It currently special cases ISong for the suggestion button which,
-    /// while not great OO practice, but makes it easier to cache UI elements.
+    /// while not great OO practice, is necessary for performance reasons because this cell is cached.
     /// </summary>
     public class ResultListCell : ViewCell, IUIChangeListener
     {
@@ -21,6 +21,7 @@ namespace MeNext
         public const string VOTE_YES = "\ud83d\ude00";
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
+        public const string NOW_PLAYING = "\u25b6";
 
         private ResultItemData resultItem;
 
@@ -66,11 +67,30 @@ namespace MeNext
                 FontSize = LayoutConsts.ICON_SIZE,
                 WidthRequest = LayoutConsts.BUTTON_WIDTH,
                 Margin = LayoutConsts.RIGHT_BUTTON_MARGIN,
-                Command = new Command((obj) =>
+                Command = new Command(async (obj) =>
                 {
-                    Debug.WriteLine("Menu!");
-                    if (resultItem.MenuCommand != null && resultItem.MenuCommand.CanExecute(resultItem)) {
-                        resultItem.MenuCommand.Execute(resultItem);
+                    if (this.resultItem.MenuHandler == null) {
+                        return;
+                    }
+                    var menu = this.resultItem.MenuHandler.ProduceMenu(this.resultItem);
+                    if (menu.Count == 0) {
+                        return;
+                    }
+                    var commands = new List<string>();
+                    foreach (var item in menu) {
+                        commands.Add(item.Title);
+                    }
+                    var action = await controller.NavPage.DisplayActionSheet(
+                        "Menu: " + this.resultItem.Title,
+                        "Cancel",
+                        null,
+                        commands.ToArray()
+                    );
+                    foreach (var item in menu) {
+                        if (item.Title == action && item.Command.CanExecute(this.resultItem)) {
+                            item.Command.Execute(this.resultItem);
+                            Debug.WriteLine("Performed action " + action);
+                        }
                     }
                 }),
             };
@@ -84,9 +104,8 @@ namespace MeNext
                     new StackLayout
                     {
                         Orientation = StackOrientation.Vertical,
-                        Children = { titleLabel, subtitleLabel
-    }
-},
+                        Children = { titleLabel, subtitleLabel }
+                    },
                     new StackLayout
                     {
                         Orientation = StackOrientation.Horizontal,
@@ -157,10 +176,11 @@ namespace MeNext
                     Debug.Assert(resultItem.Item as ISong != null);
                 }
 
-                // TODO Menu
+                this.menuButton.IsVisible = (this.resultItem.MenuHandler != null);
             }
         }
 
+        // TODO: Move the song specific stuff into a new class
         private void UpdateSuggestionButton()
         {
             if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
@@ -168,19 +188,24 @@ namespace MeNext
             }
             var suggestions = this.controller.Event.SuggestionQueue.Songs;
 
-            var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
-            if (item != null) {
-                // The song has already been suggested
-                if (item.Vote == 1) {
-                    resultItem.Suggest = SuggestSetting.VOTE_LIKE;
-                } else if (item.Vote == -1) {
-                    resultItem.Suggest = SuggestSetting.VOTE_DISLIKE;
-                } else {
-                    resultItem.Suggest = SuggestSetting.VOTE_NEUTRAL;
-                }
+            if (this.controller.Event?.LatestPull?.Playing?.CurrentSongID == this.resultItem.Item.UniqueId) {
+                // This is the currently playing song
+                resultItem.Suggest = SuggestSetting.NOW_PLAYING;
             } else {
-                // The song is not yet suggested
-                resultItem.Suggest = SuggestSetting.SUGGEST;
+                var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
+                if (item != null) {
+                    // The song has already been suggested
+                    if (item.Vote == 1) {
+                        resultItem.Suggest = SuggestSetting.VOTE_LIKE;
+                    } else if (item.Vote == -1) {
+                        resultItem.Suggest = SuggestSetting.VOTE_DISLIKE;
+                    } else {
+                        resultItem.Suggest = SuggestSetting.VOTE_NEUTRAL;
+                    }
+                } else {
+                    // The song is not yet suggested
+                    resultItem.Suggest = SuggestSetting.SUGGEST;
+                }
             }
 
             // Update the icon
@@ -223,6 +248,9 @@ namespace MeNext
                 case SuggestSetting.VOTE_NEUTRAL:
                     return VOTE_NEUTRAL;
 
+                case SuggestSetting.NOW_PLAYING:
+                    return NOW_PLAYING;
+
                 default:
                     return "ERROR";
             }
@@ -232,6 +260,8 @@ namespace MeNext
         {
             this.UpdateSuggestionButton();
         }
+
+
     }
 
 

@@ -10,17 +10,8 @@ using System.Diagnostics;
 
 namespace MeNext
 {
-    /// <summary>
-    /// This is a view which allows us to EITHER (1) display multiple lists of metadata with a title for each grouping
-    /// OR (2) display a single incomplete list whose values are loaded dynamically. One cannot have multiple
-    /// dynamically loaded lists.
-    /// </summary>
     public class ListsView<T> : ListView where T : IMetadata
     {
-        //private IResultList<T> resultList;
-        //private BetterObservableCollection<ResultItemWrapper<T>> resultCollection;
-        //ResultItemFactory<T> resultItemFactory;
-
         private List<ResultsGroup<T>> allGroups;
 
         /// <summary>
@@ -71,61 +62,6 @@ namespace MeNext
                 group.SetAll(wrappedItems);
             }
         }
-
-        //// TODO: Handle result lists where pages can contain 0 items
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="T:MeNext.QueuesView`1"/> class. This constructor is for a
-        ///// single result list, which will be loaded lazily as the user scrolls.
-        ///// </summary>
-        ///// <param name="resultList">Result list.</param>
-        //public ListsView(IResultList<T> resultList, ResultItemFactory<T> resultItemFactory)
-        //{
-        //    this.GenericSettings();
-        //    this.allGroups = null;
-        //    this.resultItemFactory = resultItemFactory;
-        //    this.resultList = resultList;
-        //    this.resultCollection = new BetterObservableCollection<ResultItemWrapper<T>>();
-
-        //    // Adds the current page of results
-        //    this.addCurrentPage();
-
-        //    //this.ItemAppearing += (sender, e) =>
-        //    //{
-        //    //    var cue.Item;
-        //    //};
-        //}
-
-        //private void addCurrentPage()
-        //{
-        //    var items = new List<ResultItemWrapper<T>>();
-        //    foreach (var x in this.resultList.Items) {
-        //        var item = this.resultItemFactory.GetResultItem(x);
-        //        items.Add(new ResultItemWrapper<T>(item));
-        //    }
-        //}
-
-        //// Do not call if using groups
-        //public void UpdateResultList(IResultList<T> resultList)
-        //{
-        //    Debug.Assert(this.allGroups == null);
-        //    // TODO
-        //}
-
-        //public void LoadMore()
-        //{
-        //    if (currentList != null && currentList.FirstResult.HasNextPage) {
-        //        this.currentResult = this.currentResult.NextPage;
-        //        // TODO Add the header
-        //    } else if (resultLists.Count > 0) {
-        //        this.currentList = resultLists.Dequeue();
-        //        this.currentResult = this.currentList.FirstResult;
-        //    } else {
-        //        // Nothing else to load
-        //        return;
-        //    }
-        //    // TODO: Add the items ist
-
-        //}
 
     }
 
