@@ -100,9 +100,9 @@ namespace MeNext
                     //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
                 }
                 if (mainController.musicService.Playing) {
-                    this.playButton.Image = "play_icon_50px.png";
-                } else {
                     this.playButton.Image = "pause_icon_50px.png";
+                } else {
+                    this.playButton.Image = "play_icon_50px.png";
                 }
             });
         }
