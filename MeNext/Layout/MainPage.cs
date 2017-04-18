@@ -27,7 +27,9 @@ namespace MeNext.Layout
 
             var homeScreen = new NavigationPage(new HomeScreen(mainController, mainController.NavPage));
             homeScreen.Title = "Home";
-            homeScreen.Icon = "home_screen_icon";
+            if (Device.OS == TargetPlatform.iOS) {
+                homeScreen.Icon = "home_screen_icon";
+            }
             this.Children.Add(homeScreen);
 
             this.mainController.RegisterUiListenerDangerous(this);
@@ -42,22 +44,30 @@ namespace MeNext.Layout
                 if (this.tabsShown) {
                     var playingScreen = new NavigationPage(new PlayingScreen(mainController));
                     playingScreen.Title = "Playing";
-                    playingScreen.Icon = "play_screen_icon";
+                    if (Device.OS == TargetPlatform.iOS) {
+                        playingScreen.Icon = "play_screen_icon";
+                    }
                     pages.Add(playingScreen);
 
                     var libraryScreen = new NavigationPage(new LibraryView(mainController));
                     libraryScreen.Title = "Library";
-                    libraryScreen.Icon = "library_screen_icon";
+                    if (Device.OS == TargetPlatform.iOS) {
+                        libraryScreen.Icon = "library_screen_icon";
+                    }
                     pages.Add(libraryScreen);
 
                     var searchScreen = new NavigationPage(new SearchView(mainController));
                     searchScreen.Title = "Search";
-                    searchScreen.Icon = "search_screen_icon";
+                    if (Device.OS == TargetPlatform.iOS) {
+                        searchScreen.Icon = "search_screen_icon";
+                    }
                     pages.Add(searchScreen);
 
                     var queueScreen = new NavigationPage(new QueueView(mainController));
                     queueScreen.Title = "Queue";
-                    queueScreen.Icon = "queue_screen_icon";
+                    if (Device.OS == TargetPlatform.iOS) {
+                        queueScreen.Icon = "queue_screen_icon";
+                    }
                     pages.Add(queueScreen);
 
                     foreach (var page in this.pages) {

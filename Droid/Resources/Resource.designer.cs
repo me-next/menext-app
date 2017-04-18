@@ -2188,26 +2188,26 @@ namespace MeNext.Droid
 			// aapt resource value: 0x7f020053
 			public const int avd_hide_password = 2130837587;
 			
-			// aapt resource value: 0x7f02010a
-			public const int avd_hide_password_1 = 2130837770;
+			// aapt resource value: 0x7f02010e
+			public const int avd_hide_password_1 = 2130837774;
 			
-			// aapt resource value: 0x7f02010b
-			public const int avd_hide_password_2 = 2130837771;
+			// aapt resource value: 0x7f02010f
+			public const int avd_hide_password_2 = 2130837775;
 			
-			// aapt resource value: 0x7f02010c
-			public const int avd_hide_password_3 = 2130837772;
+			// aapt resource value: 0x7f020110
+			public const int avd_hide_password_3 = 2130837776;
 			
 			// aapt resource value: 0x7f020054
 			public const int avd_show_password = 2130837588;
 			
-			// aapt resource value: 0x7f02010d
-			public const int avd_show_password_1 = 2130837773;
+			// aapt resource value: 0x7f020111
+			public const int avd_show_password_1 = 2130837777;
 			
-			// aapt resource value: 0x7f02010e
-			public const int avd_show_password_2 = 2130837774;
+			// aapt resource value: 0x7f020112
+			public const int avd_show_password_2 = 2130837778;
 			
-			// aapt resource value: 0x7f02010f
-			public const int avd_show_password_3 = 2130837775;
+			// aapt resource value: 0x7f020113
+			public const int avd_show_password_3 = 2130837779;
 			
 			// aapt resource value: 0x7f020055
 			public const int design_bottom_navigation_item_background = 2130837589;
@@ -2717,40 +2717,52 @@ namespace MeNext.Droid
 			public const int navigation_empty_icon = 2130837757;
 			
 			// aapt resource value: 0x7f0200fe
-			public const int notification_action_background = 2130837758;
+			public const int next_icon_50px = 2130837758;
 			
 			// aapt resource value: 0x7f0200ff
-			public const int notification_bg = 2130837759;
+			public const int notification_action_background = 2130837759;
 			
 			// aapt resource value: 0x7f020100
-			public const int notification_bg_low = 2130837760;
+			public const int notification_bg = 2130837760;
 			
 			// aapt resource value: 0x7f020101
-			public const int notification_bg_low_normal = 2130837761;
+			public const int notification_bg_low = 2130837761;
 			
 			// aapt resource value: 0x7f020102
-			public const int notification_bg_low_pressed = 2130837762;
+			public const int notification_bg_low_normal = 2130837762;
 			
 			// aapt resource value: 0x7f020103
-			public const int notification_bg_normal = 2130837763;
+			public const int notification_bg_low_pressed = 2130837763;
 			
 			// aapt resource value: 0x7f020104
-			public const int notification_bg_normal_pressed = 2130837764;
+			public const int notification_bg_normal = 2130837764;
 			
 			// aapt resource value: 0x7f020105
-			public const int notification_icon_background = 2130837765;
-			
-			// aapt resource value: 0x7f020108
-			public const int notification_template_icon_bg = 2130837768;
-			
-			// aapt resource value: 0x7f020109
-			public const int notification_template_icon_low_bg = 2130837769;
+			public const int notification_bg_normal_pressed = 2130837765;
 			
 			// aapt resource value: 0x7f020106
-			public const int notification_tile_bg = 2130837766;
+			public const int notification_icon_background = 2130837766;
+			
+			// aapt resource value: 0x7f02010c
+			public const int notification_template_icon_bg = 2130837772;
+			
+			// aapt resource value: 0x7f02010d
+			public const int notification_template_icon_low_bg = 2130837773;
 			
 			// aapt resource value: 0x7f020107
-			public const int notify_panel_notification_icon_bg = 2130837767;
+			public const int notification_tile_bg = 2130837767;
+			
+			// aapt resource value: 0x7f020108
+			public const int notify_panel_notification_icon_bg = 2130837768;
+			
+			// aapt resource value: 0x7f020109
+			public const int pause_icon_50px = 2130837769;
+			
+			// aapt resource value: 0x7f02010a
+			public const int play_icon_50px = 2130837770;
+			
+			// aapt resource value: 0x7f02010b
+			public const int previous_icon_50px = 2130837771;
 			
 			static Drawable()
 			{
