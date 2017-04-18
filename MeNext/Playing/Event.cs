@@ -79,7 +79,20 @@ namespace MeNext
         /// </summary>
         public void RequestPlay()
         {
-            // TODO
+            var task = Task.Run(async () =>
+             {
+            	 if (this.LatestPull != null) {
+                    return await Api.PlaySong(this.Slug, this.controller.UserKey);
+            	 }
+            	 return null;
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting play:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested play song");
         }
 
         /// <summary>
@@ -87,7 +100,20 @@ namespace MeNext
         /// </summary>
         public void RequestPause()
         {
-            // TODO
+            var task = Task.Run(async () =>
+             {
+            	 if (this.LatestPull != null) {
+                    return await Api.PauseSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingPosition);
+            	 }
+            	 return null;
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting pause:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested pause song");
         }
 
         /// <summary>
@@ -125,11 +151,11 @@ namespace MeNext
              });
 
             if (task.IsFaulted) {
-                Debug.WriteLine("Error requesting skip:" + task.Exception.ToString());
+                Debug.WriteLine("Error requesting next at song end:" + task.Exception.ToString());
                 return;
             }
 
-            Debug.WriteLine("Requested next song");
+            Debug.WriteLine("Requested next song at song end");
         }
 
         /// <summary>
@@ -137,7 +163,20 @@ namespace MeNext
         /// </summary>
         public void RequestPrevious()
         {
-            // TODO
+            var task = Task.Run(async () =>
+             {
+            	 if (this.LatestPull != null) {
+                    return await Api.PrevSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
+            	 }
+            	 return null;
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting previous:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested previous song");
         }
 
         /// <summary>

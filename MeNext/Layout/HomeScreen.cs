@@ -28,7 +28,7 @@ namespace MeNext
             NavigationPage.SetHasNavigationBar(this, false);
             var layout = new StackLayout()
             {
-                Padding = LayoutConsts.DEFAULT_PADDING
+                Padding = LayoutConsts.DEFAULT_PADDING,
             };
 
             layout.Children.Add(eventName = new Label { HorizontalTextAlignment = TextAlignment.Center });
@@ -79,8 +79,10 @@ namespace MeNext
         {
             if (this.mc.InEvent) {
                 this.eventName.Text = "Event Id: " + this.mc.Event.Slug;
+                this.eventName.Margin = new Thickness(0, 30, 0, 0);
             } else {
                 this.eventName.Text = " ";
+                this.eventName.Margin = new Thickness(0, 0, 0, 0);
             }
 
             this.joinEvent.IsVisible = !this.mc.InEvent;
