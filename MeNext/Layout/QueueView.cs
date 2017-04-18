@@ -46,27 +46,32 @@ namespace MeNext
 
         public void OnNewPullData(PullResponse data)
         {
-            var songUids = new List<string>();
-
-            // look up the metadata with spotify for each song
-            foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
-                songUids.Add(song.ID);
-            }
-
-            var songs = mainController.musicService.GetSongs(songUids);
-
-            // now go for the play-next songs 
+            // Get play next song uids
             var playNextSongUids = new List<string>();
             foreach (var song in data.PlayNextQueue.Songs) {
                 playNextSongUids.Add(song.ID);
             }
 
+            // Get suggestions song uids
+            var suggestSongUids = new List<string>();
+            foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
+                suggestSongUids.Add(song.ID);
+            }
+
+            // Get the combined list of songs in one shot and then discard them.
+            // This allows us to make only a single metadata call to the Spotify API, and then the backend caches the
+            // ISongs, so the next 2 calls to GetSongs don't trigger separate calls to the Spotify API which speeds
+            // things up a smidge
+            var combinedUids = new List<string>();
+            combinedUids.AddRange(playNextSongUids);
+            combinedUids.AddRange(suggestSongUids);
+            mainController.musicService.GetSongs(combinedUids);
+
+            // Get the individual play next and suggestion song sets
             var playNextSongs = mainController.musicService.GetSongs(playNextSongUids);
-                
+            var suggestSongs = mainController.musicService.GetSongs(suggestSongUids);
 
-            this.UpdateSongLists(playNextSongs, songs);
-
-            // TODO: Update the play next queue insetad of just reusing the suggestion queue
+            this.UpdateSongLists(playNextSongs, suggestSongs);
         }
 
         private void UpdateSongLists(IEnumerable<ISong> playNext, IEnumerable<ISong> suggestions)
