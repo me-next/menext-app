@@ -13,6 +13,9 @@ namespace MeNext
 
         [JsonProperty(PropertyName = "playing")]
         public PlayingResponse Playing;
+
+        [JsonProperty(PropertyName = "playnext")]
+        public QueueResponse PlayNextQueue;
     }
 
     public class SongResponse

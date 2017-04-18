@@ -79,6 +79,12 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        public async Task<string> AddPlayNext(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/addPlayNext/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
         public async Task<string> SongFinished(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/songFinished/{0}/{1}/{2}", eid, uid, sid));
@@ -91,6 +97,27 @@ namespace MeNext
             var uri = new Uri(string.Format("/skip/{0}/{1}/{2}", eid, uid, sid));
             Debug.WriteLine("Skip song uri:" + uri.ToString());
             return await FireRequest(uri);
+        }
+
+        public async Task<string> PrevSong(string eid, string uid, string sid)
+        {
+        	var uri = new Uri(string.Format("/previous/{0}/{1}/{2}", eid, uid, sid));
+        	Debug.WriteLine("Prev song uri:" + uri.ToString());
+        	return await FireRequest(uri);
+        }
+
+        public async Task<string> PlaySong(string eid, string uid)
+        {
+        	var uri = new Uri(string.Format("/play/{0}/{1}", eid, uid));
+        	Debug.WriteLine("Play song uri:" + uri.ToString());
+        	return await FireRequest(uri);
+        }
+
+        public async Task<string> PauseSong(string eid, string uid, double pos)
+        {
+            var uri = new Uri(string.Format("/pause/{0}/{1}/{2}", eid, uid, pos));
+        	Debug.WriteLine("Pause song uri:" + uri.ToString());
+        	return await FireRequest(uri);
         }
 
         public async Task<string> SuggestionDownvote(string eid, string uid, string sid)

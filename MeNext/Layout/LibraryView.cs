@@ -68,7 +68,7 @@ namespace MeNext
         {
             this.Title = "Songs";
 
-            var resultsView = new ResultListView<ISong>(controller, new SongItemFactory());
+            var resultsView = new ResultListView<ISong>(controller, new SongItemFactory(controller));
             resultsView.UpdateResultList(controller.musicService.UserLibrarySongs);
 
             this.Content = new StackLayout

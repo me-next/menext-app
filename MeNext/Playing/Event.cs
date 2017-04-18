@@ -72,8 +72,6 @@ namespace MeNext
                 var playController = new PlayController(this.controller.musicService);
                 RegisterPullObserver(playController);
             }
-
-            this.controller.InformSomethingChanged();
         }
 
         /// <summary>
@@ -81,7 +79,20 @@ namespace MeNext
         /// </summary>
         public void RequestPlay()
         {
-            // TODO
+            var task = Task.Run(async () =>
+             {
+            	 if (this.LatestPull != null) {
+                    return await Api.PlaySong(this.Slug, this.controller.UserKey);
+            	 }
+            	 return null;
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting play:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested play song");
         }
 
         /// <summary>
@@ -89,7 +100,20 @@ namespace MeNext
         /// </summary>
         public void RequestPause()
         {
-            // TODO
+            var task = Task.Run(async () =>
+             {
+            	 if (this.LatestPull != null) {
+                    return await Api.PauseSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingPosition);
+            	 }
+            	 return null;
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting pause:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested pause song");
         }
 
         /// <summary>
@@ -127,11 +151,11 @@ namespace MeNext
              });
 
             if (task.IsFaulted) {
-                Debug.WriteLine("Error requesting skip:" + task.Exception.ToString());
+                Debug.WriteLine("Error requesting next at song end:" + task.Exception.ToString());
                 return;
             }
 
-            Debug.WriteLine("Requested next song");
+            Debug.WriteLine("Requested next song at song end");
         }
 
         /// <summary>
@@ -139,7 +163,20 @@ namespace MeNext
         /// </summary>
         public void RequestPrevious()
         {
-            // TODO
+            var task = Task.Run(async () =>
+             {
+            	 if (this.LatestPull != null) {
+                    return await Api.PrevSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
+            	 }
+            	 return null;
+             });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Error requesting previous:" + task.Exception.ToString());
+                return;
+            }
+
+            Debug.WriteLine("Requested previous song");
         }
 
         /// <summary>
@@ -198,7 +235,17 @@ namespace MeNext
         /// </param>
         public void RequestAddToPlayNext(ISong song, int index = -1)
         {
-            // TODO
+            // TODO implement idx
+            var task = Task.Run(async () =>
+            {
+                return await Api.AddPlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Failed to add song to play next!" + task.Exception.ToString());
+            }
+
+            Debug.WriteLine("Added " + song.UniqueId + " to play next");
         }
 
         /// <summary>
@@ -206,20 +253,6 @@ namespace MeNext
         /// </summary>
         /// <param name="song">Song.</param>
         public void RequestRemoveFromPlayNext(ISong song)
-        {
-            // TODO
-        }
-
-        /// <summary>
-        /// Atomic operation which is functionally equivalent to:
-        /// <code>
-        /// RequestRemoveFromPlayNext(song);
-        /// RequestAddToPlayNext(song, index);
-        /// </code>
-        /// </summary>
-        /// <param name="song">Song.</param>
-        /// <param name="index">Index.</param>
-        public void MoveWithinPlayNext(ISong song, int index)
         {
             // TODO
         }
@@ -352,7 +385,6 @@ namespace MeNext
         /// <param name="observer">Observer.</param>
         public void RegisterPullObserver(IPullUpdateObserver observer)
         {
-            // TODO: membership checking
             PullObservers.Add(observer);
         }
 

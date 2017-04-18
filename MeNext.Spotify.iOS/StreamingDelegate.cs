@@ -14,7 +14,7 @@ namespace MeNext.Spotify.iOS
 
         // TODO: Disabling for now because it breaks some songs
         // ex "G String Tuning Note" often doesn't work w/ cache
-        public const bool SPOTIFY_CACHE_ENABLED = false;
+        private bool SPOTIFY_CACHE_ENABLED = false;
 
         public StreamingDelegate(SpotifyMusicServiceIos service)
         {
