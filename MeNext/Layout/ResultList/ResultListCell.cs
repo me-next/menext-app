@@ -21,6 +21,7 @@ namespace MeNext
         public const string VOTE_YES = "\ud83d\ude00";
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
+        public const string NOW_PLAYING = "\u25b6";
 
         private ResultItemData resultItem;
 
@@ -69,9 +70,12 @@ namespace MeNext
                 Command = new Command((obj) =>
                 {
                     Debug.WriteLine("Menu!");
-                    if (resultItem.MenuCommand != null && resultItem.MenuCommand.CanExecute(resultItem)) {
-                        resultItem.MenuCommand.Execute(resultItem);
+                    if (resultItem.MenuCommands == null) {
+                        return;
                     }
+                    //if (resultItem.MenuCommand != null && resultItem.MenuCommand.CanExecute(resultItem)) {
+                    //    resultItem.MenuCommand.Execute(resultItem);
+                    //}
                 }),
             };
 
@@ -84,9 +88,8 @@ namespace MeNext
                     new StackLayout
                     {
                         Orientation = StackOrientation.Vertical,
-                        Children = { titleLabel, subtitleLabel
-    }
-},
+                        Children = { titleLabel, subtitleLabel }
+                    },
                     new StackLayout
                     {
                         Orientation = StackOrientation.Horizontal,
@@ -157,7 +160,7 @@ namespace MeNext
                     Debug.Assert(resultItem.Item as ISong != null);
                 }
 
-                // TODO Menu
+                this.menuButton.IsVisible = (resultItem.MenuCommands != null);
             }
         }
 
@@ -168,19 +171,24 @@ namespace MeNext
             }
             var suggestions = this.controller.Event.SuggestionQueue.Songs;
 
-            var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
-            if (item != null) {
-                // The song has already been suggested
-                if (item.Vote == 1) {
-                    resultItem.Suggest = SuggestSetting.VOTE_LIKE;
-                } else if (item.Vote == -1) {
-                    resultItem.Suggest = SuggestSetting.VOTE_DISLIKE;
-                } else {
-                    resultItem.Suggest = SuggestSetting.VOTE_NEUTRAL;
-                }
+            if (this.controller.Event?.LatestPull?.Playing?.CurrentSongID == this.resultItem.Item.UniqueId) {
+                // This is the currently playing song
+                resultItem.Suggest = SuggestSetting.NOW_PLAYING;
             } else {
-                // The song is not yet suggested
-                resultItem.Suggest = SuggestSetting.SUGGEST;
+                var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
+                if (item != null) {
+                    // The song has already been suggested
+                    if (item.Vote == 1) {
+                        resultItem.Suggest = SuggestSetting.VOTE_LIKE;
+                    } else if (item.Vote == -1) {
+                        resultItem.Suggest = SuggestSetting.VOTE_DISLIKE;
+                    } else {
+                        resultItem.Suggest = SuggestSetting.VOTE_NEUTRAL;
+                    }
+                } else {
+                    // The song is not yet suggested
+                    resultItem.Suggest = SuggestSetting.SUGGEST;
+                }
             }
 
             // Update the icon
@@ -222,6 +230,9 @@ namespace MeNext
 
                 case SuggestSetting.VOTE_NEUTRAL:
                     return VOTE_NEUTRAL;
+
+                case SuggestSetting.NOW_PLAYING:
+                    return NOW_PLAYING;
 
                 default:
                     return "ERROR";
