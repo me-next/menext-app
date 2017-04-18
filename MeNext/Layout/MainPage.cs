@@ -42,22 +42,22 @@ namespace MeNext.Layout
                 if (this.tabsShown) {
                     var playingScreen = new NavigationPage(new PlayingScreen(mainController));
                     playingScreen.Title = "Playing";
-                    //playingScreen.Icon = "playing_screen_icon";
+                    playingScreen.Icon = "play_screen_icon";
                     pages.Add(playingScreen);
 
                     var libraryScreen = new NavigationPage(new LibraryView(mainController));
                     libraryScreen.Title = "Library";
-                    //libraryScreen.Icon = "library_screen_icon";
+                    libraryScreen.Icon = "library_screen_icon";
                     pages.Add(libraryScreen);
 
                     var searchScreen = new NavigationPage(new SearchView(mainController));
                     searchScreen.Title = "Search";
-                    //searchScreen.Icon = "search_screen_icon";
+                    searchScreen.Icon = "search_screen_icon";
                     pages.Add(searchScreen);
 
                     var queueScreen = new NavigationPage(new QueueView(mainController));
                     queueScreen.Title = "Queue";
-                    //queueScreen.Icon = "queue_screen_icon";
+                    queueScreen.Icon = "queue_screen_icon";
                     pages.Add(queueScreen);
 
                     foreach (var page in this.pages) {
