@@ -27,7 +27,8 @@ namespace MeNext.MusicService
             return new ResultListEnumerator<T>(this.resultList);
         }
         /// <summary>
-        /// Fufilling inheritance contract.  Gets enumerator.
+        /// Fufilling inheritance contract.
+        /// Gets enumerator.
         /// </summary>
         /// <returns>The enumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator()

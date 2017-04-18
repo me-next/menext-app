@@ -50,7 +50,7 @@ namespace MeNext
             JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent());
             Navigation.PopAsync();
             if (joinEvent.EventResult.ToString() == "SUCCESS") {
-                mc.Event.RequestEventPermissions(permissions);
+                mc.Event.RequestEventPermissions();
                 //Navigation.PopAsync();
                 //Navigation.PushAsync(new JoinedEvent(mc));
             }

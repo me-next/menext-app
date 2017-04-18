@@ -10,7 +10,7 @@ namespace MeNext
     /// </summary>
     public class JoinEvent : ContentPage
     {
-        //Text box to input the Event's ID
+        // Text box to input the Event's ID
         private Entry eventIDEntry;
         public JoinEvent(MainController mc)
         {
