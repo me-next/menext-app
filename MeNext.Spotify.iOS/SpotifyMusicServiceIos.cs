@@ -16,7 +16,7 @@ namespace MeNext.Spotify.iOS
     // Based mostly on https://github.com/spotify/ios-sdk/tree/2db9f565b45e683b4bb62c1ee1bdc34660f07c8f/Demo%20Projects/Simple%20Track%20Playback/Simple%20Track%20Playback
     // With a special mention of https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/
     /// <summary>
-    /// Spotify music service specifically for IOS.
+    /// Spotify music service for IOS.
     /// </summary>
     public class SpotifyMusicServiceIos : SpotifyMusicService
     {
@@ -162,7 +162,7 @@ namespace MeNext.Spotify.iOS
         }
 
         /// <summary>
-        /// Plays the song at given position in seconds.
+        /// Plays a song at given position in seconds.
         /// </summary>
         /// <param name="song">Song.</param>
         /// <param name="position">Position. Defaults to beginning = 0.</param>

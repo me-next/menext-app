@@ -195,7 +195,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs a song.
+        /// Searchs for a song.
         /// </summary>
         /// <returns>The song.</returns>
         /// <param name="query">Query for song.</param>
