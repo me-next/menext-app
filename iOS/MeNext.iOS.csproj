@@ -157,6 +157,17 @@
     <Compile Include="Playing\PollingTask.cs" />
     <Compile Include="NowPlayingRenderer.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\home_screen_icon.png" />
+    <BundleResource Include="Resources\library_screen_icon.png" />
+    <BundleResource Include="Resources\play_screen_icon.png" />
+    <BundleResource Include="Resources\queue_screen_icon.png" />
+    <BundleResource Include="Resources\search_screen_icon.png" />
+    <BundleResource Include="Resources\next_icon_50px.png" />
+    <BundleResource Include="Resources\pause_icon_50px.png" />
+    <BundleResource Include="Resources\play_icon_50px.png" />
+    <BundleResource Include="Resources\previous_icon_50px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
 </Project>
