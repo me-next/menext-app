@@ -72,8 +72,6 @@ namespace MeNext
                 var playController = new PlayController(this.controller.musicService);
                 RegisterPullObserver(playController);
             }
-
-            this.controller.InformSomethingChanged();
         }
 
         /// <summary>

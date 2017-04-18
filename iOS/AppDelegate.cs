@@ -8,12 +8,15 @@ using Foundation;
 using MeNext.Spotify.iOS;
 using UIKit;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace MeNext.iOS
 {
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        private static AppDelegate currentDelegate;
+
         private SpotifyMusicServiceIos musicService;
         private MainController mainController;
         private PollingTask pollingTask;
@@ -22,9 +25,11 @@ namespace MeNext.iOS
         {
             // create common music service objects
             // these will go through the PollingTask to the Poller
-            //musicService = new SampleMusicService.SampleMusicService();
             musicService = new SpotifyMusicServiceIos();
             mainController = new MainController(this.musicService);
+
+            Debug.Assert(currentDelegate == null);
+            currentDelegate = this;
         }
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -65,10 +70,30 @@ namespace MeNext.iOS
                 pollingTask.Stop();
             });
         }
-    }
 
-    public class MyViewController : UIViewController
-    {
+        public static void RemoteControlReceived(UIEvent theEvent)
+        {
+            var evt = currentDelegate.mainController.Event;
+            if (evt == null) {
+                return;
+            }
+            switch (theEvent.Subtype) {
+                case UIEventSubtype.RemoteControlNextTrack:
+                    evt.RequestSkip();
+                    break;
 
+                case UIEventSubtype.RemoteControlPreviousTrack:
+                    evt.RequestPrevious();
+                    break;
+
+                case UIEventSubtype.RemoteControlPause:
+                    evt.RequestPause();
+                    break;
+
+                case UIEventSubtype.RemoteControlPlay:
+                    evt.RequestPlay();
+                    break;
+            }
+        }
     }
 }

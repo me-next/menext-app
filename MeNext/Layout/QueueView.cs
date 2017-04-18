@@ -55,7 +55,16 @@ namespace MeNext
 
             var songs = mainController.musicService.GetSongs(songUids);
 
-            this.UpdateSongLists(songs, songs);
+            // now go for the play-next songs 
+            var playNextSongUids = new List<string>();
+            foreach (var song in data.PlayNextQueue.Songs) {
+                playNextSongUids.Add(song.ID);
+            }
+
+            var playNextSongs = mainController.musicService.GetSongs(playNextSongUids);
+                
+
+            this.UpdateSongLists(playNextSongs, songs);
 
             // TODO: Update the play next queue insetad of just reusing the suggestion queue
         }
