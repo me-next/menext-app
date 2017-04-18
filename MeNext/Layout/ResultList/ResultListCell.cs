@@ -12,7 +12,7 @@ namespace MeNext
 
     /// <summary>
     /// Represents a single row within a results list. It currently special cases ISong for the suggestion button which,
-    /// while not great OO practice, but makes it easier to cache UI elements.
+    /// while not great OO practice, is necessary for performance reasons because this cell is cached.
     /// </summary>
     public class ResultListCell : ViewCell, IUIChangeListener
     {
@@ -67,15 +67,31 @@ namespace MeNext
                 FontSize = LayoutConsts.ICON_SIZE,
                 WidthRequest = LayoutConsts.BUTTON_WIDTH,
                 Margin = LayoutConsts.RIGHT_BUTTON_MARGIN,
-                Command = new Command((obj) =>
+                Command = new Command(async (obj) =>
                 {
-                    Debug.WriteLine("Menu!");
-                    if (resultItem.MenuCommands == null) {
+                    if (this.resultItem.MenuHandler == null) {
                         return;
                     }
-                    //if (resultItem.MenuCommand != null && resultItem.MenuCommand.CanExecute(resultItem)) {
-                    //    resultItem.MenuCommand.Execute(resultItem);
-                    //}
+                    var menu = this.resultItem.MenuHandler.ProduceMenu(this.resultItem);
+                    if (menu.Count == 0) {
+                        return;
+                    }
+                    var commands = new List<string>();
+                    foreach (var item in menu) {
+                        commands.Add(item.Title);
+                    }
+                    var action = await controller.NavPage.DisplayActionSheet(
+                        "Menu: " + this.resultItem.Title,
+                        "Cancel",
+                        null,
+                        commands.ToArray()
+                    );
+                    foreach (var item in menu) {
+                        if (item.Title == action && item.Command.CanExecute(this.resultItem)) {
+                            item.Command.Execute(this.resultItem);
+                            Debug.WriteLine("Performed action " + action);
+                        }
+                    }
                 }),
             };
 
@@ -160,10 +176,11 @@ namespace MeNext
                     Debug.Assert(resultItem.Item as ISong != null);
                 }
 
-                this.menuButton.IsVisible = (resultItem.MenuCommands != null);
+                this.menuButton.IsVisible = (this.resultItem.MenuHandler != null);
             }
         }
 
+        // TODO: Move the song specific stuff into a new class
         private void UpdateSuggestionButton()
         {
             if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
@@ -243,6 +260,8 @@ namespace MeNext
         {
             this.UpdateSuggestionButton();
         }
+
+
     }
 
 

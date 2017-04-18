@@ -6,6 +6,6 @@ namespace MeNext
     public class MenuCommand
     {
         public string Title { get; set; }
-        public Command Command { get; set; }
+        public Command<ResultItemData> Command { get; set; }
     }
 }

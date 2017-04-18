@@ -23,9 +23,9 @@ namespace MeNext
         public SuggestSetting Suggest { get; set; }
 
 
-        public Command TapCommand { get; set; }    // TODO
+        public Command<ResultItemData> TapCommand { get; set; }    // TODO
 
-        public IList<Command> MenuCommands { get; set; }
+        public IMenuHandler MenuHandler { get; set; }
 
         public ResultItemData(IMetadata item)
         {
@@ -35,7 +35,7 @@ namespace MeNext
             this.Subtitle = null;
             this.Suggest = SuggestSetting.DISABLE_SUGGEST;
             this.TapCommand = null;
-            this.MenuCommands = null;
+            this.MenuHandler = null;
         }
     }
 

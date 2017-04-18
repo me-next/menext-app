@@ -12,22 +12,22 @@ namespace MeNext
     /// </summary>
     public class QueueView : ContentPage, IPullUpdateObserver
     {
-        private MainController mainController;
+        private MainController controller;
         private ListsView<ISong> songList;
 
-        public QueueView(MainController mainController)
+        public QueueView(MainController controller)
         {
             this.Title = "Queue";
-            this.mainController = mainController;
+            this.controller = controller;
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            this.mainController.Event.RegisterPullObserver(this);
+            this.controller.Event.RegisterPullObserver(this);
 
-            var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory());
-            var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory());
+            var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory(this.controller));
+            var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory(this.controller));
 
-            this.songList = new ListsView<ISong>(mainController, playNextQueue, suggestionQueue);
+            this.songList = new ListsView<ISong>(controller, playNextQueue, suggestionQueue);
 
             //var songList = new SongListView(model, new BasicSongCellFactory());
             //songList.OnSongSelected += (song) =>
@@ -54,7 +54,7 @@ namespace MeNext
 
             // Get suggestions song uids
             var suggestSongUids = new List<string>();
-            foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
+            foreach (var song in this.controller.Event.SuggestionQueue.Songs) {
                 suggestSongUids.Add(song.ID);
             }
 
@@ -65,11 +65,11 @@ namespace MeNext
             var combinedUids = new List<string>();
             combinedUids.AddRange(playNextSongUids);
             combinedUids.AddRange(suggestSongUids);
-            mainController.musicService.GetSongs(combinedUids);
+            controller.musicService.GetSongs(combinedUids);
 
             // Get the individual play next and suggestion song sets
-            var playNextSongs = mainController.musicService.GetSongs(playNextSongUids);
-            var suggestSongs = mainController.musicService.GetSongs(suggestSongUids);
+            var playNextSongs = controller.musicService.GetSongs(playNextSongUids);
+            var suggestSongs = controller.musicService.GetSongs(suggestSongUids);
 
             this.UpdateSongLists(playNextSongs, suggestSongs);
         }

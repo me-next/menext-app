@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using MeNext.MusicService;
+using Xamarin.Forms;
 
 namespace MeNext
 {
     public class SongItemFactory : ResultItemFactory<ISong>
     {
         public const string BULLET = "\u2022";
+        private MainController controller;
 
-        public SongItemFactory()
+        public SongItemFactory(MainController controller)
         {
+            this.controller = controller;
         }
 
         public ResultItemData GetResultItem(ISong from)
@@ -27,6 +32,7 @@ namespace MeNext
                 Subtitle = artists + " " + BULLET + " " + from.Album.Name,
                 Suggest = SuggestSetting.SUGGEST,
                 TapCommand = null,
+                MenuHandler = new SongMenuHandler(this.controller),  // TODO reuse one instance?
             };
         }
     }
