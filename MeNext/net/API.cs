@@ -79,6 +79,12 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        public async Task<string> AddPlayNext(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/addPlayNext/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
         public async Task<string> SongFinished(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/songFinished/{0}/{1}/{2}", eid, uid, sid));

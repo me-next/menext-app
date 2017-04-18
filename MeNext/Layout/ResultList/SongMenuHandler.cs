@@ -87,8 +87,8 @@ namespace MeNext
 
             var poll = this.controller.Event.LatestPull;
             if (poll != null) {
-                playNext = new List<SongResponse>(poll.SuggestQueue.Songs);
-                suggestions = new List<SongResponse>(poll.PlayNextQueue.Songs);
+                playNext = new List<SongResponse>(poll.PlayNextQueue.Songs);
+                suggestions = new List<SongResponse>(poll.SuggestQueue.Songs);
                 isPlaying = (poll.Playing.CurrentSongID == from.UniqueId);
             }
 

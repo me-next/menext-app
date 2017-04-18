@@ -196,7 +196,17 @@ namespace MeNext
         /// </param>
         public void RequestAddToPlayNext(ISong song, int index = -1)
         {
-            // TODO
+            // TODO implement idx
+            var task = Task.Run(async () =>
+            {
+                return await Api.AddPlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
+
+            if (task.IsFaulted) {
+                Debug.WriteLine("Failed to add song to play next!" + task.Exception.ToString());
+            }
+
+            Debug.WriteLine("Added " + song.UniqueId + " to play next");
         }
 
         /// <summary>
@@ -204,20 +214,6 @@ namespace MeNext
         /// </summary>
         /// <param name="song">Song.</param>
         public void RequestRemoveFromPlayNext(ISong song)
-        {
-            // TODO
-        }
-
-        /// <summary>
-        /// Atomic operation which is functionally equivalent to:
-        /// <code>
-        /// RequestRemoveFromPlayNext(song);
-        /// RequestAddToPlayNext(song, index);
-        /// </code>
-        /// </summary>
-        /// <param name="song">Song.</param>
-        /// <param name="index">Index.</param>
-        public void MoveWithinPlayNext(ISong song, int index)
         {
             // TODO
         }
@@ -350,7 +346,6 @@ namespace MeNext
         /// <param name="observer">Observer.</param>
         public void RegisterPullObserver(IPullUpdateObserver observer)
         {
-            // TODO: membership checking
             PullObservers.Add(observer);
         }
 
