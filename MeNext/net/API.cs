@@ -59,6 +59,19 @@ namespace MeNext
         }
 
         /// <summary>
+        /// Try to create party with given name.
+        /// </summary>
+        /// <returns>The party.</returns>
+        /// <param name="id">User ID.</param>
+        /// <param name="userName">User name.</param>
+        /// <param name="eventName">Event name.</param>
+        public async Task<string> CreateParty(string id, string userName, string eventName) 
+        {
+            var uri = new Uri(string.Format("/createPartyWithName/{0}/{1}/{2}", id, userName, eventName));
+            return await FireRequest(uri);
+        }
+
+        /// <summary>
         /// Try to join a party. 
         /// </summary>
         /// <param name="slug">Event ID</param>
