@@ -114,21 +114,5 @@ namespace MeNext
                 }
             });
         }
-        /// <summary>
-        /// Play or Pause depending on the status of the Event.
-        /// </summary>
-        public void PlayPause()
-        {
-            //Music is playing
-            if (this.mainController.musicService.Playing) {
-                pauseButt.IsVisible = true;
-                playButt.IsVisible = false;
-                mainController.Event.RequestPlay();
-            } else { //No music playing.
-                pauseButt.IsVisible = false;
-                playButt.IsVisible = true;
-                mainController.Event.RequestPause();
-            }
-        }
     }
 }
