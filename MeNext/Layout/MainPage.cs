@@ -42,8 +42,9 @@ namespace MeNext.Layout
             // Enable or disable available tabs
             if (mainController.InEvent != this.tabsShown) {
                 this.tabsShown = mainController.InEvent;
-                // Show tabs if in event
+                // Check if in event.
                 if (this.tabsShown) {
+                    // Show tabs
                     var playingScreen = new NavigationPage(new PlayingScreen(mainController));
                     playingScreen.Title = "Playing";
                     if (Device.OS == TargetPlatform.iOS) {
@@ -75,7 +76,8 @@ namespace MeNext.Layout
                     foreach (var page in this.pages) {
                         this.Children.Add(page);
                     }
-                } else { // No Event no tabs.
+                } else {
+                    // Hide the tabs.
                     foreach (var page in this.pages) {
                         this.Children.Remove(page);
                     }

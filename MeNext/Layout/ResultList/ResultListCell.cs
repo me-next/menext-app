@@ -35,7 +35,6 @@ namespace MeNext
         public ResultListCell(MainController controller)
         {
             this.controller = controller;
-
             this.titleLabel = new Label
             {
                 FontAttributes = FontAttributes.Bold,
@@ -43,6 +42,7 @@ namespace MeNext
                 Text = "Placeholder",
                 FontSize = LayoutConsts.TITLE_FONT_SIZE
             };
+
             this.subtitleLabel = new Label
             {
                 LineBreakMode = LineBreakMode.TailTruncation,
@@ -155,7 +155,9 @@ namespace MeNext
             this.controller.Event.RegisterUiListener(this);
         }
 
-        // This is called when the backing data for the cell changes
+        /// <summary>
+        /// This is called when the backing data for the cell changes
+        /// </summary>
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -179,6 +181,7 @@ namespace MeNext
                 this.menuButton.IsVisible = (this.resultItem.MenuHandler != null);
             }
         }
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 
         // TODO: Move the song specific stuff into a new class
@@ -187,6 +190,13 @@ namespace MeNext
         /// Updates the suggestion button.
         /// </summary>
 >>>>>>> d700bcc... * Comments * MainPage.cs: * HostEvent.cs: * JoinEvent.cs: * HomeScreen.cs: * SearchView.cs: * LibraryView.cs: * LayoutConsts.cs: * TestingScreen.cs: * PlayingScreen.cs: * SimpleResultList.cs: * ResultListWrapper.cs: * ResultListEnumerator.cs: * Resource.designer.cs: * ResultListCell.cs:
+=======
+
+        // TODO: Move the song specific stuff into a new class
+        /// <summary>
+        /// Updates the suggestion button.
+        /// </summary>
+>>>>>>> Stashed changes
         private void UpdateSuggestionButton()
         {
             if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
@@ -217,9 +227,9 @@ namespace MeNext
             // Update the icon
             this.suggestButton.Text = GetSuggestIcon(resultItem.Suggest);
         }
+
         /// <summary>
-        /// Handles the suggestion.
-        /// 
+        /// Handles a press of the suggestion button.
         /// </summary>
         /// <param name="s">SuggestedSetting s is "vote" on the song.</param>
         /// <param name="song">ISong song is the song thats been suggested.</param>
@@ -243,8 +253,9 @@ namespace MeNext
                     break;
             }
         }
+
         /// <summary>
-        /// Gets the suggest icon.
+        /// Gets the suggestion button icon.
         /// </summary>
         /// <returns>The icon for suggest.</returns>
         /// <param name="s">SuggestSetting s is the current "vote" on the song.</param>
@@ -270,6 +281,7 @@ namespace MeNext
                     return "ERROR";
             }
         }
+
         /// <summary>
         /// Update UI since something changed.
         /// </summary>

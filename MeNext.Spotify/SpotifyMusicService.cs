@@ -165,7 +165,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for an album.
+        /// Searches for albums.
         /// </summary>
         /// <returns>The album.</returns>
         /// <param name="query">Query for album.</param>
@@ -175,7 +175,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for an artist.
+        /// Searches for artists.
         /// </summary>
         /// <returns>The artist.</returns>
         /// <param name="query">Query for artist.</param>
@@ -185,7 +185,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for a playlists.
+        /// Searches for playlists.
         /// </summary>
         /// <returns>The playlist.</returns>
         /// <param name="query">Query for playlist.</param>
@@ -195,7 +195,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Searchs for a song.
+        /// Searches for songs.
         /// </summary>
         /// <returns>The song.</returns>
         /// <param name="query">Query for song.</param>
@@ -235,7 +235,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Something has changed so update Ui accordingly.
+        /// Something has changed so update UI accordingly.
         /// </summary>
         public void SomethingChanged()
         {
@@ -275,7 +275,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="T:MeNext.Spotify.SpotifyMusicService"/> can play.
+        /// Gets a value indicating whether this <see cref="T:MeNext.Spotify.SpotifyMusicService"/> can play music.
         /// </summary>
         /// <value><c>true</c> if can play; otherwise, <c>false</c>.</value>
         public bool CanPlay

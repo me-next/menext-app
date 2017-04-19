@@ -38,7 +38,7 @@ namespace MeNext.MusicService
             }
         }
         /// <summary>
-        /// Fufilling inheritance contract.
+        /// Fulfilling inheritance contract.
         /// </summary>
         /// <value>The current value.</value>
         object IEnumerator.Current

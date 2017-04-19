@@ -8,7 +8,7 @@ namespace MeNext
 {
     /// <summary>
     /// Search view.
-    /// Contains a list of searched songs and an entry for song info to search.
+    /// Contains a list of searched songs and a search field.
     /// </summary>
     public class SearchView : ContentPage
     {

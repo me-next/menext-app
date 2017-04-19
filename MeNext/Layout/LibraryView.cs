@@ -54,7 +54,6 @@ namespace MeNext
             this.SomethingChanged();
         }
         /// <summary>
-        /// User's Spotify account's login status has changed.
         /// Update UI based on if song can be added or if login is needed.
         /// </summary>
         public void SomethingChanged()

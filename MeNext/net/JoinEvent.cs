@@ -10,6 +10,7 @@ namespace MeNext
         public string JSON { get; set; }
         public string PID { get; set; }
         public CreateEventResult EventResult { get; set; }
+
         /// <summary>
         /// Initializes when creating a new event.
         /// </summary>
@@ -20,6 +21,7 @@ namespace MeNext
             EventResult = ERes;
             JSON = ERes.ToString();
         }
+
         /// <summary>
         /// Initializes when joining new event.
         /// </summary>

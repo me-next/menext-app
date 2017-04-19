@@ -35,6 +35,7 @@ namespace MeNext
             });
             Content = layout;
         }
+
         /// <summary>
         /// Command called when attempting to Join event.
         /// Calls the API join event request.
@@ -53,7 +54,5 @@ namespace MeNext
                 // TODO Fail if we couldn't join!
             }
         }
-
-
     }
 }
