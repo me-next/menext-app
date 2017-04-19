@@ -55,6 +55,7 @@ namespace MeNext
         public async Task<string> CreateParty(string id, string name)
         {
             var uri = new Uri(string.Format("/createParty/{0}/{1}", id, name));
+            Debug.WriteLine("uri = " + uri);
             return await FireRequest(uri);
         }
 
@@ -68,6 +69,7 @@ namespace MeNext
         public async Task<string> CreateParty(string id, string userName, string eventName) 
         {
             var uri = new Uri(string.Format("/createPartyWithName/{0}/{1}/{2}", id, userName, eventName));
+            Debug.WriteLine("uri = " + uri);
             return await FireRequest(uri);
         }
 

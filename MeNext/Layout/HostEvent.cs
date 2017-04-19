@@ -61,11 +61,13 @@ namespace MeNext
                     // That event name is taken.
                     // TODO: Implement warning to notify user that new name is needed.
                     // Right now it just changes the entry's text to implicate the new name.
-                    nameEntry.Text = mc.EventName;
+                    nameEntry.Text = mc.EventName.ToString();
                     return;
                 } else if (createEvent.ToString() == "FAIL_GENERIC") 
-                { 
-                    
+                {
+                    nameEntry.Text = "";
+                    nameEntry.Placeholder = "pick an unused name";
+                    return;
                 }
             } else {
                 createEvent = mc.RequestCreateEvent();
