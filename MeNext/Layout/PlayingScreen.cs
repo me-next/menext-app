@@ -4,6 +4,9 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// The currently playing song screen.  Shows the currently playing song and other info.
+    /// </summary>
     public class PlayingScreen : ContentPage, IUIChangeListener
     {
         private readonly Label songTitle;
@@ -14,13 +17,17 @@ namespace MeNext
         //private readonly int artSize;
         private Button playButton;
         private readonly MainController mainController;
-
+        private Button prevButt;
+        private Button playButt;
+        private Button pauseButt;
+        private Button nextButt;
         public PlayingScreen(MainController mainController)
         {
             this.mainController = mainController;
 
             this.Title = "Now Playing";
             NavigationPage.SetHasNavigationBar(this, false);
+<<<<<<< HEAD
 
             var prevButton = new Button
             {
@@ -45,6 +52,43 @@ namespace MeNext
                 Image = "next_icon_50px.png",
                 Command = new Command(() => mainController.Event.RequestSkip())
             };
+=======
+            var layout = new StackLayout
+            {
+                Padding = LayoutConsts.DEFAULT_PADDING
+            };
+            //Buttons to manipulate the playing music queue.
+            prevButt = new Button
+            {
+                Text = "<<",
+                Command = new Command(() => mainController.Event.RequestPrevious()),
+                IsVisible = false
+            };
+            prevButt.Clicked += (sender, e) => SomethingChanged();
+            layout.Children.Add(prevButt);
+            playButt = new Button
+            {
+                Text = "Play",
+                Command = new Command(PlayPause),
+                IsVisible = false
+            };
+            layout.Children.Add(playButt);
+            pauseButt = new Button
+            {
+                Text = "Pause",
+                Command = new Command(PlayPause),
+                IsVisible = false
+            };
+            layout.Children.Add(pauseButt);
+            nextButt = new Button
+            {
+                Text = ">>",
+                Command = new Command(() => mainController.Event.RequestSkip()),
+                IsVisible = false
+            };
+            nextButt.Clicked += (sender, e) => SomethingChanged();
+            layout.Children.Add(nextButt);
+>>>>>>> d700bcc... * Comments * MainPage.cs: * HostEvent.cs: * JoinEvent.cs: * HomeScreen.cs: * SearchView.cs: * LibraryView.cs: * LayoutConsts.cs: * TestingScreen.cs: * PlayingScreen.cs: * SimpleResultList.cs: * ResultListWrapper.cs: * ResultListEnumerator.cs: * Resource.designer.cs: * ResultListCell.cs:
 
             var buttons = new StackLayout
             {
@@ -79,20 +123,33 @@ namespace MeNext
             };
 
             mainController.Event.RegisterUiListener(this);
+            this.SomethingChanged();
         }
-
+        /// <summary>
+        /// Something has changed.  Update UI accordingly.
+        /// Shows buttons and song name when they are available to the User.
+        /// </summary>
         public void SomethingChanged()
         {
             Device.BeginInvokeOnMainThread(() =>
             {
                 var playing = this.mainController.Event?.LatestPull?.Playing?.CurrentSongID;
+                //There is a song playing.
                 if (playing != null) {
                     var song = this.mainController.musicService.GetSong(playing);
                     this.songTitle.Text = song.Name;
+<<<<<<< HEAD
                     this.albumTitle.Text = song.Album.Name;
                     //this.albumArt = (Image)song.Album.GetAlbumArt(artSize, artSize);
+=======
+                    prevButt.IsVisible = true;
+                    pauseButt.IsVisible = true;
+                    nextButt.IsVisible = true;
+>>>>>>> d700bcc... * Comments * MainPage.cs: * HostEvent.cs: * JoinEvent.cs: * HomeScreen.cs: * SearchView.cs: * LibraryView.cs: * LayoutConsts.cs: * TestingScreen.cs: * PlayingScreen.cs: * SimpleResultList.cs: * ResultListWrapper.cs: * ResultListEnumerator.cs: * Resource.designer.cs: * ResultListCell.cs:
                     // TODO Other metadata
                 } else {
+                    prevButt.IsVisible = true;
+                    nextButt.IsVisible = true;
                     this.songTitle.Text = "Nothing Playing";
                     this.songTitle.Margin = new Thickness(0, 30, 0, 30);
                     this.artistLabel.Text = "";
@@ -105,6 +162,22 @@ namespace MeNext
                     this.playButton.Image = "play_icon_50px.png";
                 }
             });
+        }
+        /// <summary>
+        /// Play or Pause depending on the status of the Event.
+        /// </summary>
+        public void PlayPause()
+        {
+            //Music is playing
+            if (this.mainController.musicService.Playing) {
+                pauseButt.IsVisible = true;
+                playButt.IsVisible = false;
+                mainController.Event.RequestPlay();
+            } else { //No music playing.
+                pauseButt.IsVisible = false;
+                playButt.IsVisible = true;
+                mainController.Event.RequestPause();
+            }
         }
     }
 }

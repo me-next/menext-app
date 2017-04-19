@@ -6,6 +6,9 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Testing screen.
+    /// </summary>
     public class TestingScreen : ContentPage
     {
         private static Random rnd = new Random();

@@ -34,13 +34,15 @@ namespace MeNext.Layout
 
             this.mainController.RegisterUiListenerDangerous(this);
         }
-
+        /// <summary>
+        /// Something has changed.  Update the UI accordingly.
+        /// </summary>
         public void SomethingChanged()
         {
             // Enable or disable available tabs
             if (mainController.InEvent != this.tabsShown) {
                 this.tabsShown = mainController.InEvent;
-
+                //Show tabs if in event
                 if (this.tabsShown) {
                     var playingScreen = new NavigationPage(new PlayingScreen(mainController));
                     playingScreen.Title = "Playing";
@@ -73,7 +75,7 @@ namespace MeNext.Layout
                     foreach (var page in this.pages) {
                         this.Children.Add(page);
                     }
-                } else {
+                } else { //No Event no tabs.
                     foreach (var page in this.pages) {
                         this.Children.Remove(page);
                     }

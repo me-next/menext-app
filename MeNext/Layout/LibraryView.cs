@@ -53,7 +53,10 @@ namespace MeNext
             this.mainController.Event.RegisterUiListener(this);
             this.SomethingChanged();
         }
-
+        /// <summary>
+        /// User's Spotify account's login status has changed.
+        /// Update UI based on if song can be added or if login is needed.
+        /// </summary>
         public void SomethingChanged()
         {
             var logged = this.mainController.musicService.LoggedIn;
@@ -61,7 +64,10 @@ namespace MeNext
             songButton.IsVisible = logged;
         }
     }
-
+    /// <summary>
+    /// Content page that contains a view of a song library.
+    /// Displays a ResultListView that contains the user's library's songs.
+    /// </summary>
     public class SongLibraryView : ContentPage
     {
         public SongLibraryView(MainController controller)
