@@ -16,8 +16,14 @@ namespace MeNext.Spotify.iOS
             this.service = service;
         }
 
+        /// <summary>
+        /// Music has started playing. Update the service accordingly.
+        /// </summary>
+        /// <param name="audioStreaming">Audio streaming.</param>
+        /// <param name="trackUri">Track URI.</param>
         public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
+            // Get playing song
             var song = service.GetSong(trackUri);
 
             // Process remote control
@@ -35,7 +41,7 @@ namespace MeNext.Spotify.iOS
                     AlbumTitle = song.Album.Name,
                     AlbumTrackNumber = song.TrackNumber,
                     Artist = artists,
-                    //Artwork = ..., TODO
+                    // Artwork = ..., TODO
                     ElapsedPlaybackTime = 0,
                     ExternalContentIdentifier = song.UniqueId,
                     MediaType = MPNowPlayingInfoMediaType.Audio,
@@ -48,6 +54,11 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        /// <summary>
+        /// Handles when a song stops playing.
+        /// </summary>
+        /// <param name="audioStreaming">Audio streaming.</param>
+        /// <param name="trackUri">Track URI.</param>
         public override void AudioStreamingDidStopPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
             Debug.WriteLine("Track ended: " + trackUri, "playback");
@@ -57,12 +68,20 @@ namespace MeNext.Spotify.iOS
             MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo();
         }
 
+        /// <summary>
+        /// Update UI since the audio changed position.
+        /// </summary>
+        /// <param name="audioStreaming">Audio streaming.</param>
+        /// <param name="position">Position.</param>
         public override void AudioStreamingDidChangePosition(SPTAudioStreamingController audioStreaming, double position)
         {
             //Debug.WriteLine("Position: " + position);
             service.SomethingChanged();
         }
 
+        /// <summary>
+        /// Update UI since the Playback status has changed
+        /// </summary>
         public override void AudioStreamingDidChangePlaybackStatus(SPTAudioStreamingController audioStreaming, bool isPlaying)
         {
             Debug.WriteLine("Playback changed: " + isPlaying, "playback");

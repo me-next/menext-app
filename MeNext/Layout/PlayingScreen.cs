@@ -4,6 +4,9 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// The currently playing song screen. Shows the currently playing song and other info.
+    /// </summary>
     public class PlayingScreen : ContentPage, IUIChangeListener
     {
         private readonly Label songTitle;
@@ -14,7 +17,6 @@ namespace MeNext
         //private readonly int artSize;
         private Button playButton;
         private readonly MainController mainController;
-
         public PlayingScreen(MainController mainController)
         {
             this.mainController = mainController;
@@ -22,6 +24,7 @@ namespace MeNext
             this.Title = "Now Playing";
             NavigationPage.SetHasNavigationBar(this, false);
 
+            // Buttons to manipulate the playing music queue.
             var prevButton = new Button
             {
                 Image = "previous_icon_50px.png",
@@ -58,7 +61,6 @@ namespace MeNext
             };
 
             //TODO: add seeking/time slider
-
             this.songTitle = new Label { Text = "", Margin = new Thickness(0, 30, 0, 0), HorizontalOptions = LayoutOptions.CenterAndExpand };
             this.artistLabel = new Label { Text = "", HorizontalOptions = LayoutOptions.CenterAndExpand };
             this.albumTitle = new Label { Text = "", Margin = new Thickness(0, 0, 0, 30), HorizontalOptions = LayoutOptions.CenterAndExpand };
@@ -79,13 +81,19 @@ namespace MeNext
             };
 
             mainController.Event.RegisterUiListener(this);
+            this.SomethingChanged();
         }
 
+        /// <summary>
+        /// Something has changed. Update UI accordingly.
+        /// Shows buttons and song name when they are available to the User.
+        /// </summary>
         public void SomethingChanged()
         {
             Device.BeginInvokeOnMainThread(() =>
             {
                 var playing = this.mainController.Event?.LatestPull?.Playing?.CurrentSongID;
+                // There is a song playing.
                 if (playing != null) {
                     var song = this.mainController.musicService.GetSong(playing);
                     this.songTitle.Text = song.Name;

@@ -4,6 +4,11 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Home screen of the MeNext App. Contains options to Join event, host event, login to spotify,
+    /// logout of spotify, and leave event. Buttons are created only if User should be able to access the button.
+    /// i.e. cannot logout of spotify if the user isn't logged in.
+    /// </summary>
     public class HomeScreen : ContentPage, IUIChangeListener
     {
         public const string SPOTIFY_WHY = "Logging in with Spotify Premium allows you to host events, where the " +
@@ -74,7 +79,10 @@ namespace MeNext
             mc.RegisterUiListenerDangerous(this);
             this.SomethingChanged();
         }
-
+        /// <summary>
+        /// Something has changed. Updates UI to represent the new changes.
+        /// Updates event name and visibility of buttons.
+        /// </summary>
         public void SomethingChanged()
         {
             if (this.mc.InEvent) {

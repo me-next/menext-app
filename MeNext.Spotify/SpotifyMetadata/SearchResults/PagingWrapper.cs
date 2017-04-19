@@ -35,7 +35,12 @@ namespace MeNext.Spotify
 
             this.delayedLoad = firstUrl;
         }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:MeNext.Spotify.PagingWrapper`2"/> class.
+        /// </summary>
+        /// <param name="result">Paging object with results.</param>
+        /// <param name="webApi">Web API.</param>
+        /// <param name="isWrapped">If set to <c>true</c> is wrapped.</param>
         internal PagingWrapper(PagingObjectResult<Q> result, WebApi webApi, bool isWrapped)
         {
             this.webApi = webApi;

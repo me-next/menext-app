@@ -35,7 +35,6 @@ namespace MeNext
         public ResultListCell(MainController controller)
         {
             this.controller = controller;
-
             this.titleLabel = new Label
             {
                 FontAttributes = FontAttributes.Bold,
@@ -43,6 +42,7 @@ namespace MeNext
                 Text = "Placeholder",
                 FontSize = LayoutConsts.TITLE_FONT_SIZE
             };
+
             this.subtitleLabel = new Label
             {
                 LineBreakMode = LineBreakMode.TailTruncation,
@@ -155,7 +155,9 @@ namespace MeNext
             this.controller.Event.RegisterUiListener(this);
         }
 
-        // This is called when the backing data for the cell changes
+        /// <summary>
+        /// This is called when the backing data for the cell changes
+        /// </summary>
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -181,6 +183,9 @@ namespace MeNext
         }
 
         // TODO: Move the song specific stuff into a new class
+        /// <summary>
+        /// Updates the suggestion button.
+        /// </summary>
         private void UpdateSuggestionButton()
         {
             if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
@@ -211,7 +216,11 @@ namespace MeNext
             // Update the icon
             this.suggestButton.Text = GetSuggestIcon(resultItem.Suggest);
         }
-
+        /// <summary>
+        /// Handles a press of the suggestion button.
+        /// </summary>
+        /// <param name="s">SuggestedSetting s is "vote" on the song.</param>
+        /// <param name="song">ISong song is the song thats been suggested.</param>
         private void HandleSuggestion(SuggestSetting s, ISong song)
         {
             switch (s) {
@@ -232,7 +241,11 @@ namespace MeNext
                     break;
             }
         }
-
+        /// <summary>
+        /// Gets the suggestion button icon.
+        /// </summary>
+        /// <returns>The icon for suggest.</returns>
+        /// <param name="s">SuggestSetting s is the current "vote" on the song.</param>
         private string GetSuggestIcon(SuggestSetting s)
         {
             switch (s) {
@@ -256,6 +269,9 @@ namespace MeNext
             }
         }
 
+        /// <summary>
+        /// Update UI since something changed.
+        /// </summary>
         public void SomethingChanged()
         {
             this.UpdateSuggestionButton();

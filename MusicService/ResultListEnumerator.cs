@@ -4,12 +4,19 @@ using System.Collections.Generic;
 
 namespace MeNext.MusicService
 {
+    /// <summary>
+    /// Enumerator of IResultLists
+    /// </summary>
     public class ResultListEnumerator<T> : IEnumerator<T>
     {
         private IResultList<T> currentList;
         private List<T> allElements;
         private int pos = -1;
 
+        /// <summary>
+        /// Initializes a new result list enumerator from given list.
+        /// </summary>
+        /// <param name="resultList">List to enumerate through.</param>
         public ResultListEnumerator(IResultList<T> resultList)
         {
             this.currentList = resultList;
@@ -17,6 +24,10 @@ namespace MeNext.MusicService
             this.allElements.AddRange(resultList.Items);
         }
 
+        /// <summary>
+        /// Returns the current Enum's value
+        /// </summary>
+        /// <value>The current element's value.</value>
         public T Current
         {
             get
@@ -29,6 +40,10 @@ namespace MeNext.MusicService
             }
         }
 
+        /// <summary>
+        /// Fulfilling inheritance contract.
+        /// </summary>
+        /// <value>The current value.</value>
         object IEnumerator.Current
         {
             get
@@ -41,6 +56,11 @@ namespace MeNext.MusicService
         {
         }
 
+        /// <summary>
+        /// Moves to the next element in the list.
+        /// Will go to next page if needed.
+        /// </summary>
+        /// <returns><c>true</c>, if next was moved, <c>false</c> otherwise.</returns>
         public bool MoveNext()
         {
             ++pos;
@@ -55,6 +75,9 @@ namespace MeNext.MusicService
             return true;
         }
 
+        /// <summary>
+        /// Reset the Enumerator.
+        /// </summary>
         public void Reset()
         {
             pos = -1;
