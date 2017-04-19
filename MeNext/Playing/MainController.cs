@@ -169,14 +169,19 @@ namespace MeNext
             Debug.WriteLine(task.Status.ToString());
             // Currently assumes only failure would be from name already being taken.
             // Shouldn't be able to "RanToCompletion" with a blank Json.
-            if (task.Status.ToString() == "RanToCompletion") {
+            if (!task.IsFaulted) {
                 //if(task.Status.ToString == "StatusInternalServerError")
                 var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
-                this.Event = new Event(this, result.EventID, true);
-                this.Event.StartPolling();
-                this.EventName = result.EventID;
-                this.InformSomethingChanged();
-                return CreateEventResult.SUCCESS;
+                if (result?.Error != null) {
+                    this.EventName = result.AltID;
+                    return CreateEventResult.FAIL_EVENT_EXISTS;
+                } else if (result?.EventID != null) {
+                    this.Event = new Event(this, result.EventID, true);
+                    this.Event.StartPolling();
+                    this.EventName = result.EventID;
+                    this.InformSomethingChanged();
+                    return CreateEventResult.SUCCESS;
+                } else { return CreateEventResult.FAIL_GENERIC; }
             } else {
                 Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
                 // Dirty fix? I wasn't sure how to pass the info that the event name is bad
@@ -283,8 +288,7 @@ namespace MeNext
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public void MusicServiceChange()
