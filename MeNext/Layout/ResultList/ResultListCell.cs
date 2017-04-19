@@ -216,7 +216,6 @@ namespace MeNext
             // Update the icon
             this.suggestButton.Text = GetSuggestIcon(resultItem.Suggest);
         }
-
         /// <summary>
         /// Handles a press of the suggestion button.
         /// </summary>
@@ -242,7 +241,6 @@ namespace MeNext
                     break;
             }
         }
-
         /// <summary>
         /// Gets the suggestion button icon.
         /// </summary>

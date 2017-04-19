@@ -12,6 +12,7 @@ namespace MeNext.MusicService
         private IResultList<T> currentList;
         private List<T> allElements;
         private int pos = -1;
+
         /// <summary>
         /// Initializes a new result list enumerator from given list.
         /// </summary>
@@ -22,6 +23,7 @@ namespace MeNext.MusicService
             this.allElements = new List<T>();
             this.allElements.AddRange(resultList.Items);
         }
+
         /// <summary>
         /// Returns the current Enum's value
         /// </summary>
@@ -37,6 +39,7 @@ namespace MeNext.MusicService
                 }
             }
         }
+
         /// <summary>
         /// Fulfilling inheritance contract.
         /// </summary>
@@ -71,6 +74,7 @@ namespace MeNext.MusicService
             }
             return true;
         }
+
         /// <summary>
         /// Reset the Enumerator.
         /// </summary>
