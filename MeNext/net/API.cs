@@ -33,10 +33,10 @@ namespace MeNext
             var uri = new Uri("/hello");
             return await FireRequest(uri);
         }
+
         /// <summary>
-        /// Pulls a request from the server
+        /// Pulls a request from the server.
         /// </summary>
-        /// <returns>The pull.</returns>
         /// <param name="uid">User id.</param>
         /// <param name="eid">Event id.</param>
         /// <param name="changeID">Change identifier.</param>
@@ -72,7 +72,7 @@ namespace MeNext
         }
 
         /// <summary>
-        /// Suggests the song to the suggestion queue
+        /// Suggests the song to the suggestion queue.
         /// </summary>
         /// <param name="uid">User id.</param>
         /// <param name="eid">Event id.</param>
@@ -84,6 +84,7 @@ namespace MeNext
             return await FireRequest(uri);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         public async Task<string> AddPlayNext(string eid, string uid, string sid)
         {
@@ -92,12 +93,15 @@ namespace MeNext
         }
 
 =======
+=======
+
+>>>>>>> 7eb16ad... Fixed some comments
         /// <summary>
-        /// Songs the finished.
+        /// Called when song finishes.
         /// </summary>
-        /// <param name="eid">Eid.</param>
-        /// <param name="uid">Uid.</param>
-        /// <param name="sid">Sid.</param>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
         /// <returns>The server response string.</returns>
 >>>>>>> 79bc569... More comments
         public async Task<string> SongFinished(string eid, string uid, string sid)
@@ -106,6 +110,7 @@ namespace MeNext
             Debug.WriteLine("Song finished uri:" + uri.ToString());
             return await FireRequest(uri);
         }
+
         /// <summary>
         /// Skips the song.
         /// </summary>
@@ -119,6 +124,7 @@ namespace MeNext
             Debug.WriteLine("Skip song uri:" + uri.ToString());
             return await FireRequest(uri);
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         public async Task<string> PrevSong(string eid, string uid, string sid)
@@ -143,6 +149,9 @@ namespace MeNext
         }
 
 =======
+=======
+
+>>>>>>> 7eb16ad... Fixed some comments
         /// <summary>
         /// Suggestion downvote.
         /// </summary>
@@ -156,6 +165,7 @@ namespace MeNext
             var uri = new Uri(string.Format("/suggestDown/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
+
         /// <summary>
         /// Suggestion upvote.
         /// </summary>
@@ -168,6 +178,7 @@ namespace MeNext
             var uri = new Uri(string.Format("/suggestUp/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
+
         /// <summary>
         /// Clears the suggestion vote.
         /// </summary>
@@ -180,6 +191,7 @@ namespace MeNext
             var uri = new Uri(string.Format("/suggestClearvote/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
+
 
         /// <summary>
         /// Sends a request URI to the server. 

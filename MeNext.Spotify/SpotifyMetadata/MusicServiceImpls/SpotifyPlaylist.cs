@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace MeNext.Spotify
 {
     /// <summary>
-    /// Class that represents a spotify playlist and its metadata
+    /// Class that represents a spotify playlist.
     /// </summary>
     public class SpotifyPlaylist : IPlaylist, ISpotifyMetadata
     {
@@ -17,6 +17,7 @@ namespace MeNext.Spotify
         private string uri;
         private string name;
         private IResultList<ISong> page1;
+
         /// <summary>
         /// Initializes a new instance of the Spotify playlist class.
         /// </summary>
@@ -52,7 +53,10 @@ namespace MeNext.Spotify
             this.page1 = wrap;
         }
 
-        //Returns the playlist's name
+        /// <summary>
+        /// Returns the playlist's name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get
@@ -61,7 +65,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //Returns the playlist's songs
+        /// <summary>
+        /// Returns the playlist's songs.
+        /// </summary>
+        /// <value>The songs.</value>
         public IResultList<ISong> Songs
         {
             get
@@ -70,7 +77,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //Returns the playlist's uid
+        /// <summary>
+        /// Returns the playlist's uid.
+        /// </summary>
+        /// <value>The unique identifier.</value>
         public string UniqueId
         {
             get
@@ -80,6 +90,13 @@ namespace MeNext.Spotify
         }
 
         // This one is a bit different than the other 3 obtainers, because the API is totally different
+        /// <summary>
+        /// Obtains a list of playlists from the given list of playlist ids.
+        /// </summary>
+        /// <returns>The playlists.</returns>
+        /// <param name="factory">Factory.</param>
+        /// <param name="uids">Uids is the playlist ids.</param>
+        /// <param name="webApi">Web API.</param>
         internal static List<SpotifyPlaylist> ObtainPlaylists(MetadataFactory factory, IList<string> uids, WebApi webApi)
         {
             var result = new List<SpotifyPlaylist>();

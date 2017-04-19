@@ -5,7 +5,7 @@ using MeNext.MusicService;
 namespace MeNext.Spotify
 {
     /// <summary>
-    /// Class that represents an album and spotify metadata.
+    /// Class that represents an album.
     /// </summary>
     public class SpotifyAlbum : IAlbum, ISpotifyMetadata
     {
@@ -49,7 +49,10 @@ namespace MeNext.Spotify
             this.name = result.name;
         }
 
-        //returns the album's name
+        /// <summary>
+        /// Gets the name of the album.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get
@@ -58,7 +61,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //returns the album's songs
+        /// <summary>
+        /// Gets the album's songs.
+        /// </summary>
+        /// <value>The songs.</value>
         public List<ISong> Songs
         {
             get
@@ -68,7 +74,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //returns the album's uid
+        /// <summary>
+        /// Gets the album's unique identifier.
+        /// </summary>
+        /// <value>The unique identifier.</value>
         public string UniqueId
         {
             get
@@ -77,14 +86,24 @@ namespace MeNext.Spotify
             }
         }
 
-        //returns the album's artwork
+        /// <summary>
+        /// Gets the album's artwork.
+        /// </summary>
+        /// <returns>The album art.</returns>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
         public IImage GetAlbumArt(int width, int height)
         {
             // TODO
             return null;
         }
 
-        //returns a list of the requested albums by id.
+        /// <summary>
+        /// Obtains a list of albums.
+        /// </summary>
+        /// <returns>The albums.</returns>
+        /// <param name="factory">Factory.</param>
+        /// <param name="sids">Sids is a queue of album ids.</param>
         internal static List<SpotifyAlbum> ObtainAlbums(MetadataFactory factory, Queue<string> sids)
         {
             var result = new List<SpotifyAlbum>();

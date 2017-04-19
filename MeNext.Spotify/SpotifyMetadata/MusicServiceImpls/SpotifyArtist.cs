@@ -5,7 +5,7 @@ using MeNext.MusicService;
 namespace MeNext.Spotify
 {
     /// <summary>
-    /// Class that represents an artist and their spotify metadata.
+    /// Class that represents an artist.
     /// </summary>
     public class SpotifyArtist : IArtist, ISpotifyMetadata
     {
@@ -16,7 +16,12 @@ namespace MeNext.Spotify
         private string name;
         private string uri;
         private List<string> albumUids;
-        //Initializes an artist
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:MeNext.Spotify.SpotifyArtist"/> class.
+        /// </summary>
+        /// <param name="factory">Factory.</param>
+        /// <param name="result">Result.</param>
         internal SpotifyArtist(MetadataFactory factory, ArtistResult result)
         {
             this.factory = factory;
@@ -32,7 +37,11 @@ namespace MeNext.Spotify
             this.uri = result.uri;
             this.albumUids = null;
         }
-        //Returns a list of the artist's albums
+
+        /// <summary>
+        /// Gets the artist's albums.
+        /// </summary>
+        /// <value>The albums.</value>
         public List<IAlbum> Albums
         {
             get
@@ -50,7 +59,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //the artist's name
+        /// <summary>
+        /// Gets the artist's name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get
@@ -59,7 +71,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //the artist's uid
+        /// <summary>
+        /// Gets the artist's unique identifier.
+        /// </summary>
+        /// <value>The unique identifier.</value>
         public string UniqueId
         {
             get
@@ -68,14 +83,24 @@ namespace MeNext.Spotify
             }
         }
 
-        //the artist's artwork
+        /// <summary>
+        /// Gets the artist's album artwork.
+        /// </summary>
+        /// <returns>The artist art.</returns>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
         public IImage GetArtistArt(int width, int height)
         {
             // TODO
             return null;
         }
 
-        //returns a list of artists based on the given ids.
+        /// <summary>
+        /// Returns a list of artists based on the given ids.
+        /// </summary>
+        /// <returns>The artists.</returns>
+        /// <param name="factory">Factory.</param>
+        /// <param name="sids">Sids.</param>
         internal static List<SpotifyArtist> ObtainArtists(MetadataFactory factory, Queue<string> sids)
         {
             var result = new List<SpotifyArtist>();

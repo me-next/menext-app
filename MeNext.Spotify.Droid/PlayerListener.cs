@@ -118,33 +118,43 @@ namespace MeNext.Spotify.Droid
 
         // == Callback methods == //
 
-        //Update on login
+        /// <summary>
+        /// Update when logging in.
+        /// </summary>
         public void OnLoggedIn()
         {
             Log.Debug("PlayerListener", "Login complete");
             this.sms.SomethingChanged();
         }
 
-        //Update on logout
+        /// <summary>
+        /// Update when logging out
+        /// </summary>
         public void OnLoggedOut()
         {
             Log.Debug("PlayerListener", "Logout complete");
             this.sms.SomethingChanged();
         }
 
-        //Update when login fails
+        /// <summary>
+        /// Update on login failure
+        /// </summary>
+        /// <param name="error">Error.</param>
         public void OnLoginFailed(Com.Spotify.Sdk.Android.Player.Error error)
         {
             Log.Debug("PlayerListener", "*** Login error: " + error);
             this.sms.SomethingChanged();
         }
 
-        //Update for temporary errors
+        /// <summary>
+        /// Update for temporary errors
+        /// </summary>
         public void OnTemporaryError()
         {
             Log.Debug("PlayerListener", "*** Temporary error (what does that mean??)");
             this.sms.SomethingChanged();
         }
+
 
         public void OnConnectionMessage(string msg)
         {

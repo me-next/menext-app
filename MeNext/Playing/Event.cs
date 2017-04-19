@@ -298,7 +298,7 @@ namespace MeNext
         /// </summary>
         /// <param name="permissions">integer where each bit is a bool for a parameter. 0-5</param>
         /// Assumes that the Event begins with Play Next and Suggest Allowed but everything else not allowed.
-        public void RequestEventPermissions(int permissions)
+        public void RequestEventPermissions()
         {
             //set the permissions for the Event
             //1 is Suggest
@@ -317,13 +317,6 @@ namespace MeNext
         {
             // TODO
         }
-
-
-
-        //////// POLLING
-        /// 
-        /// 
-
 
         /// <summary>
         /// Begins polling the server for the latest info
