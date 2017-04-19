@@ -8,6 +8,7 @@ namespace MeNext
     public class HostEvent : ContentPage
     {   // int permissions = 0b00011
         int permissions = 3;
+        public Entry nameEntry;
         // TODO Create class that stores permission instead of using bit masks
         // Less hardcoding = :)
         public HostEvent(MainController mc)
@@ -17,6 +18,8 @@ namespace MeNext
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
             };
+            nameEntry = new Entry { Placeholder = "Event Name", Text = "" };
+            layout.Children.Add(nameEntry);
             var suggButt = new Button { Text = "Suggest Song", BackgroundColor = Color.Green };
             suggButt.Clicked += (sender, e) => AddPermission(sender, e, 1, mc);
             layout.Children.Add(suggButt);
@@ -41,15 +44,34 @@ namespace MeNext
             });
             Content = layout;
         }
+
+        // Host Event works for randomized Event ids and unique new Event Ids.
+        // Recieves blank Json response from server when attempting to host with in use Event id.
+        // The blank response causes null errors @ line 175 in MainController.cs.  result is undefined.
         /// <summary>
         /// Create and host a new event.  
         /// </summary>
         /// <param name="mc">Mc.</param>
         void HostCommand(MainController mc)
         {
-            JoinEventClass joinEvent = new JoinEventClass(mc.RequestCreateEvent());
+            CreateEventResult createEvent;
+            if (nameEntry.Text != "") {
+                createEvent = mc.RequestCreateEvent(nameEntry.Text.ToLower());
+                if (createEvent.ToString() == "FAIL_EVENT_EXISTS") {
+                    // That event name is taken.
+                    // TODO: Implement warning to notify user that new name is needed.
+                    // Right now it just changes the entry's text to implicate the new name.
+                    nameEntry.Text = mc.EventName;
+                    return;
+                } else if (createEvent.ToString() == "FAIL_GENERIC") 
+                { 
+                    
+                }
+            } else {
+                createEvent = mc.RequestCreateEvent();
+            }
             Navigation.PopAsync();
-            if (joinEvent.EventResult.ToString() == "SUCCESS") {
+            if (createEvent.ToString() == "SUCCESS") {
                 mc.Event.RequestEventPermissions();
                 //Navigation.PopAsync();
                 //Navigation.PushAsync(new JoinedEvent(mc));

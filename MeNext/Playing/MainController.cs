@@ -57,6 +57,8 @@ namespace MeNext
             }
         }
 
+        public string EventName { get; private set; }
+
         public Event Event { get; private set; }
 
         public NavigationPage NavPage { get; set; }
@@ -77,7 +79,7 @@ namespace MeNext
 
             // TODO Username?
             this.UserName = "bob";
-
+            this.EventName = "";
             Debug.WriteLine("User key: " + this.UserKey);
         }
 
@@ -93,7 +95,7 @@ namespace MeNext
             Debug.WriteLine("Requesting to join an event...");
             var task = Task.Run(async () =>
              {
-                 return await Api.JoinParty(slug, this.UserKey, this.UserName);
+                return await Api.JoinParty(slug, this.UserKey, this.UserName);
              });
 
             var json = task.Result;
@@ -138,9 +140,49 @@ namespace MeNext
 
             this.Event = new Event(this, result.EventID, true);
             this.Event.StartPolling();
+            this.EventName = result.EventID;
             this.InformSomethingChanged();
 
             return CreateEventResult.SUCCESS;
+        }
+
+        /// <summary>
+        /// Attempts to create an event with a given name.
+        /// </summary>
+        /// <returns>The result of the attempt.</returns>
+        /// <param name="Eventname">Given event name.</param>
+        public CreateEventResult RequestCreateEvent(string eventName)
+        {
+        	Debug.Assert(!this.InEvent);
+
+        	var task = Task.Run(async () =>
+        	{
+                return await Api.CreateParty(this.UserKey, this.UserName, eventName);
+        	});
+            var json = task.Result;
+            Debug.WriteLine("Json: " + json);
+            // TODO: real error check
+            if (task.IsFaulted) {
+                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
+                return CreateEventResult.FAIL_GENERIC;
+            }
+            Debug.WriteLine(task.Status.ToString());
+            // Currently assumes only failure would be from name already being taken.
+            // Shouldn't be able to "RanToCompletion" with a blank Json.
+            if (task.Status.ToString() == "RanToCompletion") {
+                //if(task.Status.ToString == "StatusInternalServerError")
+                var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+                this.Event = new Event(this, result.EventID, true);
+                this.Event.StartPolling();
+                this.EventName = result.EventID;
+                this.InformSomethingChanged();
+                return CreateEventResult.SUCCESS;
+            } else {
+                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
+                // Dirty fix? I wasn't sure how to pass the info that the event name is bad
+				this.EventName = (JsonConvert.DeserializeObject<CreateWithNameResponse>(json)).AltID;
+                return CreateEventResult.FAIL_EVENT_EXISTS;
+            }
         }
 
         /// <summary>
@@ -157,6 +199,7 @@ namespace MeNext
             if (this.Event.IsHost)
                 this.musicService.Playing = false;
             this.Event = null;
+            this.EventName = "";
             this.InformSomethingChanged();
             return EndEventResult.SUCCESS;
         }
@@ -179,6 +222,7 @@ namespace MeNext
                     return LeaveEventResult.FAIL_GENERIC;
 
                 this.Event = null;
+                this.EventName = "";
                 return LeaveEventResult.SUCCESS;
             }
 
@@ -186,6 +230,7 @@ namespace MeNext
 
 
             this.Event = null;
+            this.EventName = "";
 
             this.InformSomethingChanged();
             return LeaveEventResult.SUCCESS;
