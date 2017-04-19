@@ -14,8 +14,6 @@ namespace MeNext.Spotify.iOS
         public StreamingPlaybackDelegate(SpotifyMusicServiceIos service)
         {
             this.service = service;
-
-
         }
 
         /// <summary>
@@ -28,12 +26,8 @@ namespace MeNext.Spotify.iOS
             // Get playing song
             var song = service.GetSong(trackUri);
 
-            // TODO: This is only working w/ old versions of iOS
-            // See https://forums.xamarin.com/discussion/93235/mpnowplayinginfocenter-defaultcenter-null-in-simulator/p1
-            // Just going to leave this partially implemented until a resolution is found
+            // Process remote control
             if (MPNowPlayingInfoCenter.DefaultCenter != null) {
-                Debug.WriteLine("iOS Now Playing Centre Not Null");
-
                 var artists = "";
                 foreach (var artist in song.Artists) {
                     artists += ", " + artist.Name;
@@ -56,7 +50,7 @@ namespace MeNext.Spotify.iOS
                     Title = song.Name,
                 };
             } else {
-                Debug.WriteLine("iOS Now Playing Centre Null");
+                Debug.WriteLine("*** ERROR: iOS Now Playing Centre Null");
             }
         }
 
@@ -70,6 +64,8 @@ namespace MeNext.Spotify.iOS
             Debug.WriteLine("Track ended: " + trackUri, "playback");
             service.SomethingChanged();
             service.SongEnds(trackUri);
+
+            MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo();
         }
 
         /// <summary>

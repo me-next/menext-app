@@ -11,7 +11,6 @@ namespace MeNext
         public App(MainController mainController)
         {
             InitializeComponent();
-            //MainPage = new MainPage(mainController);
             this.MainPage = new FullWrapperView(mainController);
         }
 

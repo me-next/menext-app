@@ -29,7 +29,7 @@ namespace MeNext
                 Text = ""
             };
 
-            this.songList = new ResultListView<ISong>(this.controller, new SongItemFactory());
+            this.songList = new ResultListView<ISong>(this.controller, new SongItemFactory(controller));
 
             searchBar = new SearchBar
             {

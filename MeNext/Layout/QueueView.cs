@@ -12,22 +12,22 @@ namespace MeNext
     /// </summary>
     public class QueueView : ContentPage, IPullUpdateObserver
     {
-        private MainController mainController;
+        private MainController controller;
         private ListsView<ISong> songList;
 
-        public QueueView(MainController mainController)
+        public QueueView(MainController controller)
         {
             this.Title = "Queue";
-            this.mainController = mainController;
+            this.controller = controller;
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            this.mainController.Event.RegisterPullObserver(this);
+            this.controller.Event.RegisterPullObserver(this);
 
-            var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory());
-            var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory());
+            var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory(this.controller));
+            var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory(this.controller));
 
-            this.songList = new ListsView<ISong>(mainController, playNextQueue, suggestionQueue);
+            this.songList = new ListsView<ISong>(controller, playNextQueue, suggestionQueue);
 
             //var songList = new SongListView(model, new BasicSongCellFactory());
             //songList.OnSongSelected += (song) =>
@@ -46,18 +46,38 @@ namespace MeNext
 
         public void OnNewPullData(PullResponse data)
         {
-            var songUids = new List<string>();
+            // Get play next song uids
+            var playNextSongUids = new List<string>();
+            foreach (var song in data.PlayNextQueue.Songs) {
+                playNextSongUids.Add(song.ID);
+            }
 
+<<<<<<< HEAD
             // Look up the metadata with spotify for each song.
             foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
                 songUids.Add(song.ID);
+=======
+            // Get suggestions song uids
+            var suggestSongUids = new List<string>();
+            foreach (var song in this.controller.Event.SuggestionQueue.Songs) {
+                suggestSongUids.Add(song.ID);
+>>>>>>> e4e58e36e25b9038174a3eaaebdde3fd0412d9b3
             }
 
-            var songs = mainController.musicService.GetSongs(songUids);
+            // Get the combined list of songs in one shot and then discard them.
+            // This allows us to make only a single metadata call to the Spotify API, and then the backend caches the
+            // ISongs, so the next 2 calls to GetSongs don't trigger separate calls to the Spotify API which speeds
+            // things up a smidge
+            var combinedUids = new List<string>();
+            combinedUids.AddRange(playNextSongUids);
+            combinedUids.AddRange(suggestSongUids);
+            controller.musicService.GetSongs(combinedUids);
 
-            this.UpdateSongLists(songs, songs);
+            // Get the individual play next and suggestion song sets
+            var playNextSongs = controller.musicService.GetSongs(playNextSongUids);
+            var suggestSongs = controller.musicService.GetSongs(suggestSongUids);
 
-            // TODO: Update the play next queue insetad of just reusing the suggestion queue
+            this.UpdateSongLists(playNextSongs, suggestSongs);
         }
 
         private void UpdateSongLists(IEnumerable<ISong> playNext, IEnumerable<ISong> suggestions)

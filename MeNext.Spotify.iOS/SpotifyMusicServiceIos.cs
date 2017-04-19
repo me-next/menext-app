@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using AVFoundation;
 using Foundation;
+using MediaPlayer;
 using MeNext.MusicService;
 using MeNext.Spotify.iOS.Auth;
 using MeNext.Spotify.iOS.Playback;
@@ -198,7 +199,6 @@ namespace MeNext.Spotify.iOS
         /// </summary>
         public override void Logout()
         {
-            // TODO: Test
             Debug.WriteLine("Logout request received in music service", "auth");
             if (this.LoggedIn) {
                 this.sd.Player.Logout();
@@ -215,12 +215,16 @@ namespace MeNext.Spotify.iOS
         public override void SetIsHost(bool isHost)
         {
             if (isHost) {
-                // This makes it so we can actually hear audio
-                // I hate how long it took to figure this out
+                NSError error;
+                Debug.WriteLine("Activated playback");
                 AVAudioSession.SharedInstance().SetCategory(AVAudioSessionCategory.Playback);
-                AVAudioSession.SharedInstance().SetActive(true);
+                AVAudioSession.SharedInstance().SetActive(true, out error);
+                if (error != null) {
+                    Debug.WriteLine("*** ERROR SETTING ACTIVE: " + error.Description);
+                }
                 UIApplication.SharedApplication.BeginReceivingRemoteControlEvents();
             } else {
+                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo();
                 UIApplication.SharedApplication.EndReceivingRemoteControlEvents();
                 AVAudioSession.SharedInstance().SetActive(false);
             }

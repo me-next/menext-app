@@ -107,6 +107,7 @@ namespace MeNext
 
             this.Event = new Event(this, slug, false);
             this.Event.StartPolling();
+            this.InformSomethingChanged();
 
             Debug.WriteLine("Joined event\'" + slug + "\'");
             return JoinEventResult.SUCCESS;
@@ -137,6 +138,7 @@ namespace MeNext
 
             this.Event = new Event(this, result.EventID, true);
             this.Event.StartPolling();
+            this.InformSomethingChanged();
 
             return CreateEventResult.SUCCESS;
         }

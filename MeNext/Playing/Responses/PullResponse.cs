@@ -16,6 +16,9 @@ namespace MeNext
 
         [JsonProperty(PropertyName = "playing")]
         public PlayingResponse Playing;
+
+        [JsonProperty(PropertyName = "playnext")]
+        public QueueResponse PlayNextQueue;
     }
     /// <summary>
     /// Parses a song json response.
