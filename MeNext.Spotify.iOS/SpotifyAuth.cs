@@ -8,6 +8,9 @@ using UIKit;
 
 namespace MeNext.Spotify.iOS
 {
+    /// <summary>
+    /// Spotify authorization.
+    /// </summary>
     public class SpotifyAuth : NSObject
     {
         private SpotifyMusicServiceIos service;
@@ -82,6 +85,11 @@ namespace MeNext.Spotify.iOS
             return sd;
         }
 
+        /// <summary>
+        /// Called when the application is opened by a URL.
+        /// </summary>
+        /// <returns><c>true</c>, if the app was opened successfully, <c>false</c> otherwise.</returns>
+        /// <param name="url">URL that app is opened from.</param>
         public bool OpenUrl(UIApplication app, NSUrl url, string sourceApplication, NSObject annotation)
         {
             Debug.WriteLine("OpenUrl called with url: " + url.AbsoluteString, "auth");

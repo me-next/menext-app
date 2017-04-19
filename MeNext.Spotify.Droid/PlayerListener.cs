@@ -56,6 +56,9 @@ namespace MeNext.Spotify.Droid
         // scopes: https://developer.spotify.com/web-api/using-scopes/
         // TODO Combine scope usage?
 
+        /// <summary>
+        /// Opens the Spotify login window.
+        /// </summary>
         public void OpenLoginWindow()
         {
             var request = new AuthenticationRequest.Builder(sms.ClientId, AuthenticationResponse.Type.Token, sms.SpotifyCallback)
@@ -88,6 +91,10 @@ namespace MeNext.Spotify.Droid
             this.sms.SomethingChanged();
         }
 
+        /// <summary>
+        /// Called when authentication has completed.
+        /// </summary>
+        /// <param name="response">Response.</param>
         void OnAuthenticationComplete(AuthenticationResponse response)
         {
             // Once we have obtained an authorization token, we can proceed with creating a Player.
@@ -111,24 +118,37 @@ namespace MeNext.Spotify.Droid
 
         // == Callback methods == //
 
+        /// <summary>
+        /// Update when logging in.
+        /// </summary>
         public void OnLoggedIn()
         {
             Log.Debug("PlayerListener", "Login complete");
             this.sms.SomethingChanged();
         }
 
+        /// <summary>
+        /// Update when logging out
+        /// </summary>
         public void OnLoggedOut()
         {
             Log.Debug("PlayerListener", "Logout complete");
             this.sms.SomethingChanged();
         }
 
+        /// <summary>
+        /// Update on login failure
+        /// </summary>
+        /// <param name="error">Error.</param>
         public void OnLoginFailed(Com.Spotify.Sdk.Android.Player.Error error)
         {
             Log.Debug("PlayerListener", "*** Login error: " + error);
             this.sms.SomethingChanged();
         }
 
+        /// <summary>
+        /// Update for temporary errors
+        /// </summary>
         public void OnTemporaryError()
         {
             Log.Debug("PlayerListener", "*** Temporary error (what does that mean??)");

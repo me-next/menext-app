@@ -9,11 +9,14 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Class that represents a spotify song
+    /// </summary>
     public class SpotifySong : ISong, ISpotifyMetadata
     {
         private const int MAX_RESULTS_PER_QUERY = 50;
         private const string ENDPOINT_MULTIPLE = "tracks";
-
+        // Important metadata for song
         private MetadataFactory factory;
         private string uri;
         private string name;
@@ -23,6 +26,11 @@ namespace MeNext.Spotify
         private List<string> artistUids;
         private string albumUid;
 
+        /// <summary>
+        /// Initializes a new instance of the Spotify song class.
+        /// </summary>
+        /// <param name="factory">Factory.</param>
+        /// <param name="result">Result.</param>
         internal SpotifySong(MetadataFactory factory, TrackResult result)
         {
             this.factory = factory;
@@ -46,6 +54,10 @@ namespace MeNext.Spotify
             this.factory.CacheSubmit(result.album);
         }
 
+        /// <summary>
+        /// Gets the song's album.
+        /// </summary>
+        /// <value>The album.</value>
         public IAlbum Album
         {
             get
@@ -54,6 +66,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the song's artists.
+        /// </summary>
+        /// <value>The artist(s).</value>
         public List<IArtist> Artists
         {
             get
@@ -62,6 +78,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the song's disk number. 
+        /// </summary>
+        /// <value>The disk number.</value>
         public int DiskNumber
         {
             get
@@ -70,6 +90,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the song's duration in seconds.
+        /// </summary>
+        /// <value>The duration.</value>
         public double Duration
         {
             get
@@ -78,6 +102,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the song's name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get
@@ -86,6 +114,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the song's track number.
+        /// </summary>
+        /// <value>The track number.</value>
         public int TrackNumber
         {
             get
@@ -94,6 +126,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the song's unique identifier.
+        /// </summary>
+        /// <value>The unique identifier.</value>
         public string UniqueId
         {
             get
@@ -102,6 +138,12 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Get a list of songs from a queue of song ids
+        /// </summary>
+        /// <returns>A list of the songs.</returns>
+        /// <param name="factory">Factory.</param>
+        /// <param name="sids">Song ids.</param>
         internal static List<SpotifySong> ObtainSongs(MetadataFactory factory, Queue<string> sids)
         {
             var result = new List<SpotifySong>();

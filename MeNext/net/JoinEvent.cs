@@ -1,33 +1,36 @@
 ﻿using System;
 namespace MeNext
 {
+    /// <summary>
+    /// Join event class.
+    /// Used to organize CreateEventResult and JoinEventResult easily.
+    /// </summary>
     public class JoinEventClass
     {
-        //Add other Classes we want.
         public string JSON { get; set; }
         public string PID { get; set; }
         public CreateEventResult EventResult { get; set; }
+
+        /// <summary>
+        /// Initializes when creating a new event.
+        /// </summary>
+        /// <param name="ERes">Return value from Creating a new event.</param>
         public JoinEventClass(CreateEventResult ERes)
         {
             PID = ERes.ToString();
             EventResult = ERes;
             JSON = ERes.ToString();
         }
+
+        /// <summary>
+        /// Initializes when joining new event.
+        /// </summary>
+        /// <param name="ERes">Return value from Joining an event.</param>
         public JoinEventClass(JoinEventResult ERes)
         {
             PID = ERes.ToString();
             EventResult = (CreateEventResult) ERes;
             JSON = ERes.ToString();
-        }
-    }
-    public class commandClass
-    {
-        public string name { get; set; }
-        public MainController mc {get; set;}
-        public commandClass(MainController mc, Xamarin.Forms.Entry entry)
-        {
-            this.mc = mc;
-            this.name = entry.Text;
         }
     }
 }

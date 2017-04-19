@@ -4,6 +4,9 @@ using MeNext.MusicService;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Class that represents an album.
+    /// </summary>
     public class SpotifyAlbum : IAlbum, ISpotifyMetadata
     {
         private const int MAX_RESULTS_PER_QUERY = 20;
@@ -14,7 +17,11 @@ namespace MeNext.Spotify
         private string uri;
         private List<string> songUids;
         private string name;
-
+        /// <summary>
+        /// Initializes a new instance of the Spotify album class.
+        /// </summary>
+        /// <param name="factory">Factory.</param>
+        /// <param name="result">Result.</param>
         internal SpotifyAlbum(MetadataFactory factory, AlbumResult result)
         {
             this.factory = factory;
@@ -42,6 +49,10 @@ namespace MeNext.Spotify
             this.name = result.name;
         }
 
+        /// <summary>
+        /// Gets the name of the album.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get
@@ -50,6 +61,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets a list of the album's songs.
+        /// </summary>
+        /// <value>The songs.</value>
         public List<ISong> Songs
         {
             get
@@ -59,6 +74,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the album's unique identifier.
+        /// </summary>
+        /// <value>The unique identifier.</value>
         public string UniqueId
         {
             get
@@ -67,12 +86,24 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the album's artwork.
+        /// </summary>
+        /// <returns>The album art.</returns>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
         public IImage GetAlbumArt(int width, int height)
         {
             // TODO
             return null;
         }
 
+        /// <summary>
+        /// Obtains a list of albums.
+        /// </summary>
+        /// <returns>The albums.</returns>
+        /// <param name="factory">Factory.</param>
+        /// <param name="sids">Sids is a queue of album ids.</param>
         internal static List<SpotifyAlbum> ObtainAlbums(MetadataFactory factory, Queue<string> sids)
         {
             var result = new List<SpotifyAlbum>();
