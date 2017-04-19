@@ -5,7 +5,7 @@ using MeNext.MusicService;
 namespace MeNext.Spotify
 {
     /// <summary>
-    /// The Spotify music service class links the signed in Spotify user to MeNext.
+    /// The Spotify music service class links the Spotify user to MeNext.
     /// </summary>
     public abstract class SpotifyMusicService : IMusicService
     {
@@ -34,7 +34,10 @@ namespace MeNext.Spotify
             this.webApi = new WebApi();
         }
 
-        //User's library's albums
+        /// <summary>
+        /// Gets the user's library albums.
+        /// </summary>
+        /// <value>The user's library albums.</value>
         public IResultList<IAlbum> UserLibraryAlbums
         {
             get
@@ -44,7 +47,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //User's library's artists
+        /// <summary>
+        /// Gets the user's library artists.
+        /// </summary>
+        /// <value>The user library artists.</value>
         public IResultList<IArtist> UserLibraryArtists
         {
             get
@@ -54,7 +60,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //User's library's playlists
+        /// <summary>
+        /// Gets the user's library playlists.
+        /// </summary>
+        /// <value>The user's library playlists.</value>
         public IResultList<IPlaylist> UserLibraryPlaylists
         {
             get
@@ -63,7 +72,10 @@ namespace MeNext.Spotify
             }
         }
 
-        //Songs in the user's library
+        /// <summary>
+        /// Gets the user's library songs.
+        /// </summary>
+        /// <value>The user's library songs.</value>
         public IResultList<ISong> UserLibrarySongs
         {
             get
@@ -71,8 +83,9 @@ namespace MeNext.Spotify
                 return webApi.GetUserLibrarySongs();
             }
         }
+
         /// <summary>
-        /// Gets the album.
+        /// Gets an album.
         /// </summary>
         /// <returns>The album.</returns>
         /// <param name="uid">album id.</param>
@@ -220,6 +233,7 @@ namespace MeNext.Spotify
                 l.SongEnds(x);
             }
         }
+
         /// <summary>
         /// Something has changed so update Ui accordingly.
         /// </summary>

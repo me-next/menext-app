@@ -62,7 +62,7 @@ namespace MeNext.Spotify
         }
 
         /// <summary>
-        /// Gets the album's songs.
+        /// Gets a list of the album's songs.
         /// </summary>
         /// <value>The songs.</value>
         public List<ISong> Songs

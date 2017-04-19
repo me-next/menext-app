@@ -6,10 +6,10 @@ using Xamarin.Forms;
 namespace MeNext
 {
     public class HostEvent : ContentPage
-    {   //int permissions = 0b00011
+    {   // int permissions = 0b00011
         int permissions = 3;
-        //TODO Create class that stores permission instead of using bit masks
-        //Less hardcoding = :)
+        // TODO Create class that stores permission instead of using bit masks
+        // Less hardcoding = :)
         public HostEvent(MainController mc)
         {
             this.Title = "Host event";
@@ -60,10 +60,10 @@ namespace MeNext
         //    string errormsg = "error";
         //    string partyID = "PID";
         //    string parsedJSON = "Parsed, Json, Text";
-        //    //Call Host Event function on backend.
-        //    //Recieve JSON from backend
-        //    //Parse Json into PartyID and a general struct.
-        //    //Error msg as needed.
+        //    // Call Host Event function on backend.
+        //    // Recieve JSON from backend
+        //    // Parse Json into PartyID and a general struct.
+        //    // Error msg as needed.
         //    Tuple<string, string, string> reTuple = Tuple.Create(errormsg, partyID, parsedJSON);
         //    return reTuple;
         //}

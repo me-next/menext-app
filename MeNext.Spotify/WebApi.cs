@@ -191,7 +191,7 @@ namespace MeNext.Spotify
             return false;
         }
         /// <summary>
-        /// Gets the json response from a requestion without the base address.
+        /// Gets the json response from a request without the base address.
         /// </summary>
         /// <returns>The json response.</returns>
         /// <param name="uriEnd">URI without base address.</param>

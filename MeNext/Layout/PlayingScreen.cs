@@ -57,7 +57,7 @@ namespace MeNext
             {
                 Padding = LayoutConsts.DEFAULT_PADDING
             };
-            //Buttons to manipulate the playing music queue.
+            // Buttons to manipulate the playing music queue.
             prevButt = new Button
             {
                 Text = "<<",
@@ -134,7 +134,7 @@ namespace MeNext
             Device.BeginInvokeOnMainThread(() =>
             {
                 var playing = this.mainController.Event?.LatestPull?.Playing?.CurrentSongID;
-                //There is a song playing.
+                // There is a song playing.
                 if (playing != null) {
                     var song = this.mainController.musicService.GetSong(playing);
                     this.songTitle.Text = song.Name;
@@ -168,12 +168,12 @@ namespace MeNext
         /// </summary>
         public void PlayPause()
         {
-            //Music is playing
+            // Music is playing
             if (this.mainController.musicService.Playing) {
                 pauseButt.IsVisible = true;
                 playButt.IsVisible = false;
                 mainController.Event.RequestPlay();
-            } else { //No music playing.
+            } else { // No music playing.
                 pauseButt.IsVisible = false;
                 playButt.IsVisible = true;
                 mainController.Event.RequestPause();

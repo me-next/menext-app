@@ -10,6 +10,7 @@ namespace MeNext
     {
         private const int EDGE = 5;
         private const int IOS_TOP = 20;
+
         /// <summary>
         /// Returns the heigh for rows.
         /// </summary>
@@ -33,7 +34,7 @@ namespace MeNext
             }
         }
         /// <summary>
-        /// The font size for titles
+        /// The font size for titles.
         /// </summary>
         /// <value>The size for title fonts.</value>
         public static double TITLE_FONT_SIZE
