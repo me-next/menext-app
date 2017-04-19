@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -33,11 +33,14 @@ namespace MeNext
             var uri = new Uri("/hello");
             return await FireRequest(uri);
         }
-
         /// <summary>
-        /// Pulls the results down from the server.
+        /// Pulls a request from the server
         /// </summary>
         /// <returns>The pull.</returns>
+        /// <param name="uid">User id.</param>
+        /// <param name="eid">Event id.</param>
+        /// <param name="changeID">Change identifier.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> Pull(string uid, string eid, UInt64 changeID)
         {
             var uri = new Uri(string.Format("/pull/{0}/{1}/{2}", uid, eid, changeID));
@@ -57,27 +60,30 @@ namespace MeNext
 
         /// <summary>
         /// Try to join a party. 
-        /// id = userKey, name = userName, slug = PartyID
         /// </summary>
-        /// <returns> The party.</returns>
-        public async Task<string> JoinParty(string slug, string id, string name)
+        /// <param name="slug">Event ID</param>
+        /// <param name="ukey">User Key</param>
+        /// <param name="uid">User ID</param>
+        /// <returns>The server response string.</returns>
+        public async Task<string> JoinParty(string slug, string ukey, string uid)
         {
-            var uri = new Uri(string.Format("/joinParty/{0}/{1}/{2}", slug, id, name));
+            var uri = new Uri(string.Format("/joinParty/{0}/{1}/{2}", slug, ukey, uid));
             return await FireRequest(uri);
         }
 
         /// <summary>
         /// Suggests the song to the suggestion queue
         /// </summary>
-        /// <returns>The add song.</returns>
         /// <param name="uid">User id.</param>
         /// <param name="eid">Event id.</param>
         /// <param name="sid">song identifier.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> SuggestAddSong(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/suggest/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
+<<<<<<< HEAD
 
         public async Task<string> AddPlayNext(string eid, string uid, string sid)
         {
@@ -85,19 +91,35 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+=======
+        /// <summary>
+        /// Songs the finished.
+        /// </summary>
+        /// <param name="eid">Eid.</param>
+        /// <param name="uid">Uid.</param>
+        /// <param name="sid">Sid.</param>
+        /// <returns>The server response string.</returns>
+>>>>>>> 79bc569... More comments
         public async Task<string> SongFinished(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/songFinished/{0}/{1}/{2}", eid, uid, sid));
             Debug.WriteLine("Song finished uri:" + uri.ToString());
             return await FireRequest(uri);
         }
-
+        /// <summary>
+        /// Skips the song.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> SkipSong(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/skip/{0}/{1}/{2}", eid, uid, sid));
             Debug.WriteLine("Skip song uri:" + uri.ToString());
             return await FireRequest(uri);
         }
+<<<<<<< HEAD
 
         public async Task<string> PrevSong(string eid, string uid, string sid)
         {
@@ -120,18 +142,39 @@ namespace MeNext
         	return await FireRequest(uri);
         }
 
+=======
+        /// <summary>
+        /// Suggestion downvote.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
+>>>>>>> 79bc569... More comments
         public async Task<string> SuggestionDownvote(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/suggestDown/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
-
+        /// <summary>
+        /// Suggestion upvote.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> SuggestionUpvote(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/suggestUp/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
-
+        /// <summary>
+        /// Clears the suggestion vote.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> SuggestionClearvote(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/suggestClearvote/{0}/{1}/{2}", eid, uid, sid));
