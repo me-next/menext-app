@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Foundation;
@@ -72,8 +72,8 @@ namespace MeNext.Spotify.iOS
             auth.SessionUserDefaultsKey = @"SpotifySession";
 
             // Use our token swap service
-            auth.TokenSwapURL = new NSUrl(SpotifyMusicService.TOKEN_REFRESH + "/swap");
-            auth.TokenRefreshURL = new NSUrl(SpotifyMusicService.TOKEN_REFRESH + "/refresh");
+            auth.TokenSwapURL = new NSUrl(SpotifyToken.TOKEN_SWAP_URL);
+            auth.TokenRefreshURL = new NSUrl(SpotifyToken.TOKEN_REFRESH_URL);
 
             // If we have a valid session, notify that the session was updated so player gets setup
             if (auth.Session != null && auth.Session.IsValid) {

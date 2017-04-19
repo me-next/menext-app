@@ -12,8 +12,14 @@ namespace MeNext.Spotify
         protected WebApi webApi { get; }
         private readonly List<IMusicServiceListener> listeners = new List<IMusicServiceListener>();
 
-        // NO TRAILING SLASH
-        public const string TOKEN_REFRESH = "https://stark-shelf-18616.herokuapp.com";
+        public SpotifyToken SpotifyToken { get; set; }
+
+        protected SpotifyMusicService()
+        {
+            // Default web api without any special access
+            this.webApi = new WebApi(this);
+            this.SpotifyToken = new SpotifyToken(this);
+        }
 
         public string ClientId
         {
@@ -29,12 +35,6 @@ namespace MeNext.Spotify
             {
                 return "menext-spotify://callback";
             }
-        }
-
-        protected SpotifyMusicService()
-        {
-            // Default web api without any special access
-            this.webApi = new WebApi();
         }
 
         /// <summary>

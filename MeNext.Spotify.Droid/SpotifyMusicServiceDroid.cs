@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MeNext.MusicService;
 
 using Com.Spotify.Sdk.Android;
@@ -18,6 +18,12 @@ namespace MeNext.Spotify.Droid
         private PlayerListener listener;
         internal Activity mainActivity;
         private ISong playingSong;
+        private string lastPlayerAccessToken;
+
+        // These are used for delaying a play until the player is ready during a token refresh
+        private ISong delayedSong = null;
+        private double delayedPosition = 0;
+        internal bool DelayingSongPlay { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the Spotify music service droid class.
@@ -29,9 +35,13 @@ namespace MeNext.Spotify.Droid
             this.listener = new PlayerListener(this);
         }
 
+        /// <summary>
+        /// Lets us know what the actual current access token is.
+        /// </summary>
+        /// <param name="accessToken">Access token.</param>
         internal void OnNewAccessToken(string accessToken)
         {
-            this.webApi.updateAccessToken(accessToken);
+            this.lastPlayerAccessToken = accessToken;
         }
 
         public void OnResume()
@@ -160,6 +170,7 @@ namespace MeNext.Spotify.Droid
 
         public override void Logout()
         {
+            this.SpotifyToken.NukeToken();
             this.Player.Logout();
         }
 
@@ -173,9 +184,45 @@ namespace MeNext.Spotify.Droid
             if (song == null) {
                 return;
             }
-            if (this.Player != null) {
-                this.Player.PlayUri(this.listener.operationCallback, song.UniqueId, 0, (int) (position * 1000));
-                this.playingSong = song;
+            if (this.LoggedIn) {
+                this.delayedSong = song;
+                this.delayedPosition = position;
+                this.DelayingSongPlay = true;
+                var updated = this.UpdatePlayerToken();
+                if (!updated) {
+                    this.ActuallyPlaySong();
+                } else {
+                    // The UpdatePlayerToken flow will (should) eventually call ActuallyPlaySong().
+                }
+            }
+        }
+
+        /// <summary>
+        /// If the access token has changed, logout and re-login the player with the new token.
+        /// This function relies on side effects from PlaySong(..). Do not expect it to work when called from any other
+        /// method.
+        /// </summary>
+        private bool UpdatePlayerToken()
+        {
+            if (this.lastPlayerAccessToken != this.SpotifyToken.AccessToken) {
+                // The rest of this flow takes place in PlayerListener.OnLoggedOut()
+                this.Player.Logout();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Plays the currently delayed song, if one exists
+        /// </summary>
+        internal void ActuallyPlaySong()
+        {
+            if (this.delayedSong != null) {
+                this.Player.PlayUri(this.listener.operationCallback, this.delayedSong.UniqueId, 0, (int) (this.delayedPosition * 1000));
+                this.playingSong = this.delayedSong;
+                this.delayedSong = null;
+                this.delayedPosition = 0;
+                this.DelayingSongPlay = false;
             }
         }
 
