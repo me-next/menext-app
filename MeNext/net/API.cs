@@ -83,8 +83,6 @@ namespace MeNext
             var uri = new Uri(string.Format("/suggest/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         public async Task<string> AddPlayNext(string eid, string uid, string sid)
         {
@@ -92,10 +90,6 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
-=======
-=======
-
->>>>>>> 7eb16ad... Fixed some comments
         /// <summary>
         /// Called when song finishes.
         /// </summary>
@@ -103,7 +97,6 @@ namespace MeNext
         /// <param name="uid">User id.</param>
         /// <param name="sid">Song id.</param>
         /// <returns>The server response string.</returns>
->>>>>>> 79bc569... More comments
         public async Task<string> SongFinished(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/songFinished/{0}/{1}/{2}", eid, uid, sid));
@@ -124,8 +117,6 @@ namespace MeNext
             Debug.WriteLine("Skip song uri:" + uri.ToString());
             return await FireRequest(uri);
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
         public async Task<string> PrevSong(string eid, string uid, string sid)
         {
@@ -148,10 +139,6 @@ namespace MeNext
         	return await FireRequest(uri);
         }
 
-=======
-=======
-
->>>>>>> 7eb16ad... Fixed some comments
         /// <summary>
         /// Suggestion downvote.
         /// </summary>
@@ -159,7 +146,6 @@ namespace MeNext
         /// <param name="uid">User id.</param>
         /// <param name="sid">Song id.</param>
         /// <returns>The server response string.</returns>
->>>>>>> 79bc569... More comments
         public async Task<string> SuggestionDownvote(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/suggestDown/{0}/{1}/{2}", eid, uid, sid));

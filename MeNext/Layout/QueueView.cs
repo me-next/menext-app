@@ -52,16 +52,10 @@ namespace MeNext
                 playNextSongUids.Add(song.ID);
             }
 
-<<<<<<< HEAD
             // Get suggestions song uids
             var suggestSongUids = new List<string>();
             foreach (var song in this.controller.Event.SuggestionQueue.Songs) {
                 suggestSongUids.Add(song.ID);
-=======
-            // Look up the metadata with spotify for each song.
-            foreach (var song in this.mainController.Event.SuggestionQueue.Songs) {
-                songUids.Add(song.ID);
->>>>>>> 64a7888... Fixing of comments
             }
 
             // Get the combined list of songs in one shot and then discard them.

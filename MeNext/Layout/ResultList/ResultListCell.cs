@@ -181,22 +181,11 @@ namespace MeNext
                 this.menuButton.IsVisible = (this.resultItem.MenuHandler != null);
             }
         }
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-
-        // TODO: Move the song specific stuff into a new class
-=======
-        /// <summary>
-        /// Updates the suggestion button.
-        /// </summary>
->>>>>>> d700bcc... * Comments * MainPage.cs: * HostEvent.cs: * JoinEvent.cs: * HomeScreen.cs: * SearchView.cs: * LibraryView.cs: * LayoutConsts.cs: * TestingScreen.cs: * PlayingScreen.cs: * SimpleResultList.cs: * ResultListWrapper.cs: * ResultListEnumerator.cs: * Resource.designer.cs: * ResultListCell.cs:
-=======
 
         // TODO: Move the song specific stuff into a new class
         /// <summary>
         /// Updates the suggestion button.
         /// </summary>
->>>>>>> Stashed changes
         private void UpdateSuggestionButton()
         {
             if (!this.suggestButton.IsVisible || this.controller.Event.LatestPull == null) {
