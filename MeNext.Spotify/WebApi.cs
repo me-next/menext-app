@@ -24,29 +24,17 @@ namespace MeNext.Spotify
 
         public MetadataFactory metadata { get; set; }
 
-        // Access tokens
-        private string accessToken;
+        private SpotifyMusicService sms;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.Spotify.WebApi"/> class. This constructor only
         /// provides access to methods which do not require authentication.
         /// </summary>
-        public WebApi()
+        public WebApi(SpotifyMusicService sms)
         {
-            http = new HttpClient();
-            //http.BaseAddress = new Uri(BASE_ADDRESS);
-            metadata = new MetadataFactory(this);
-        }
-
-        /// <summary>
-        /// Updates the Spotify Web API access token.
-        /// </summary>
-        /// <param name="accessToken">Access token.</param>
-        /// <param name="tokenType">Token type.</param>
-        public void updateAccessToken(string accessToken)
-        {
-            this.accessToken = accessToken;
-            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
+            this.sms = sms;
+            this.http = new HttpClient();
+            this.metadata = new MetadataFactory(this);
         }
 
         // TODO: Unit test this
@@ -190,6 +178,7 @@ namespace MeNext.Spotify
             }
             return false;
         }
+
         /// <summary>
         /// Gets the json response from a request without the base address.
         /// </summary>
@@ -201,6 +190,7 @@ namespace MeNext.Spotify
 
             return await GetJsonFullUri(BASE_ADDRESS + uriEnd);
         }
+
         /// <summary>
         /// Gets the json with a full URI.
         /// </summary>
@@ -209,6 +199,12 @@ namespace MeNext.Spotify
         public async Task<string> GetJsonFullUri(string fullUri)
         {
             Debug.WriteLine("::Getting URI: {0}", fullUri);
+
+            // Add authentication header
+            if (this.sms.SpotifyToken != null) {
+                var accessToken = this.sms.SpotifyToken.AccessToken;
+                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
 
             var uri = new Uri(fullUri);
             HttpResponseMessage response;

@@ -38,7 +38,7 @@ namespace MeNext.Spotify.iOS
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("sessionUpdated"), (NSNotification obj) =>
               {
                   var auth = SPTAuth.DefaultInstance;
-                  this.webApi.updateAccessToken(auth.Session.AccessToken);
+                  this.SpotifyToken.UpdateAccessToken(auth.Session.AccessToken);
               });
 
             // TODO: Handle situation where session is invalidated
@@ -168,6 +168,9 @@ namespace MeNext.Spotify.iOS
         /// <param name="position">Position. Defaults to beginning = 0.</param>
         public override void PlaySong(ISong song, double position = 0)
         {
+            if (song == null) {
+                return;
+            }
             Debug.WriteLine("Trying to play song: " + song.Name, "service");
             if (this.CanPlayNow) {
                 sd.Player.PlaySpotifyURI(song.UniqueId, 0, position, (NSError error1) =>

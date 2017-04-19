@@ -183,6 +183,9 @@ namespace MeNext.Spotify
         /// <param name="uid">Uid.</param>
         public ISong GetSong(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifySong, ISong>(uid);
         }
 
@@ -193,6 +196,9 @@ namespace MeNext.Spotify
         /// <param name="uid">Album id.</param>
         public IAlbum GetAlbum(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifyAlbum, IAlbum>(uid);
         }
 
@@ -203,6 +209,9 @@ namespace MeNext.Spotify
         /// <param name="uid">Artist id.</param>
         public IArtist GetArtist(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifyArtist, IArtist>(uid);
         }
 
@@ -213,6 +222,9 @@ namespace MeNext.Spotify
         /// <param name="uid">Playlist id.</param>
         public IPlaylist GetPlaylist(string uid)
         {
+            if (uid == null) {
+                return null;
+            }
             return GetOne<SpotifyPlaylist, IPlaylist>(uid);
         }
     }

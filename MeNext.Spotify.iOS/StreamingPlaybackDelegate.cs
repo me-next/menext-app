@@ -23,6 +23,11 @@ namespace MeNext.Spotify.iOS
         /// <param name="trackUri">Track URI.</param>
         public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
+            if (trackUri == null) {
+                // Some wonkiness going on
+                return;
+            }
+
             // Get playing song
             var song = service.GetSong(trackUri);
 
