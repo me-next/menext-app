@@ -17,10 +17,6 @@ namespace MeNext
         //private readonly int artSize;
         private Button playButton;
         private readonly MainController mainController;
-        private Button prevButt;
-        private Button playButt;
-        private Button pauseButt;
-        private Button nextButt;
         public PlayingScreen(MainController mainController)
         {
             this.mainController = mainController;
@@ -52,6 +48,7 @@ namespace MeNext
                 Image = "next_icon_50px.png",
                 Command = new Command(() => mainController.Event.RequestSkip())
             };
+
             var buttons = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,

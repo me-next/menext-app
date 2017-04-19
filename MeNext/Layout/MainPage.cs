@@ -34,6 +34,7 @@ namespace MeNext.Layout
 
             this.mainController.RegisterUiListenerDangerous(this);
         }
+
         /// <summary>
         /// Something has changed. Update the UI accordingly.
         /// </summary>

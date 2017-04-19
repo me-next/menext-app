@@ -84,6 +84,13 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Called when adding a song to the PlayNext Queue.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> AddPlayNext(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/addPlayNext/{0}/{1}/{2}", eid, uid, sid));
@@ -118,6 +125,13 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Plays the previous song.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> PrevSong(string eid, string uid, string sid)
         {
         	var uri = new Uri(string.Format("/previous/{0}/{1}/{2}", eid, uid, sid));
@@ -125,6 +139,13 @@ namespace MeNext
         	return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Play the current song.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> PlaySong(string eid, string uid)
         {
         	var uri = new Uri(string.Format("/play/{0}/{1}", eid, uid));
@@ -132,6 +153,13 @@ namespace MeNext
         	return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Pause the current song.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> PauseSong(string eid, string uid, double pos)
         {
             var uri = new Uri(string.Format("/pause/{0}/{1}/{2}", eid, uid, pos));
