@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Media;
@@ -111,6 +112,8 @@ namespace MeNext.Spotify.Droid
                 var playerConfig = new Com.Spotify.Sdk.Android.Player.Config(
                     this.sms.mainActivity.ApplicationContext, accessToken, this.sms.ClientId
                 );
+                // TODO Same issue as iOS w/ short songs
+                playerConfig.UseCache(false);
 
                 // Since the Player is a static singleton owned by the Spotify class, we pass "this" as
                 // the second argument in order to refcount it properly. Note that the method
@@ -224,8 +227,18 @@ namespace MeNext.Spotify.Droid
             // Remember kids, always use the English locale when changing case for non-UI strings!
             // Otherwise you'll end up with mysterious errors when running in the Turkish locale.
             // See: http://java.sys-con.com/node/46241
+
+
+            if (pEvent == PlayerEvent.KSpPlaybackNotifyTrackDelivered) {
+                // TODO This happens slightly before the song ends, so do fix
+                Log.Debug("PlayerListener", "Track Delivered");
+                var endingSong = this.sms.PlayingSong.UniqueId;
+                this.sms.SongEnds(endingSong);
+            }
+
             Log.Debug("PlayerListener", "Playback Event: " + pEvent);
             this.sms.SomethingChanged();
+
         }
 
         public void OnPlaybackError(Com.Spotify.Sdk.Android.Player.Error error)
