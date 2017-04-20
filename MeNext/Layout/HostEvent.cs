@@ -66,7 +66,7 @@ namespace MeNext
                 } else if (createEvent.ToString() == "FAIL_GENERIC") 
                 {
                     nameEntry.Text = "";
-                    nameEntry.Placeholder = "pick an unused name";
+                    nameEntry.Placeholder = "Host name failed for unknown reason. Try again.";
                     return;
                 }
             } else {
