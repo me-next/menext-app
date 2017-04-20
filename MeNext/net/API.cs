@@ -55,6 +55,21 @@ namespace MeNext
         public async Task<string> CreateParty(string id, string name)
         {
             var uri = new Uri(string.Format("/createParty/{0}/{1}", id, name));
+            Debug.WriteLine("create with name uri: " + uri.ToString());
+            return await FireRequest(uri);
+        }
+
+        /// <summary>
+        /// Try to create party with given name.
+        /// </summary>
+        /// <returns>The party.</returns>
+        /// <param name="id">User ID.</param>
+        /// <param name="userName">User name.</param>
+        /// <param name="eventName">Event name.</param>
+        public async Task<string> CreateParty(string id, string userName, string eventName)
+        {
+            var uri = new Uri(string.Format("/createPartyWithName/{0}/{1}/{2}", id, userName, eventName));
+            Debug.WriteLine("uri = " + uri);
             return await FireRequest(uri);
         }
 

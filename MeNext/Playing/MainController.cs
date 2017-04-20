@@ -57,6 +57,8 @@ namespace MeNext
             }
         }
 
+        public string EventName { get; private set; }
+
         public Event Event { get; private set; }
 
         public NavigationPage NavPage { get; set; }
@@ -77,7 +79,7 @@ namespace MeNext
 
             // TODO Username?
             this.UserName = "bob";
-
+            this.EventName = "";
             Debug.WriteLine("User key: " + this.UserKey);
         }
 
@@ -93,7 +95,7 @@ namespace MeNext
             Debug.WriteLine("Requesting to join an event...");
             var task = Task.Run(async () =>
              {
-                 return await Api.JoinParty(slug, this.UserKey, this.UserName);
+                return await Api.JoinParty(slug, this.UserKey, this.UserName);
              });
 
             var json = task.Result;
@@ -102,6 +104,13 @@ namespace MeNext
 
             if (task.IsFaulted) {
                 Debug.WriteLine("*** Error:" + task.Exception.ToString());
+                return JoinEventResult.FAIL_GENERIC;
+            }
+
+            // deserialize
+            JoinEventResponse result = JsonConvert.DeserializeObject<JoinEventResponse>(json);
+            if (!string.IsNullOrEmpty(result.Error)) {
+                Debug.WriteLine("error joining event: " + result.Error);
                 return JoinEventResult.FAIL_GENERIC;
             }
 
@@ -135,12 +144,61 @@ namespace MeNext
             }
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+            if (!string.IsNullOrEmpty(result.Error)) {
+                Debug.WriteLine("error creating event: " + result.Error);
+                return CreateEventResult.FAIL_GENERIC;
+            }
 
             this.Event = new Event(this, result.EventID, true);
             this.Event.StartPolling();
+            this.EventName = result.EventID;
             this.InformSomethingChanged();
 
             return CreateEventResult.SUCCESS;
+        }
+
+        /// <summary>
+        /// Attempts to create an event with a given name.
+        /// </summary>
+        /// <returns>The result of the attempt.</returns>
+        /// <param name="Eventname">Given event name.</param>
+        public CreateEventResult RequestCreateEvent(string eventName)
+        {
+        	Debug.Assert(!this.InEvent);
+            Debug.WriteLine("going to create event with name");
+        	var task = Task.Run(async () =>
+        	{
+                return await Api.CreateParty(this.UserKey, this.UserName, eventName);
+        	});
+            var json = task.Result;
+            Debug.WriteLine("Json: " + json);
+            // TODO: real error check
+            if (task.IsFaulted) {
+                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
+                return CreateEventResult.FAIL_GENERIC;
+            }
+
+            var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+            // Event creation failed server side. Assumes duplicate event name was used.
+            if (!string.IsNullOrEmpty(result.Error)) {
+                Debug.WriteLine("issue creating event with name: " + result.Error);
+                this.EventName = result.AlternativeName;
+                return CreateEventResult.FAIL_EVENT_EXISTS;
+            }
+
+            if (!task.IsFaulted) {
+                //if(task.Status.ToString == "StatusInternalServerError")
+                if (result?.EventID != null) {
+                    this.Event = new Event(this, result.EventID, true);
+                    this.Event.StartPolling();
+                    this.EventName = result.EventID;
+                    this.InformSomethingChanged();
+                    return CreateEventResult.SUCCESS;
+                } else { return CreateEventResult.FAIL_GENERIC; }
+            } else {
+                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
+                return CreateEventResult.FAIL_GENERIC;
+            }
         }
 
         /// <summary>
@@ -157,6 +215,7 @@ namespace MeNext
             if (this.Event.IsHost)
                 this.musicService.Playing = false;
             this.Event = null;
+            this.EventName = "";
             this.InformSomethingChanged();
             return EndEventResult.SUCCESS;
         }
@@ -179,6 +238,7 @@ namespace MeNext
                     return LeaveEventResult.FAIL_GENERIC;
 
                 this.Event = null;
+                this.EventName = "";
                 return LeaveEventResult.SUCCESS;
             }
 
@@ -186,6 +246,7 @@ namespace MeNext
 
 
             this.Event = null;
+            this.EventName = "";
 
             this.InformSomethingChanged();
             return LeaveEventResult.SUCCESS;
@@ -238,8 +299,7 @@ namespace MeNext
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public void MusicServiceChange()

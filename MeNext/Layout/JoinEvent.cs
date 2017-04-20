@@ -43,13 +43,14 @@ namespace MeNext
         /// <param name="mc">the mainController</param>
         void JoinCommand(MainController mc)
         {
-            JoinEventClass joinEvent = new JoinEventClass(mc.RequestJoinEvent(eventIDEntry.Text.ToLower()));
+            var joinEvent = mc.RequestJoinEvent(eventIDEntry.Text.ToLower());
+
             Navigation.PopAsync();
-            if (joinEvent.EventResult.ToString() == "SUCCESS") {
+            if (joinEvent.ToString() == "SUCCESS") {
 
                 //Navigation.PushAsync(new JoinedEvent(cClass.mc));
             } else {
-                Debug.WriteLine("Couldn't join event successfully: " + joinEvent.EventResult.ToString());
+                Debug.WriteLine("Couldn't join event successfully: " + joinEvent.ToString());
                 // TODO Error message
                 // TODO Fail if we couldn't join!
             }
