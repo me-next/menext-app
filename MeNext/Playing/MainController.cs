@@ -273,14 +273,15 @@ namespace MeNext
         /// </summary>
         public void InformSomethingChanged()
         {
-            if (!this.InEvent) {
-                this.musicService.SetIsHost(false);
-            }
-
+            
             Device.BeginInvokeOnMainThread(() =>
             {
                 // We use a copy so listeners we call can create objects which register new listeners
                 var copy = new List<IUIChangeListener>(listeners);
+
+                if (!this.InEvent) {
+                    this.musicService.SetIsHost(false);
+                }
 
                 foreach (var listener in copy) {
                     listener.SomethingChanged();

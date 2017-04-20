@@ -436,8 +436,9 @@ namespace MeNext
             });
 
             var json = task.Result;
-            Debug.WriteLine("Pull json: " + json);
             if (json == null) {
+                // if got null json, then we had an error with executing the pull
+                // request to leave event
                 this.controller.LeaveEvent();
                 return;
             }
