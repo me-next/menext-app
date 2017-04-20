@@ -51,6 +51,17 @@ namespace MeNext
             }
         }
 
+        public bool Playing
+        {
+            get
+            {
+                if (this.LatestPull == null) {
+                    return false;
+                }
+                return this.LatestPull.Playing.Playing;
+            }
+        }
+
         public Event(MainController controller, string eventSlug, bool isHost)
         {
             this.PullObservers = new List<IPullUpdateObserver>();

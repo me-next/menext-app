@@ -36,7 +36,7 @@ namespace MeNext
                 Image = "play_icon_50px.png",
                 Command = new Command(() =>
                 {
-                    if (mainController.musicService.Playing) {
+                    if (mainController.Event.Playing) {
                         mainController.Event.RequestPause();
                     } else {
                         mainController.Event.RequestPlay();
@@ -136,7 +136,7 @@ namespace MeNext
                     this.albumTitle.Text = "";
                     //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
                 }
-                if (mainController.musicService.Playing) {
+                if (mainController.Event.Playing) {
                     this.playButton.Image = "pause_icon_50px.png";
                 } else {
                     this.playButton.Image = "play_icon_50px.png";
