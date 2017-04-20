@@ -247,7 +247,7 @@ namespace MeNext.Spotify
             Debug.WriteLine("::Getting URI: {0}", fullUri);
 
             // Add authentication header
-            if (this.sms.SpotifyToken != null) {
+            if (this.sms.SpotifyToken.AccessToken != null) {
                 var accessToken = this.sms.SpotifyToken.AccessToken;
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
