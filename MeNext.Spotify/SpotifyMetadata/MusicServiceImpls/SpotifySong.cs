@@ -18,7 +18,7 @@ namespace MeNext.Spotify
         private const string ENDPOINT_MULTIPLE = "tracks";
         // Important metadata for song
         private MetadataFactory factory;
-        private string uri;
+        private readonly string uri;
         private string name;
         private int trackNumber;
         private int diskNumber;
@@ -154,6 +154,18 @@ namespace MeNext.Spotify
             }
 
             return result;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.UniqueId.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+            return ((SpotifySong) obj).UniqueId == this.UniqueId;
         }
 
     }

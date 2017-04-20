@@ -43,7 +43,7 @@ namespace MeNext
         /// <param name="mc">the mainController</param>
         void JoinCommand(MainController mc)
         {
-            JoinEventClass joinEvent = new JoinEventClass(mc.RequestJoinEvent(eventIDEntry.Text.ToUpper()));
+            JoinEventClass joinEvent = new JoinEventClass(mc.RequestJoinEvent(eventIDEntry.Text.ToLower()));
             Navigation.PopAsync();
             if (joinEvent.EventResult.ToString() == "SUCCESS") {
 

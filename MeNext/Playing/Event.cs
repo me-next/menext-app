@@ -69,7 +69,7 @@ namespace MeNext
 
             // set up the play controller
             if (this.IsHost) {
-                var playController = new PlayController(this.controller.musicService);
+                var playController = new PlayController(this.controller.musicService, this.controller);
                 RegisterPullObserver(playController);
             }
         }
@@ -81,10 +81,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-            	 if (this.LatestPull != null) {
-                    return await Api.PlaySong(this.Slug, this.controller.UserKey);
-            	 }
-            	 return null;
+                 if (this.LatestPull != null) {
+                     return await Api.PlaySong(this.Slug, this.controller.UserKey);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
@@ -102,10 +102,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-            	 if (this.LatestPull != null) {
-                    return await Api.PauseSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingPosition);
-            	 }
-            	 return null;
+                 if (this.LatestPull != null) {
+                     return await Api.PauseSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingPosition);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
@@ -165,10 +165,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-            	 if (this.LatestPull != null) {
-                    return await Api.PrevSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
-            	 }
-            	 return null;
+                 if (this.LatestPull != null) {
+                     return await Api.PrevSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
