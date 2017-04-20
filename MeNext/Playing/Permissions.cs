@@ -7,12 +7,12 @@ namespace MeNext
 {
     public class Permissions : IPullUpdateObserver
     {
-        public static string PlayNext = "PlayNext";
-        public static string PlayPause = "PlayPause";
-        public static string Seek = "Seek";
-        public static string Suggest = "Suggest";
-        public static string SuggestVote = "SuggestVote";
-        public static string Volume = "Volume";
+        public const string PlayNext = "PlayNext";
+        public const string PlayPause = "PlayPause";
+        public const string Seek = "Seek";
+        public const string Suggest = "Suggest";
+        public const string SuggestVote = "SuggestVote";
+        public const string Volume = "Volume";
 
         private Dictionary<string, bool> permissions;
         /// <summary>
@@ -28,7 +28,6 @@ namespace MeNext
             permissions.Add(Suggest, true);
             permissions.Add(SuggestVote, true);
             permissions.Add(Volume, true);
-
         }
 
         public bool GetPermission(string which)
@@ -37,7 +36,7 @@ namespace MeNext
                 return true;
             }
 
-            bool val; 
+            bool val;
             var has = permissions.TryGetValue(which, out val);
             if (!has) {
                 Debug.WriteLine("can't find value: " + which);
