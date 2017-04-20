@@ -19,6 +19,9 @@ namespace MeNext
 
         [JsonProperty(PropertyName = "playnext")]
         public QueueResponse PlayNextQueue;
+
+        [JsonProperty(PropertyName = "error")]
+        public String Error;
     }
     /// <summary>
     /// Parses a song json response.
