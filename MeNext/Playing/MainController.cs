@@ -95,22 +95,15 @@ namespace MeNext
             Debug.WriteLine("Requesting to join an event...");
             var task = Task.Run(async () =>
              {
-                return await Api.JoinParty(slug, this.UserKey, this.UserName);
+                 return await Api.JoinParty(slug, this.UserKey, this.UserName);
              });
 
             var json = task.Result;
 
             Debug.WriteLine("Got json: " + task.Result);
 
-            if (task.IsFaulted) {
-                Debug.WriteLine("*** Error:" + task.Exception.ToString());
-                return JoinEventResult.FAIL_GENERIC;
-            }
-
-            // deserialize
-            JoinEventResponse result = JsonConvert.DeserializeObject<JoinEventResponse>(json);
-            if (!string.IsNullOrEmpty(result.Error)) {
-                Debug.WriteLine("error joining event: " + result.Error);
+            if (task.IsFaulted || json == null) {
+                Debug.WriteLine("*** Failed to join event!");
                 return JoinEventResult.FAIL_GENERIC;
             }
 
@@ -137,9 +130,8 @@ namespace MeNext
             var json = task.Result;
             Debug.WriteLine("Json: " + json);
 
-            // TODO: real error check
-            if (task.IsFaulted) {
-                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
+            if (task.IsFaulted || json == null) {
+                Debug.WriteLine("*** Failed to create event!");
                 return CreateEventResult.FAIL_GENERIC;
             }
 
@@ -164,17 +156,17 @@ namespace MeNext
         /// <param name="Eventname">Given event name.</param>
         public CreateEventResult RequestCreateEvent(string eventName)
         {
-        	Debug.Assert(!this.InEvent);
+            Debug.Assert(!this.InEvent);
             Debug.WriteLine("going to create event with name");
-        	var task = Task.Run(async () =>
-        	{
+            var task = Task.Run(async () =>
+            {
                 return await Api.CreateParty(this.UserKey, this.UserName, eventName);
-        	});
+            });
             var json = task.Result;
             Debug.WriteLine("Json: " + json);
-            // TODO: real error check
-            if (task.IsFaulted) {
-                Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
+
+            if (task.IsFaulted || json == null) {
+                Debug.WriteLine("*** Failed to create event!");
                 return CreateEventResult.FAIL_GENERIC;
             }
 

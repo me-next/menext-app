@@ -83,6 +83,7 @@ namespace MeNext
         public async Task<string> JoinParty(string slug, string ukey, string uid)
         {
             var uri = new Uri(string.Format("/joinParty/{0}/{1}/{2}", slug, ukey, uid));
+            Debug.WriteLine("uri = " + uri);
             return await FireRequest(uri);
         }
 
@@ -239,6 +240,7 @@ namespace MeNext
             } else {
                 Debug.WriteLine(" *** ERR: BAD SERVER STATUS CODE: " + response.StatusCode);
                 Debug.WriteLine(" *** FROM URI: " + uri.AbsoluteUri);
+                return null;
             }
 
             return result;
