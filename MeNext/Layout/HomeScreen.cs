@@ -210,7 +210,6 @@ namespace MeNext
                 }
             }
 
-
             this.joinEvent.IsVisible = !this.mc.InEvent;
             this.hostEvent.IsVisible = !this.mc.InEvent && mc.musicService.LoggedIn;  // TODO Check premium too
             this.leaveEvent.IsVisible = this.mc.InEvent;
