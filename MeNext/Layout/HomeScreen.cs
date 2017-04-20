@@ -191,8 +191,8 @@ namespace MeNext
 
             // set visible only if host
             // can call event directly b/c we are 
+            permissionsLabel.IsVisible = (this.mc.InEvent && this.mc.Event.IsHost);
             if (this.mc.InEvent) {
-                permissionsLabel.IsVisible = this.mc.Event.IsHost;
                 foreach (KeyValuePair<string, Button> entry in this.buttons) {
                     entry.Value.IsVisible = this.mc.Event.IsHost;
                 }
