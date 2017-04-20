@@ -244,19 +244,36 @@ namespace MeNext
         /// The index to insert the song at. 0=Next Song, 1=Song after that, etc. -1=Last Song,-2=song before that,
         /// etc.
         /// </param>
-        public void RequestAddToPlayNext(ISong song, int index = -1)
+        public void RequestAddToPlayNext(ISong song)
         {
-            // TODO implement idx
-            var task = Task.Run(async () =>
+            Task.Run(async () =>
             {
                 return await Api.AddPlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
             });
+        }
 
-            if (task.IsFaulted) {
-                Debug.WriteLine("Failed to add song to play next!" + task.Exception.ToString());
-            }
+        public void RequestAddTopOfPlayNext(ISong song)
+        {
+            Task.Run(async () =>
+            {
+                return await Api.AddTopPlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
+        }
 
-            Debug.WriteLine("Added " + song.UniqueId + " to play next");
+        public void RequestRemovePlayNext(ISong song)
+        {
+            Task.Run(async () =>
+            {
+                return await Api.RemovePlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
+        }
+
+        public void RequestPlayNow(ISong song)
+        {
+            Task.Run(async () =>
+            {
+                return await Api.PlayNow(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>
@@ -265,7 +282,10 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestRemoveFromPlayNext(ISong song)
         {
-            // TODO
+            Task.Run(async () =>
+            {
+                return await Api.RemovePlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>
