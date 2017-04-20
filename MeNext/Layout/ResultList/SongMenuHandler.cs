@@ -13,7 +13,7 @@ namespace MeNext
         private MenuCommand menuAddUpNext;
         private MenuCommand menuPlayNext;
         private MenuCommand menuPlayNow;
-        private MenuCommand menuRemoveSuggest;
+        //private MenuCommand menuRemoveSuggest;
         private MenuCommand menuRemoveUpNext;
 
         public SongMenuHandler(MainController controller)
@@ -43,7 +43,7 @@ namespace MeNext
                 Title = "Play Next",
                 Command = new Command<ResultItemData>((obj) =>
                 {
-                    this.controller.Event.RequestAddToPlayNext((ISong) obj.Item, 0);
+                    this.controller.Event.RequestAddTopOfPlayNext((ISong) obj.Item);
                 })
             };
 
@@ -53,26 +53,25 @@ namespace MeNext
                 Command = new Command<ResultItemData>((obj) =>
                 {
                     // TODO Atomize this operation
-                    this.controller.Event.RequestAddToPlayNext((ISong) obj.Item, 0);
-                    this.controller.Event.RequestSkip();
+                    this.controller.Event.RequestPlayNow((ISong) obj.Item);
                 })
             };
 
-            this.menuRemoveSuggest = new MenuCommand
-            {
-                Title = "Remove from Suggestions",
-                Command = new Command<ResultItemData>((obj) =>
-                {
-                    this.controller.Event.RequestRemoveFromSuggestions((ISong) obj);
-                })
-            };
+            //this.menuRemoveSuggest = new MenuCommand
+            //{
+            //    Title = "Remove from Suggestions",
+            //    Command = new Command<ResultItemData>((obj) =>
+            //    {
+            //        this.controller.Event.RequestRemoveFromSuggestions((ISong) obj.Item);
+            //    })
+            //};
 
             this.menuRemoveUpNext = new MenuCommand
             {
                 Title = "Remove from Up Next",
                 Command = new Command<ResultItemData>((obj) =>
                 {
-                    this.controller.Event.RequestRemoveFromPlayNext((ISong) obj);
+                    this.controller.Event.RequestRemoveFromPlayNext((ISong) obj.Item);
                 })
             };
         }
@@ -104,7 +103,7 @@ namespace MeNext
                 menu.Add(menuAddUpNext);
                 menu.Add(menuPlayNext);
                 menu.Add(menuPlayNow);
-                menu.Add(menuRemoveSuggest);
+                //menu.Add(menuRemoveSuggest);
             } else if (inUpNext) {
                 // The song is in the up next queue
                 menu.Add(menuPlayNext);

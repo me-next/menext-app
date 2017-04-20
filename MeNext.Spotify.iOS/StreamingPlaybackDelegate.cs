@@ -23,16 +23,11 @@ namespace MeNext.Spotify.iOS
         /// <param name="trackUri">Track URI.</param>
         public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
-            if (trackUri == null) {
-                // Some wonkiness going on
-                return;
-            }
+            if (trackUri != null) {
+                // Get playing song
+                var song = service.GetSong(trackUri);
 
-            // Get playing song
-            var song = service.GetSong(trackUri);
-
-            // Process remote control
-            if (MPNowPlayingInfoCenter.DefaultCenter != null) {
+                // Process remote control
                 var artists = "";
                 foreach (var artist in song.Artists) {
                     artists += ", " + artist.Name;
@@ -55,8 +50,9 @@ namespace MeNext.Spotify.iOS
                     Title = song.Name,
                 };
             } else {
-                Debug.WriteLine("*** ERROR: iOS Now Playing Centre Null");
+                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo();
             }
+
         }
 
         /// <summary>

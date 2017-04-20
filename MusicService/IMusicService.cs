@@ -240,5 +240,13 @@ namespace MeNext.MusicService
         /// <returns><c>true</c>, if it is hosting, <c>false</c> otherwise.</returns>
         /// <param name="isHost">If set to <c>true</c> is host.</param>
         void SetIsHost(bool isHost);
+
+        /// <summary>
+        /// Gets recommendations based on a set of songs.
+        /// </summary>
+        /// <returns>The recommendations.</returns>
+        /// <param name="seeds">Seeds.</param>
+        IList<ISong> GetRecommendations(IList<ISong> seeds);
+
     }
 }

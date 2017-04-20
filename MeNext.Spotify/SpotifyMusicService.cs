@@ -303,6 +303,16 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets recommendations based on a set of songs.
+        /// </summary>
+        /// <returns>The recommendations.</returns>
+        /// <param name="seeds">Seeds.</param>
+        public IList<ISong> GetRecommendations(IList<ISong> seeds)
+        {
+            return this.webApi.GetRecommendations(seeds);
+        }
+
         public abstract bool LoggedIn { get; }
         public abstract bool Playing { get; set; }
         public abstract double PlayingPosition { get; set; }

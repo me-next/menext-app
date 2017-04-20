@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -17,6 +18,8 @@ namespace MeNext.Spotify
     {
         // Don't include trailing /
         private const string BASE_ADDRESS = "https://api.spotify.com/v1";
+
+        public const int MAX_RECOMMENDATION_SEEDS = 5;
 
         private const int DEFAULT_RETRY_TIME = 10;
 
@@ -37,7 +40,50 @@ namespace MeNext.Spotify
             this.metadata = new MetadataFactory(this);
         }
 
-        // TODO: Unit test this
+        /// <summary>
+        /// Gets recommendations for a set of songs.
+        /// </summary>
+        /// <returns>The recommendations.</returns>
+        /// <param name="seeds">Seeds.</param>
+        public IList<ISong> GetRecommendations(IList<ISong> rawSeeds)
+        {
+            if (rawSeeds.Count == 0) {
+                return new List<ISong>();
+            }
+
+            // Select up to 5 random seeds from the list of rawSeeds
+            var copiedRawSeeds = new List<ISong>(rawSeeds);
+            Shuffle(copiedRawSeeds);
+
+            var seeds = copiedRawSeeds.GetRange(0, Math.Min(copiedRawSeeds.Count, MAX_RECOMMENDATION_SEEDS));
+
+            // Format the seed URIs
+            var commaSeeds = "";
+            foreach (var seed in seeds) {
+                commaSeeds += "," + seed.UniqueId.Substring(14);
+            }
+            commaSeeds = commaSeeds.Substring(1);
+
+            // Hit the Spotify server
+            var task = Task.Run(async () =>
+            {
+                // TODO Unmagick the 30
+                return await GetJson("/recommendations?limit=30&seed_tracks=" + commaSeeds);
+            });
+
+            var json = task.Result;
+            var tracksResult = JsonConvert.DeserializeObject<RecommendedTracksResult>(json);
+
+            // Submit tracks to cache and compile their UIDs
+            var trackUids = new List<string>();
+            foreach (var track in tracksResult.Items) {
+                this.metadata.CacheSubmit(track);
+                trackUids.Add(track.uri);
+            }
+
+            return this.metadata.GetSongs(trackUids);
+        }
+
         /// <summary>
         /// Encodes a query string according to the requirements outlines in
         /// https://developer.spotify.com/web-api/search-item/
@@ -201,7 +247,7 @@ namespace MeNext.Spotify
             Debug.WriteLine("::Getting URI: {0}", fullUri);
 
             // Add authentication header
-            if (this.sms.SpotifyToken != null) {
+            if (this.sms.SpotifyToken.AccessToken != null) {
                 var accessToken = this.sms.SpotifyToken.AccessToken;
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
@@ -229,9 +275,30 @@ namespace MeNext.Spotify
             }
 
             // Get the data
-            var jsonResult = await response.Content.ReadAsStringAsync();
+
+            // TODO We should be using this, but Spotify is being stupid
+            // See http://stackoverflow.com/questions/39065988/utf8-is-not-a-supported-encoding-name
+            //var jsonResult = await response.Content.ReadAsStringAsync();
+
+            // So temporary kludge, just assume UTF-8 and parse the bytes:
+            var jsonResultBytes = await response.Content.ReadAsByteArrayAsync();
+            var jsonResult = System.Text.Encoding.UTF8.GetString(jsonResultBytes, 0, jsonResultBytes.Length);
 
             return jsonResult;
+        }
+
+        private static Random rng = new Random();
+
+        public static void Shuffle<T>(IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1) {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
     }
 }

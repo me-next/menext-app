@@ -34,8 +34,9 @@ namespace MeNext
             playButton = new Button
             {
                 Image = "play_icon_50px.png",
-                Command = new Command(() => {
-                    if (mainController.musicService.Playing) {
+                Command = new Command(() =>
+                {
+                    if (mainController.Event.Playing) {
                         mainController.Event.RequestPause();
                     } else {
                         mainController.Event.RequestPlay();
@@ -61,9 +62,28 @@ namespace MeNext
             };
 
             //TODO: add seeking/time slider
-            this.songTitle = new Label { Text = "", Margin = new Thickness(0, 30, 0, 0), HorizontalOptions = LayoutOptions.CenterAndExpand };
-            this.artistLabel = new Label { Text = "", HorizontalOptions = LayoutOptions.CenterAndExpand };
-            this.albumTitle = new Label { Text = "", Margin = new Thickness(0, 0, 0, 30), HorizontalOptions = LayoutOptions.CenterAndExpand };
+            this.songTitle = new Label
+            {
+                Text = "",
+                Margin = new Thickness(0, 30, 0, 0),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                FontSize = LayoutConsts.TITLE_FONT_SIZE,
+                FontAttributes = FontAttributes.Bold,
+                LineBreakMode = LineBreakMode.TailTruncation,
+            };
+            this.artistLabel = new Label
+            {
+                Text = "",
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                LineBreakMode = LineBreakMode.TailTruncation,
+            };
+            this.albumTitle = new Label
+            {
+                Text = "",
+                Margin = new Thickness(0, 0, 0, 30),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                LineBreakMode = LineBreakMode.TailTruncation,
+            };
 
             //this.artSize = (int)(this.Width * 0.7);
             //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
@@ -96,18 +116,27 @@ namespace MeNext
                 // There is a song playing.
                 if (playing != null) {
                     var song = this.mainController.musicService.GetSong(playing);
+
+                    var artists = "";
+                    foreach (var artist in song.Artists) {
+                        artists += ", " + artist.Name;
+                    }
+                    if (artists.Length > 0) {
+                        artists = artists.Substring(2);
+                    }
+
                     this.songTitle.Text = song.Name;
+                    this.artistLabel.Text = artists;
                     this.albumTitle.Text = song.Album.Name;
                     //this.albumArt = (Image)song.Album.GetAlbumArt(artSize, artSize);
                     // TODO Other metadata
                 } else {
                     this.songTitle.Text = "Nothing Playing";
-                    this.songTitle.Margin = new Thickness(0, 30, 0, 30);
                     this.artistLabel.Text = "";
                     this.albumTitle.Text = "";
                     //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
                 }
-                if (mainController.musicService.Playing) {
+                if (mainController.Event.Playing) {
                     this.playButton.Image = "pause_icon_50px.png";
                 } else {
                     this.playButton.Image = "play_icon_50px.png";

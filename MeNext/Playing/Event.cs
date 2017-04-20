@@ -57,6 +57,17 @@ namespace MeNext
             }
         }
 
+        public bool Playing
+        {
+            get
+            {
+                if (this.LatestPull == null) {
+                    return false;
+                }
+                return this.LatestPull.Playing.Playing;
+            }
+        }
+
         public Event(MainController controller, string eventSlug, bool isHost)
         {
             this.PullObservers = new List<IPullUpdateObserver>();
@@ -75,7 +86,7 @@ namespace MeNext
 
             // set up the play controller
             if (this.IsHost) {
-                var playController = new PlayController(this.controller.musicService);
+                var playController = new PlayController(this.controller.musicService, this.controller);
                 RegisterPullObserver(playController);
             }
 
@@ -91,10 +102,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-            	 if (this.LatestPull != null) {
-                    return await Api.PlaySong(this.Slug, this.controller.UserKey);
-            	 }
-            	 return null;
+                 if (this.LatestPull != null) {
+                     return await Api.PlaySong(this.Slug, this.controller.UserKey);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
@@ -112,10 +123,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-            	 if (this.LatestPull != null) {
-                    return await Api.PauseSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingPosition);
-            	 }
-            	 return null;
+                 if (this.LatestPull != null) {
+                     return await Api.PauseSong(this.Slug, this.controller.UserKey, this.controller.musicService.PlayingPosition);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
@@ -175,10 +186,10 @@ namespace MeNext
         {
             var task = Task.Run(async () =>
              {
-            	 if (this.LatestPull != null) {
-                    return await Api.PrevSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
-            	 }
-            	 return null;
+                 if (this.LatestPull != null) {
+                     return await Api.PrevSong(this.Slug, this.controller.UserKey, this.LatestPull.Playing.CurrentSongID);
+                 }
+                 return null;
              });
 
             if (task.IsFaulted) {
@@ -243,19 +254,36 @@ namespace MeNext
         /// The index to insert the song at. 0=Next Song, 1=Song after that, etc. -1=Last Song,-2=song before that,
         /// etc.
         /// </param>
-        public void RequestAddToPlayNext(ISong song, int index = -1)
+        public void RequestAddToPlayNext(ISong song)
         {
-            // TODO implement idx
-            var task = Task.Run(async () =>
+            Task.Run(async () =>
             {
                 return await Api.AddPlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
             });
+        }
 
-            if (task.IsFaulted) {
-                Debug.WriteLine("Failed to add song to play next!" + task.Exception.ToString());
-            }
+        public void RequestAddTopOfPlayNext(ISong song)
+        {
+            Task.Run(async () =>
+            {
+                return await Api.AddTopPlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
+        }
 
-            Debug.WriteLine("Added " + song.UniqueId + " to play next");
+        public void RequestRemovePlayNext(ISong song)
+        {
+            Task.Run(async () =>
+            {
+                return await Api.RemovePlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
+        }
+
+        public void RequestPlayNow(ISong song)
+        {
+            Task.Run(async () =>
+            {
+                return await Api.PlayNow(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>
@@ -264,7 +292,10 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestRemoveFromPlayNext(ISong song)
         {
-            // TODO
+            Task.Run(async () =>
+            {
+                return await Api.RemovePlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>
