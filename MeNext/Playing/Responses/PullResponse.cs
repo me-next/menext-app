@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace MeNext
 {
     /// <summary>
@@ -20,6 +21,9 @@ namespace MeNext
         [JsonProperty(PropertyName = "playnext")]
         public QueueResponse PlayNextQueue;
 
+        [JsonProperty(PropertyName = "permissions")]
+        public Dictionary<string, bool> Permissions;
+      
         [JsonProperty(PropertyName = "error")]
         public String Error;
     }

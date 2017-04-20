@@ -41,6 +41,12 @@ namespace MeNext
 
         public SuggestionQueue SuggestionQueue { get; private set; }
 
+        /// <summary>
+        /// Permissions are stored in the pull information. Default to allow all permissions. 
+        /// </summary>
+        /// <value>The permissions.</value>
+        public Permissions Permissions { get; set; }
+
         private MainController controller;
 
         private API Api
@@ -83,6 +89,10 @@ namespace MeNext
                 var playController = new PlayController(this.controller.musicService, this.controller);
                 RegisterPullObserver(playController);
             }
+
+            // create permissions and have it listen for updates
+            this.Permissions = new Permissions();
+            this.RegisterPullObserver(Permissions);
         }
 
         /// <summary>
@@ -347,6 +357,32 @@ namespace MeNext
         public void RequestUserPermissions(string username /* TODO: permissions structure */)
         {
             // TODO
+        }
+
+        /// <summary>
+        /// Checks if the user can perform an action. Distinct from the party permissions.
+        /// </summary>
+        /// <returns><c>true</c>, if the user has permission for the action <c>false</c> otherwise.</returns>
+        /// <param name="which">Which permission to check.</param>
+        public bool ThisHasPermission(string which)
+        {
+            return this.IsHost || this.Permissions.GetPermission(which);
+        }
+
+        /// <summary>
+        /// Try to set the permission
+        /// </summary>
+        /// <param name="which">Which.</param>
+        /// <param name="value">If set to <c>true</c> value.</param>
+        public void RequestSetPermission(string which, bool value)
+        {
+            // try to set the permission, just leave it
+            var task = Task.Run(async () =>
+            {
+                return await this.Api.SetPermission(this.Slug, this.controller.UserKey, which, value);
+            });
+
+            Debug.WriteLine("set permission result: " + task.Result);
         }
 
         /// <summary>

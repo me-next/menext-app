@@ -242,6 +242,36 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Gets the permissions with descriptions from the server
+        /// </summary>
+        /// <returns>Server response string.</returns>
+        public async Task<string> GetPermissions()
+        {
+            var uri = new Uri(string.Format("/permissions"));
+            return await FireRequest(uri);
+        }
+
+        /// <summary>
+        /// Attempts to set a permission
+        /// </summary>
+        /// <returns>The permission to set.</returns>
+        /// <param name="eid">Event ID.</param>
+        /// <param name="uid">User ID.</param>
+        /// <param name="which">Which permission.</param>
+        /// <param name="enabled">If set to <c>true</c> allow users to use that permission.</param>
+        public async Task<string> SetPermission(string eid, string uid, string which, bool enabled)
+        {
+            if (enabled) {
+                var innerUri = new Uri(string.Format("/setPermission/{0}/{1}/{2}/true", eid, uid, which));
+                Debug.WriteLine(innerUri.ToString());
+                return await FireRequest(innerUri);
+            }
+
+            var uri = new Uri(string.Format("/setPermission/{0}/{1}/{2}/false", eid, uid, which));
+            Debug.WriteLine(uri.ToString());
+            return await FireRequest(uri);
+        }
 
         /// <summary>
         /// Sends a request URI to the server. 
