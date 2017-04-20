@@ -17,12 +17,21 @@ namespace MeNext
         //private readonly int artSize;
         private Button playButton;
         private readonly MainController mainController;
+        private Slider volumeSlider;
+        private int lastVolumePull;
+
         public PlayingScreen(MainController mainController)
         {
             this.mainController = mainController;
 
             this.Title = "Now Playing";
             NavigationPage.SetHasNavigationBar(this, false);
+
+            volumeSlider = new Slider(0, 100, 50);
+            volumeSlider.ValueChanged += (sender, e) =>
+            {
+                mainController.Event.RequestVolume(volumeSlider.Value);
+            };
 
             // Buttons to manipulate the playing music queue.
             var prevButton = new Button
@@ -96,7 +105,8 @@ namespace MeNext
                     this.songTitle,
                     this.artistLabel,
                     this.albumTitle,
-                    buttons
+                    buttons,
+                    volumeSlider,
                 }
             };
 
@@ -136,10 +146,19 @@ namespace MeNext
                     this.albumTitle.Text = "";
                     //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
                 }
+
                 if (mainController.Event.Playing) {
                     this.playButton.Image = "pause_icon_50px.png";
                 } else {
                     this.playButton.Image = "play_icon_50px.png";
+                }
+
+                if (mainController.Event?.LatestPull?.Playing != null) {
+                    var nominalVolume = mainController.Event.LatestPull.Playing.Volume;
+                    if (nominalVolume != this.lastVolumePull) {
+                        this.volumeSlider.Value = nominalVolume;
+                        this.lastVolumePull = nominalVolume;
+                    }
                 }
             });
         }
