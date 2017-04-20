@@ -22,6 +22,7 @@ namespace MeNext
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
         public const string NOW_PLAYING = "\u25b6";
+        public const string UP_NEXT = "\ud83d\ude1d";
 
         private ResultItemData resultItem;
 
@@ -192,17 +193,21 @@ namespace MeNext
                 return;
             }
             var suggestions = this.controller.Event.SuggestionQueue.Songs;
+            var playNext = new List<SongResponse>(this.controller.Event.LatestPull.PlayNextQueue.Songs);
 
             if (this.controller.Event?.LatestPull?.Playing?.CurrentSongID == this.resultItem.Item.UniqueId) {
                 // This is the currently playing song
                 resultItem.Suggest = SuggestSetting.NOW_PLAYING;
             } else {
-                var item = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
-                if (item != null) {
+                var playNextItem = playNext.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
+                var suggestItem = suggestions.Find((obj) => obj.ID == this.resultItem.Item.UniqueId);
+                if (playNextItem != null) {
+                    resultItem.Suggest = SuggestSetting.UP_NEXT;
+                } else if (suggestItem != null) {
                     // The song has already been suggested
-                    if (item.Vote == 1) {
+                    if (suggestItem.Vote == 1) {
                         resultItem.Suggest = SuggestSetting.VOTE_LIKE;
-                    } else if (item.Vote == -1) {
+                    } else if (suggestItem.Vote == -1) {
                         resultItem.Suggest = SuggestSetting.VOTE_DISLIKE;
                     } else {
                         resultItem.Suggest = SuggestSetting.VOTE_NEUTRAL;
@@ -263,6 +268,9 @@ namespace MeNext
 
                 case SuggestSetting.NOW_PLAYING:
                     return NOW_PLAYING;
+
+                case SuggestSetting.UP_NEXT:
+                    return UP_NEXT;
 
                 default:
                     return "ERROR";

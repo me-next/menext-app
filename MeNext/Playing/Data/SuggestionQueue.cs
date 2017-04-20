@@ -49,11 +49,11 @@ namespace MeNext
                     break;
 
                 case SortOptions.NEWEST_FIRST:
-                    this.Songs.Sort((x, y) => x.TimeAdded.CompareTo(y.TimeAdded));
+                    this.Songs.Sort((x, y) => x.PosAdded.CompareTo(y.PosAdded));
                     break;
 
                 case SortOptions.OLDEST_FIRST:
-                    this.Songs.Sort((x, y) => x.TimeAdded.CompareTo(y.TimeAdded));
+                    this.Songs.Sort((x, y) => x.PosAdded.CompareTo(y.PosAdded));
                     break;
             }
         }

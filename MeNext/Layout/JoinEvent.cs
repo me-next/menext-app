@@ -44,6 +44,7 @@ namespace MeNext
         void JoinCommand(MainController mc)
         {
             var joinEvent = mc.RequestJoinEvent(eventIDEntry.Text.ToLower());
+
             Navigation.PopAsync();
             if (joinEvent.ToString() == "SUCCESS") {
 
