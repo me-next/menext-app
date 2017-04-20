@@ -63,7 +63,7 @@ namespace MeNext
                     // Right now it just changes the entry's text to implicate the new name.
                     nameEntry.Text = mc.EventName.ToString();
                     return;
-                } else if (createEvent.ToString() == "FAIL_GENERIC") {
+                } else if (createEvent == CreateEventResult.FAIL_GENERIC) {
                     nameEntry.Text = "";
                     nameEntry.Placeholder = "Host name failed for unknown reason. Try again.";
                     return;
