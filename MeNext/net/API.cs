@@ -55,7 +55,11 @@ namespace MeNext
         public async Task<string> CreateParty(string id, string name)
         {
             var uri = new Uri(string.Format("/createParty/{0}/{1}", id, name));
+<<<<<<< HEAD
             Debug.WriteLine("uri = " + uri);
+=======
+            Debug.WriteLine("create with name uri: " + uri.ToString());
+>>>>>>> 0d44da9... fixed error checking issue
             return await FireRequest(uri);
         }
 
@@ -232,9 +236,7 @@ namespace MeNext
             var result = "";
 
             var response = await Client.GetAsync(uri);
-            if (response.IsSuccessStatusCode) {
-                result = await response.Content.ReadAsStringAsync();
-            }
+            result = await response.Content.ReadAsStringAsync();
 
 
             return result;

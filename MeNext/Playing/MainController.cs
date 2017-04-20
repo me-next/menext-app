@@ -107,6 +107,13 @@ namespace MeNext
                 return JoinEventResult.FAIL_GENERIC;
             }
 
+            // deserialize
+            JoinEventResponse result = JsonConvert.DeserializeObject<JoinEventResponse>(json);
+            if (!string.IsNullOrEmpty(result.Error)) {
+                Debug.WriteLine("error joining event: " + result.Error);
+                return JoinEventResult.FAIL_GENERIC;
+            }
+
             this.Event = new Event(this, slug, false);
             this.Event.StartPolling();
             this.InformSomethingChanged();
@@ -137,6 +144,10 @@ namespace MeNext
             }
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+            if (!string.IsNullOrEmpty(result.Error)) {
+                Debug.WriteLine("error creating event: " + result.Error);
+                return CreateEventResult.FAIL_GENERIC;
+            }
 
             this.Event = new Event(this, result.EventID, true);
             this.Event.StartPolling();
@@ -154,7 +165,7 @@ namespace MeNext
         public CreateEventResult RequestCreateEvent(string eventName)
         {
         	Debug.Assert(!this.InEvent);
-
+            Debug.WriteLine("going to create event with name");
         	var task = Task.Run(async () =>
         	{
                 return await Api.CreateParty(this.UserKey, this.UserName, eventName);
@@ -166,11 +177,18 @@ namespace MeNext
                 Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
                 return CreateEventResult.FAIL_GENERIC;
             }
-            Debug.WriteLine(task.Status.ToString());
+
+            var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+            if (!string.IsNullOrEmpty(result.Error)) {
+                Debug.WriteLine("issue creating event with name: " + result.Error);
+                return CreateEventResult.FAIL_GENERIC;
+            }
+
             // Currently assumes only failure would be from name already being taken.
             // Shouldn't be able to "RanToCompletion" with a blank Json.
             if (!task.IsFaulted) {
                 //if(task.Status.ToString == "StatusInternalServerError")
+<<<<<<< HEAD
                 var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
                 if (result?.Error != null) {
                     this.EventName = result.AltID;
@@ -182,6 +200,13 @@ namespace MeNext
                     this.InformSomethingChanged();
                     return CreateEventResult.SUCCESS;
                 } else { return CreateEventResult.FAIL_GENERIC; }
+=======
+                this.Event = new Event(this, result.EventID, true);
+                this.Event.StartPolling();
+                this.EventName = result.EventID;
+                this.InformSomethingChanged();
+                return CreateEventResult.SUCCESS;
+>>>>>>> 0d44da9... fixed error checking issue
             } else {
                 Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
                 // Dirty fix? I wasn't sure how to pass the info that the event name is bad
