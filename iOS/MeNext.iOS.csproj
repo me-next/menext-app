@@ -167,6 +167,9 @@
     <BundleResource Include="Resources\pause_icon_50px.png" />
     <BundleResource Include="Resources\play_icon_50px.png" />
     <BundleResource Include="Resources\previous_icon_50px.png" />
+    <BundleResource Include="Resources\album_art_placeholder.jpg" />
+    <BundleResource Include="Resources\album_art_placeholder%402x.jpg" />
+    <BundleResource Include="Resources\album_art_placeholder%403x.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

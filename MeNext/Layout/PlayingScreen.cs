@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using MeNext.MusicService;
 using Xamarin.Forms;
 
@@ -12,18 +13,19 @@ namespace MeNext
         private readonly Label songTitle;
         private readonly Label artistLabel;
         private readonly Label albumTitle;
+
         //TODO: make album art work
-        //private Image albumArt;
-        //private readonly int artSize;
+        private Image albumArt;
+        private readonly double artSize;
 
         private Button playButton;
         private Button prevButton;
         private Button nextButton;
 
-
         private readonly MainController mainController;
         private Slider volumeSlider;
         private int lastVolumePull;
+        private Slider playSlider;
 
         public PlayingScreen(MainController mainController)
         {
@@ -42,6 +44,7 @@ namespace MeNext
             this.prevButton = new Button
             {
                 Image = "previous_icon_50px.png",
+                //TODO: make go to beginning of song if not far into it, instead of skipping back
                 Command = new Command(() => mainController.Event.RequestPrevious())
             };
 
@@ -75,38 +78,49 @@ namespace MeNext
                 }
             };
 
-            //TODO: add seeking/time slider
             this.songTitle = new Label
             {
                 Text = "",
-                Margin = new Thickness(0, 30, 0, 0),
+                //Margin = new Thickness(0, 30, 0, 0),
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 FontSize = LayoutConsts.TITLE_FONT_SIZE,
                 FontAttributes = FontAttributes.Bold,
                 LineBreakMode = LineBreakMode.TailTruncation,
+                HorizontalTextAlignment = TextAlignment.Center
             };
             this.artistLabel = new Label
             {
                 Text = "",
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 LineBreakMode = LineBreakMode.TailTruncation,
+                HorizontalTextAlignment = TextAlignment.Center
             };
             this.albumTitle = new Label
             {
                 Text = "",
-                Margin = new Thickness(0, 0, 0, 30),
+                //Margin = new Thickness(0, 0, 0, 30),
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
+                FontAttributes = FontAttributes.Italic,
                 LineBreakMode = LineBreakMode.TailTruncation,
+                HorizontalTextAlignment = TextAlignment.Center
             };
 
-            //this.artSize = (int)(this.Width * 0.7);
-            //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
+            //this.artSize = (this.Width * 0.7);
+            this.albumArt = new Image { Source = "album_art_placeholder.jpg" };
+
+            this.playSlider = new Slider();
+			playSlider.ValueChanged += (sender, e) => 
+            { 
+                //TODO: seek when moved and update with playtime
+                Debug.WriteLine(playSlider.Value); 
+            };
 
             this.Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
-                    //this.albumArt,
+                    this.albumArt,
+                    this.playSlider,
                     this.songTitle,
                     this.artistLabel,
                     this.albumTitle,
@@ -151,13 +165,13 @@ namespace MeNext
                     this.songTitle.Text = song.Name;
                     this.artistLabel.Text = artists;
                     this.albumTitle.Text = song.Album.Name;
-                    //this.albumArt = (Image)song.Album.GetAlbumArt(artSize, artSize);
-                    // TODO Other metadata
+                    this.playSlider.Value = 0;
+                    this.playSlider.Maximum = song.Duration;
                 } else {
                     this.songTitle.Text = "Nothing Playing";
-                    this.artistLabel.Text = "";
-                    this.albumTitle.Text = "";
-                    //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
+                    this.artistLabel.Text = "--";
+                    this.albumTitle.Text = "--";
+                    this.albumArt = new Image { Source = "album_art_placeholder.jpg" };
                 }
 
                 // Play button icon

@@ -157,6 +157,8 @@
     <AndroidResource Include="Resources\drawable\pause_icon_50px.png" />
     <AndroidResource Include="Resources\drawable\play_icon_50px.png" />
     <AndroidResource Include="Resources\drawable\previous_icon_50px.png" />
+    <AndroidResource Include="Resources\drawable\album_art_placeholder.jpg" />
+    <AndroidResource Include="Resources\drawable-hdpi\album_art_placeholder.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Playing\" />
