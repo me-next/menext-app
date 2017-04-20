@@ -20,9 +20,10 @@ namespace MeNext.Spotify.Droid
         public OperationCallback operationCallback;
 
         /// <summary>
-        /// Request code that will be passed together with authentication result to the onAuthenticationResult
+        /// Request code that will be passed together with authentication result to the onAuthenticationResult.
+        /// Just a random uniquish number.
         /// </summary>
-        private const int REQUEST_CODE = 1337;
+        private const int REQUEST_CODE = 43594;
 
         public PlayerListener(SpotifyMusicServiceDroid sms)
         {
@@ -54,14 +55,14 @@ namespace MeNext.Spotify.Droid
         // == Authentication == //
 
         // scopes: https://developer.spotify.com/web-api/using-scopes/
-        // TODO Combine scope usage?
+        // TODO Combine scope usage across platforms?
 
         /// <summary>
         /// Opens the Spotify login window.
         /// </summary>
         public void OpenLoginWindow()
         {
-            var request = new AuthenticationRequest.Builder(sms.ClientId, AuthenticationResponse.Type.Token, sms.SpotifyCallback)
+            var request = new AuthenticationRequest.Builder(sms.ClientId, AuthenticationResponse.Type.Code, sms.SpotifyCallback)
                 .SetScopes(new string[] {
                     "streaming",
                     "playlist-read-private",
@@ -79,9 +80,10 @@ namespace MeNext.Spotify.Droid
             if (requestCode == REQUEST_CODE) {
                 var response = AuthenticationClient.GetResponse((int) resultCode, data);
                 var type = response.GetType();
-                if (type == AuthenticationResponse.Type.Token) {
+                if (type == AuthenticationResponse.Type.Code) {
                     OnAuthenticationComplete(response);
                 } else if (type == AuthenticationResponse.Type.Error) {
+                    // TODO: Show err message?
                     Log.Debug("PlayerListener", "Auth error: " + response.Error);
                 } else {
                     // Most likely auth flow was cancelled
@@ -98,10 +100,13 @@ namespace MeNext.Spotify.Droid
         void OnAuthenticationComplete(AuthenticationResponse response)
         {
             // Once we have obtained an authorization token, we can proceed with creating a Player.
-            Log.Debug("PlayerListener", "Gort auth token");
+            Log.Debug("PlayerListener", "Got code");
+            this.sms.SpotifyToken.UpdateTokens(response.Code);
+            var accessToken = this.sms.SpotifyToken.AccessToken;
+
             if (this.Player == null) {
                 var playerConfig = new Com.Spotify.Sdk.Android.Player.Config(
-                    this.sms.mainActivity.ApplicationContext, response.AccessToken, this.sms.ClientId
+                    this.sms.mainActivity.ApplicationContext, accessToken, this.sms.ClientId
                 );
                 // Since the Player is a static singleton owned by the Spotify class, we pass "this" as
                 // the second argument in order to refcount it properly. Note that the method
@@ -110,9 +115,9 @@ namespace MeNext.Spotify.Droid
                 // Spotify.destroyPlayer(), that will definitely result in resource leaks.
                 this.Player = Com.Spotify.Sdk.Android.Player.Spotify.GetPlayer(playerConfig, this, new PlayerInitObserver(this));
             } else {
-                this.Player.Login(response.AccessToken);
+                this.Player.Login(accessToken);
             }
-            this.sms.OnNewAccessToken(response.AccessToken);
+
             this.sms.SomethingChanged();
         }
 
@@ -124,6 +129,15 @@ namespace MeNext.Spotify.Droid
         public void OnLoggedIn()
         {
             Log.Debug("PlayerListener", "Login complete");
+
+            // Let the sms know what our new auth token is
+            var accessToken = this.sms.SpotifyToken.AccessToken;
+            this.sms.OnNewAccessToken(accessToken);
+
+            // Causes a delayed song play (if one exists) to play during a token refresh
+            // Does nothing if this is just a normal login
+            this.sms.ActuallyPlaySong();
+
             this.sms.SomethingChanged();
         }
 
@@ -133,6 +147,10 @@ namespace MeNext.Spotify.Droid
         public void OnLoggedOut()
         {
             Log.Debug("PlayerListener", "Logout complete");
+            if (this.sms.DelayingSongPlay) {
+                // If we are delaying a song play, then we are in the midst of a token refresh and should log back in
+                this.Player.Login(this.sms.SpotifyToken.AccessToken);
+            }
             this.sms.SomethingChanged();
         }
 

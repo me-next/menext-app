@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Foundation;
@@ -71,9 +71,9 @@ namespace MeNext.Spotify.iOS
             // Enables SPTAuth to automatically store the session object for future use.
             auth.SessionUserDefaultsKey = @"SpotifySession";
 
-            // TODO: Use a token swap service
-            //auth.TokenSwapURL;
-            //auth.TokenRefreshURL;
+            // Use our token swap service
+            auth.TokenSwapURL = new NSUrl(SpotifyToken.TOKEN_SWAP_URL);
+            auth.TokenRefreshURL = new NSUrl(SpotifyToken.TOKEN_REFRESH_URL);
 
             // If we have a valid session, notify that the session was updated so player gets setup
             if (auth.Session != null && auth.Session.IsValid) {
