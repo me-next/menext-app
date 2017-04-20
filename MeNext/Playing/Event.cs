@@ -436,7 +436,12 @@ namespace MeNext
             });
 
             var json = task.Result;
-
+            if (json == null) {
+                // if got null json, then we had an error with executing the pull
+                // request to leave event
+                this.controller.LeaveEvent();
+                return;
+            }
             // if there is no data, continue on
             // This is expected if change id is equal to ours
             if (json.Length == 0) {
@@ -451,6 +456,7 @@ namespace MeNext
             Debug.WriteLine("Pull json: " + json + ". " + json.Length);
 
             var result = JsonConvert.DeserializeObject<PullResponse>(json);
+
 
             // update ourself
             this.changeID = result.Change;
