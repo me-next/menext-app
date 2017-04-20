@@ -62,7 +62,7 @@ namespace MeNext
             //    Title = "Remove from Suggestions",
             //    Command = new Command<ResultItemData>((obj) =>
             //    {
-            //        this.controller.Event.RequestRemoveFromSuggestions((ISong) obj);
+            //        this.controller.Event.RequestRemoveFromSuggestions((ISong) obj.Item);
             //    })
             //};
 
@@ -71,7 +71,7 @@ namespace MeNext
                 Title = "Remove from Up Next",
                 Command = new Command<ResultItemData>((obj) =>
                 {
-                    this.controller.Event.RequestRemoveFromPlayNext((ISong) obj);
+                    this.controller.Event.RequestRemoveFromPlayNext((ISong) obj.Item);
                 })
             };
         }

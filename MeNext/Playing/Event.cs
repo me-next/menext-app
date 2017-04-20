@@ -282,7 +282,10 @@ namespace MeNext
         /// <param name="song">Song.</param>
         public void RequestRemoveFromPlayNext(ISong song)
         {
-            // TODO
+            Task.Run(async () =>
+            {
+                return await Api.RemovePlayNext(this.Slug, this.controller.UserKey, song.UniqueId);
+            });
         }
 
         /// <summary>
