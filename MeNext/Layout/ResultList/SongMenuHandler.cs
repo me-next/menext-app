@@ -100,21 +100,27 @@ namespace MeNext
                 // The song is currently playing
             } else if (inSuggest) {
                 // The song is in the suggestion queue
-                menu.Add(menuAddUpNext);
-                menu.Add(menuPlayNext);
-                menu.Add(menuPlayNow);
-                //menu.Add(menuRemoveSuggest);
+                if (controller.Event.ThisHasPermission(Permissions.PlayNext)) {
+                    menu.Add(menuAddUpNext);
+                    menu.Add(menuPlayNext);
+                    menu.Add(menuPlayNow);
+                    //menu.Add(menuRemoveSuggest);
+                }
             } else if (inUpNext) {
                 // The song is in the up next queue
-                menu.Add(menuPlayNext);
-                menu.Add(menuPlayNow);
-                menu.Add(menuRemoveUpNext);
+                if (controller.Event.ThisHasPermission(Permissions.PlayNext)) {
+                    menu.Add(menuPlayNext);
+                    menu.Add(menuPlayNow);
+                    menu.Add(menuRemoveUpNext);
+                }
             } else {
                 // The song is not in any salient list
                 menu.Add(menuSuggest);
-                menu.Add(menuAddUpNext);
-                menu.Add(menuPlayNext);
-                menu.Add(menuPlayNow);
+                if (controller.Event.ThisHasPermission(Permissions.PlayNext)) {
+                    menu.Add(menuAddUpNext);
+                    menu.Add(menuPlayNext);
+                    menu.Add(menuPlayNow);
+                }
             }
 
             return menu;

@@ -28,6 +28,9 @@ namespace MeNext
         private Button leaveEvent;
         private Label loginSpotifyWhy;
 
+        Label permissionsLabel;
+
+
         public HomeScreen(MainController mc, NavigationPage nav)
         {
             this.mc = mc;
@@ -42,7 +45,11 @@ namespace MeNext
                 Padding = LayoutConsts.DEFAULT_PADDING,
             };
 
-            layout.Children.Add(eventName = new Label { HorizontalTextAlignment = TextAlignment.Center });
+            layout.Children.Add(eventName = new Label
+            {
+                FontSize = LayoutConsts.TITLE_FONT_SIZE,
+                HorizontalTextAlignment = TextAlignment.Center,
+            });
 
             layout.Children.Add(joinEvent = new Button
             {
@@ -80,35 +87,55 @@ namespace MeNext
                 Command = new Command(() => musicService.Logout())
             });
 
+            layout.Children.Add(permissionsLabel = new Label
+            {
+                Text = "Permissions for everybody else:",
+                HorizontalTextAlignment = TextAlignment.Center,
+                IsVisible = false,
+            });
+
             // TODO: do this properly
-            var suggButt = new Button { Text = "Suggest Song", BackgroundColor = Color.Green };
-            suggButt.Clicked += (sender, e) => TogglePermission(Permissions.Suggest);
-            layout.Children.Add(suggButt);
-            buttons.Add(Permissions.Suggest, suggButt);
 
-            var nextButt = new Button { Text = "Play Pause", BackgroundColor = Color.Green };
-            nextButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayPause);
-            layout.Children.Add(nextButt);
-            buttons.Add(Permissions.PlayPause, nextButt);
+            var playPauseButt = new Button
+            {
+                Text = "Play/Pause",
+                BackgroundColor = Color.Green,
+                TextColor = Color.White,
+            };
+            playPauseButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayPause);
+            layout.Children.Add(playPauseButt);
+            buttons.Add(Permissions.PlayPause, playPauseButt);
 
+            var skipButt = new Button
+            {
+                Text = "Skip songs",
+                BackgroundColor = Color.Green,
+                TextColor = Color.White,
+            };
+            skipButt.Clicked += (sender, e) => TogglePermission(Permissions.Skip);
+            layout.Children.Add(skipButt);
+            buttons.Add(Permissions.Skip, skipButt);
 
-            var nowButt = new Button { Text = "Up Next", BackgroundColor = Color.Green };
+            var nowButt = new Button
+            {
+                Text = "Add to up next",
+                BackgroundColor = Color.Green,
+                TextColor = Color.White,
+            };
             nowButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayNext);
             layout.Children.Add(nowButt);
             buttons.Add(Permissions.PlayNext, nowButt);
 
 
-            var volButt = new Button { Text = "Volume Control", BackgroundColor = Color.Green };
+            var volButt = new Button
+            {
+                Text = "Control volume",
+                BackgroundColor = Color.Green,
+                TextColor = Color.White,
+            };
             volButt.Clicked += (sender, e) => TogglePermission(Permissions.Volume);
             layout.Children.Add(volButt);
             buttons.Add(Permissions.Volume, volButt);
-
-
-            var seekButt = new Button { Text = "Seek", BackgroundColor = Color.Green };
-            seekButt.Clicked += (sender, e) => TogglePermission(Permissions.Seek);
-            layout.Children.Add(seekButt);
-            buttons.Add(Permissions.Seek, seekButt);
-
 
             Content = layout;
 
@@ -165,6 +192,7 @@ namespace MeNext
             // set visible only if host
             // can call event directly b/c we are 
             if (this.mc.InEvent) {
+                permissionsLabel.IsVisible = this.mc.Event.IsHost;
                 foreach (KeyValuePair<string, Button> entry in this.buttons) {
                     entry.Value.IsVisible = this.mc.Event.IsHost;
                 }
@@ -172,8 +200,7 @@ namespace MeNext
                 // now try setting color for each one
                 SetButtonColorForField(Permissions.PlayNext);
                 SetButtonColorForField(Permissions.PlayPause);
-                SetButtonColorForField(Permissions.Seek);
-                SetButtonColorForField(Permissions.Suggest);
+                SetButtonColorForField(Permissions.Skip);
                 SetButtonColorForField(Permissions.Volume);
 
             } else {
