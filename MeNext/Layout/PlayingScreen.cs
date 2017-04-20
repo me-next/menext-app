@@ -109,6 +109,7 @@ namespace MeNext
             this.albumArt = new Image { Source = "album_art_placeholder.jpg" };
 
             this.playSlider = new Slider();
+            //playSlider.SetThumbImage(UIImage.FromFile("29_icon.png"), UIControlState.Normal);
 			playSlider.ValueChanged += (sender, e) => 
             { 
                 //TODO: seek when moved and update with playtime

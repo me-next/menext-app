@@ -30,6 +30,7 @@ namespace MeNext
 
         Label permissionsLabel;
 
+        private AboutPage aboutPage;
 
         public HomeScreen(MainController mc, NavigationPage nav)
         {
@@ -136,6 +137,18 @@ namespace MeNext
             volButt.Clicked += (sender, e) => TogglePermission(Permissions.Volume);
             layout.Children.Add(volButt);
             buttons.Add(Permissions.Volume, volButt);
+
+            aboutPage = new AboutPage(this);
+            var aboutButton = new Button
+            {
+                Text = "About"
+            };
+            aboutButton.Clicked += (sender, e) => 
+            {
+                aboutPage.prevView = this.Content;
+                this.Content = aboutPage;
+            };
+            layout.Children.Add(aboutButton);
 
             Content = layout;
 
