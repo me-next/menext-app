@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
+using Android.Media;
 using Android.Net;
 using Android.OS;
 using Android.Util;
@@ -18,6 +19,7 @@ namespace MeNext.Spotify.Droid
         protected SpotifyMusicServiceDroid sms;
         protected BroadcastReceiver networkStateReceiver;
         public OperationCallback operationCallback;
+        private Context context;
 
         /// <summary>
         /// Request code that will be passed together with authentication result to the onAuthenticationResult.
@@ -25,9 +27,10 @@ namespace MeNext.Spotify.Droid
         /// </summary>
         private const int REQUEST_CODE = 43594;
 
-        public PlayerListener(SpotifyMusicServiceDroid sms)
+        public PlayerListener(SpotifyMusicServiceDroid sms, Context context)
         {
             this.sms = sms;
+            this.context = context;
             this.operationCallback = new OperationCallback(this);
         }
 
@@ -108,6 +111,7 @@ namespace MeNext.Spotify.Droid
                 var playerConfig = new Com.Spotify.Sdk.Android.Player.Config(
                     this.sms.mainActivity.ApplicationContext, accessToken, this.sms.ClientId
                 );
+
                 // Since the Player is a static singleton owned by the Spotify class, we pass "this" as
                 // the second argument in order to refcount it properly. Note that the method
                 // Spotify.destroyPlayer() also takes an Object argument, which must be the same as the
@@ -119,6 +123,14 @@ namespace MeNext.Spotify.Droid
             }
 
             this.sms.SomethingChanged();
+        }
+
+        public void SetVolume(double vol)
+        {
+            // TODO Instead of setting system volume, set stream volume
+            AudioManager audio = (AudioManager) this.context.GetSystemService(Context.AudioService);
+            var maxVol = audio.GetStreamMaxVolume(Stream.Music);
+            audio.SetStreamVolume(Stream.Music, (int) (vol * maxVol), 0);
         }
 
         // == Callback methods == //

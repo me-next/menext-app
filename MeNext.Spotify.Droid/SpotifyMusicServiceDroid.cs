@@ -32,7 +32,7 @@ namespace MeNext.Spotify.Droid
         public SpotifyMusicServiceDroid(Activity mainActivity)
         {
             this.mainActivity = mainActivity;
-            this.listener = new PlayerListener(this);
+            this.listener = new PlayerListener(this, mainActivity);
         }
 
         /// <summary>
@@ -146,6 +146,8 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        private double _volume;
+
         /// <summary>
         /// Gets or sets the volume on a scale from 0-1.
         /// </summary>
@@ -154,12 +156,13 @@ namespace MeNext.Spotify.Droid
         {
             get
             {
-                throw new NotImplementedException();
+                return _volume;
             }
 
             set
             {
-                throw new NotImplementedException();
+                this._volume = value;
+                this.listener.SetVolume(value);
             }
         }
 
