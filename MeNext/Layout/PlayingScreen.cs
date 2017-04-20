@@ -15,7 +15,12 @@ namespace MeNext
         //TODO: make album art work
         //private Image albumArt;
         //private readonly int artSize;
+
         private Button playButton;
+        private Button prevButton;
+        private Button nextButton;
+
+
         private readonly MainController mainController;
         private Slider volumeSlider;
         private int lastVolumePull;
@@ -34,7 +39,7 @@ namespace MeNext
             };
 
             // Buttons to manipulate the playing music queue.
-            var prevButton = new Button
+            this.prevButton = new Button
             {
                 Image = "previous_icon_50px.png",
                 Command = new Command(() => mainController.Event.RequestPrevious())
@@ -53,7 +58,7 @@ namespace MeNext
                 })
             };
 
-            var nextButton = new Button
+            this.nextButton = new Button
             {
                 Image = "next_icon_50px.png",
                 Command = new Command(() => mainController.Event.RequestSkip())
@@ -122,9 +127,17 @@ namespace MeNext
         {
             Device.BeginInvokeOnMainThread(() =>
             {
+                // What's visible
+                this.playButton.IsVisible = mainController.Event.ThisHasPermission(Permissions.PlayPause);
+                var skip = mainController.Event.ThisHasPermission(Permissions.Skip);
+                this.prevButton.IsVisible = skip;
+                this.nextButton.IsVisible = skip;
+                this.volumeSlider.IsVisible = mainController.Event.ThisHasPermission(Permissions.Volume);
+
+                // Update metadata
                 var playing = this.mainController.Event?.LatestPull?.Playing?.CurrentSongID;
-                // There is a song playing.
                 if (playing != null) {
+                    // There is a song playing.
                     var song = this.mainController.musicService.GetSong(playing);
 
                     var artists = "";
@@ -147,12 +160,14 @@ namespace MeNext
                     //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
                 }
 
+                // Play button icon
                 if (mainController.Event.Playing) {
                     this.playButton.Image = "pause_icon_50px.png";
                 } else {
                     this.playButton.Image = "play_icon_50px.png";
                 }
 
+                // Adjust playback stuff
                 if (mainController.Event?.LatestPull?.Playing != null) {
                     var nominalVolume = mainController.Event.LatestPull.Playing.Volume;
                     if (nominalVolume != this.lastVolumePull) {

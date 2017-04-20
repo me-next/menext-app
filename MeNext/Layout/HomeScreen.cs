@@ -45,7 +45,11 @@ namespace MeNext
                 Padding = LayoutConsts.DEFAULT_PADDING,
             };
 
-            layout.Children.Add(eventName = new Label { HorizontalTextAlignment = TextAlignment.Center });
+            layout.Children.Add(eventName = new Label
+            {
+                FontSize = LayoutConsts.TITLE_FONT_SIZE,
+                HorizontalTextAlignment = TextAlignment.Center,
+            });
 
             layout.Children.Add(joinEvent = new Button
             {
@@ -91,26 +95,26 @@ namespace MeNext
             });
 
             // TODO: do this properly
-            var suggButt = new Button
-            {
-                Text = "Suggest songs",
-                BackgroundColor = Color.Green,
-                TextColor = Color.White,
-            };
-            suggButt.Clicked += (sender, e) => TogglePermission(Permissions.Suggest);
-            layout.Children.Add(suggButt);
-            buttons.Add(Permissions.Suggest, suggButt);
 
-            var nextButt = new Button
+            var playPauseButt = new Button
             {
                 Text = "Play/Pause",
                 BackgroundColor = Color.Green,
                 TextColor = Color.White,
             };
-            nextButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayPause);
-            layout.Children.Add(nextButt);
-            buttons.Add(Permissions.PlayPause, nextButt);
+            playPauseButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayPause);
+            layout.Children.Add(playPauseButt);
+            buttons.Add(Permissions.PlayPause, playPauseButt);
 
+            var skipButt = new Button
+            {
+                Text = "Skip songs",
+                BackgroundColor = Color.Green,
+                TextColor = Color.White,
+            };
+            skipButt.Clicked += (sender, e) => TogglePermission(Permissions.Skip);
+            layout.Children.Add(skipButt);
+            buttons.Add(Permissions.Skip, skipButt);
 
             var nowButt = new Button
             {
@@ -132,18 +136,6 @@ namespace MeNext
             volButt.Clicked += (sender, e) => TogglePermission(Permissions.Volume);
             layout.Children.Add(volButt);
             buttons.Add(Permissions.Volume, volButt);
-
-
-            var seekButt = new Button
-            {
-                Text = "Seek",
-                BackgroundColor = Color.Green,
-                TextColor = Color.White,
-            };
-            seekButt.Clicked += (sender, e) => TogglePermission(Permissions.Seek);
-            layout.Children.Add(seekButt);
-            buttons.Add(Permissions.Seek, seekButt);
-
 
             Content = layout;
 
@@ -208,8 +200,7 @@ namespace MeNext
                 // now try setting color for each one
                 SetButtonColorForField(Permissions.PlayNext);
                 SetButtonColorForField(Permissions.PlayPause);
-                SetButtonColorForField(Permissions.Seek);
-                SetButtonColorForField(Permissions.Suggest);
+                SetButtonColorForField(Permissions.Skip);
                 SetButtonColorForField(Permissions.Volume);
 
             } else {
