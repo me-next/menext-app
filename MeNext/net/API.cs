@@ -120,6 +120,7 @@ namespace MeNext
         /// <returns>The server response string.</returns>
         public async Task<string> SkipSong(string eid, string uid, string sid)
         {
+            sid = "dummy";  // TODO
             var uri = new Uri(string.Format("/skip/{0}/{1}/{2}", eid, uid, sid));
             Debug.WriteLine("Skip song uri:" + uri.ToString());
             return await FireRequest(uri);
@@ -134,9 +135,10 @@ namespace MeNext
         /// <returns>The server response string.</returns>
         public async Task<string> PrevSong(string eid, string uid, string sid)
         {
-        	var uri = new Uri(string.Format("/previous/{0}/{1}/{2}", eid, uid, sid));
-        	Debug.WriteLine("Prev song uri:" + uri.ToString());
-        	return await FireRequest(uri);
+            sid = "dummy";  // TODO
+            var uri = new Uri(string.Format("/previous/{0}/{1}/{2}", eid, uid, sid));
+            Debug.WriteLine("Prev song uri:" + uri.ToString());
+            return await FireRequest(uri);
         }
 
         /// <summary>
@@ -148,9 +150,9 @@ namespace MeNext
         /// <returns>The server response string.</returns>
         public async Task<string> PlaySong(string eid, string uid)
         {
-        	var uri = new Uri(string.Format("/play/{0}/{1}", eid, uid));
-        	Debug.WriteLine("Play song uri:" + uri.ToString());
-        	return await FireRequest(uri);
+            var uri = new Uri(string.Format("/play/{0}/{1}", eid, uid));
+            Debug.WriteLine("Play song uri:" + uri.ToString());
+            return await FireRequest(uri);
         }
 
         /// <summary>
@@ -163,8 +165,8 @@ namespace MeNext
         public async Task<string> PauseSong(string eid, string uid, double pos)
         {
             var uri = new Uri(string.Format("/pause/{0}/{1}/{2}", eid, uid, pos));
-        	Debug.WriteLine("Pause song uri:" + uri.ToString());
-        	return await FireRequest(uri);
+            Debug.WriteLine("Pause song uri:" + uri.ToString());
+            return await FireRequest(uri);
         }
 
         /// <summary>
@@ -219,8 +221,10 @@ namespace MeNext
             var response = await Client.GetAsync(uri);
             if (response.IsSuccessStatusCode) {
                 result = await response.Content.ReadAsStringAsync();
+            } else {
+                Debug.WriteLine(" *** ERR: BAD SERVER STATUS CODE: " + response.StatusCode);
+                Debug.WriteLine(" *** FROM URI: " + uri.AbsoluteUri);
             }
-
 
             return result;
         }

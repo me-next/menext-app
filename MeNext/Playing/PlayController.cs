@@ -3,6 +3,7 @@ using MeNext.MusicService;
 using SpotifyAPI.Web;
 
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace MeNext
 {
@@ -11,10 +12,18 @@ namespace MeNext
     /// </summary>
     public class PlayController : IPullUpdateObserver
     {
-        private readonly IMusicService musicService;
+        private static Random rnd = new Random();
 
-        public PlayController(IMusicService musicService)
+        private readonly IMusicService musicService;
+        private bool hasPlayedSong = false;
+        private MainController controller;
+
+        private List<ISong> manuallyPlayedSongs = new List<ISong>();
+        private List<ISong> radioSongs = new List<ISong>();
+
+        public PlayController(IMusicService musicService, MainController controller)
         {
+            this.controller = controller;
             this.musicService = musicService;
             this.currentPullData = new PlayingResponse();
             this.previousPullData = new PlayingResponse();
@@ -57,9 +66,6 @@ namespace MeNext
 
         public void OnNewPullData(PullResponse data)
         {
-            // TODO: implement properly
-
-
             if (data == null) {
                 return;
             }
@@ -70,22 +76,46 @@ namespace MeNext
             previousPullData = currentPullData;
             currentPullData = playingInfo;
 
-            // check for relevant change
-            if (currentPullData.CurrentSongID == previousPullData.CurrentSongID) {
-                // if no change, and we aren't playing, request next song
-                return;
-            }
-
-            // if we don't have a song, skip
+            // if we don't have a song, play from radio
             if (!currentPullData.HasSong) {
+                // TODO
+                //musicService.Stop();
+                Debug.WriteLine("Submit a song from radio suggestions");
+
+                ISong radioSong;
+
+                var possibleSongs = musicService.GetRecommendations(this.manuallyPlayedSongs);
+
+                foreach (var song in radioSongs) {
+                    possibleSongs.Remove(song);
+                }
+                foreach (var song in manuallyPlayedSongs) {
+                    possibleSongs.Remove(song);
+                }
+                if (possibleSongs.Count > 0) {
+                    radioSong = possibleSongs[rnd.Next(possibleSongs.Count)];
+                } else {
+                    radioSong = this.musicService.GetSong("spotify:track:6KKzHfYj5Atv0nYk6tJgam");
+                }
+
+                this.radioSongs.Add(radioSong);
+
+                this.controller.Event.RequestAddToPlayNext(radioSong);
                 return;
             }
 
-            // lookup song
-            var song = musicService.GetSong(currentPullData.CurrentSongID);
-            musicService.PlaySong(song);
+            // check for relevant change
+            if (currentPullData.CurrentSongID != previousPullData.CurrentSongID) {
+                var song = musicService.GetSong(currentPullData.CurrentSongID);
 
-            Debug.WriteLine("Tried to play: " + song.UniqueId + " name: " + song.Name);
+                if (!radioSongs.Contains(song) && !manuallyPlayedSongs.Contains(song)) {
+                    manuallyPlayedSongs.Add(song);
+                }
+
+                musicService.PlaySong(song);
+                Debug.WriteLine("Tried to play: " + song.UniqueId + " name: " + song.Name);
+            }
+            musicService.Playing = currentPullData.Playing;
         }
     }
 }
