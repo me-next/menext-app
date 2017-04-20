@@ -22,7 +22,7 @@ namespace MeNext
         public const string VOTE_NO = "\ud83d\ude16";
         public const string VOTE_NEUTRAL = "\ud83d\ude10";
         public const string NOW_PLAYING = "\u25b6";
-        public const string UP_NEXT = "\ud83d\ude1d";
+        public const string UP_NEXT = "\ud83d\udc4c";
 
         private ResultItemData resultItem;
 

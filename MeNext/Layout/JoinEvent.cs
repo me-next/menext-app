@@ -46,7 +46,7 @@ namespace MeNext
             var joinEvent = mc.RequestJoinEvent(eventIDEntry.Text.ToLower());
 
             Navigation.PopAsync();
-            if (joinEvent.ToString() == "SUCCESS") {
+            if (joinEvent == JoinEventResult.SUCCESS) {
 
                 //Navigation.PushAsync(new JoinedEvent(cClass.mc));
             } else {

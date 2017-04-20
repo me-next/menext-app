@@ -57,14 +57,13 @@ namespace MeNext
             CreateEventResult createEvent;
             if (nameEntry.Text != "") {
                 createEvent = mc.RequestCreateEvent(nameEntry.Text.ToLower());
-                if (createEvent.ToString() == "FAIL_EVENT_EXISTS") {
+                if (createEvent == CreateEventResult.FAIL_EVENT_EXISTS) {
                     // That event name is taken.
                     // TODO: Implement warning to notify user that new name is needed.
                     // Right now it just changes the entry's text to implicate the new name.
                     nameEntry.Text = mc.EventName.ToString();
                     return;
-                } else if (createEvent.ToString() == "FAIL_GENERIC") 
-                {
+                } else if (createEvent == CreateEventResult.FAIL_GENERIC) {
                     nameEntry.Text = "";
                     nameEntry.Placeholder = "Host name failed for unknown reason. Try again.";
                     return;
@@ -73,7 +72,7 @@ namespace MeNext
                 createEvent = mc.RequestCreateEvent();
             }
             Navigation.PopAsync();
-            if (createEvent.ToString() == "SUCCESS") {
+            if (createEvent == CreateEventResult.SUCCESS) {
                 mc.Event.RequestEventPermissions();
                 //Navigation.PopAsync();
                 //Navigation.PushAsync(new JoinedEvent(mc));
