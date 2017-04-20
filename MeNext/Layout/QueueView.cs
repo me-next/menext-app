@@ -25,7 +25,7 @@ namespace MeNext
             this.controller.Event.RegisterPullObserver(this);
 
             var suggestionQueue = new ResultsGroup<ISong>("Suggestions", new SongItemFactory(this.controller));
-            var playNextQueue = new ResultsGroup<ISong>("Play Next", new SongItemFactory(this.controller));
+            var playNextQueue = new ResultsGroup<ISong>("Up Next", new SongItemFactory(this.controller));
 
             this.songList = new ListsView<ISong>(controller, playNextQueue, suggestionQueue);
 

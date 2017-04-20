@@ -44,6 +44,6 @@ namespace MeNext
     /// </summary>
     public enum SuggestSetting
     {
-        DISABLE_SUGGEST, SUGGEST, VOTE_NEUTRAL, VOTE_LIKE, VOTE_DISLIKE, NOW_PLAYING
+        DISABLE_SUGGEST, SUGGEST, VOTE_NEUTRAL, VOTE_LIKE, VOTE_DISLIKE, NOW_PLAYING, UP_NEXT
     }
 }
