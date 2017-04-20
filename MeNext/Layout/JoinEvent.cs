@@ -48,7 +48,7 @@ namespace MeNext
                 return;
             }
 
-            var joinEvent = mc.RequestJoinEvent(eventIDEntry.Text.ToLower());
+            var joinEvent = mc.RequestJoinEvent(eventIDEntry.Text.Trim().ToLower());
 
             Navigation.PopAsync();
             if (joinEvent == JoinEventResult.SUCCESS) {
