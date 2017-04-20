@@ -41,7 +41,7 @@ namespace MeNext
         {
             CreateEventResult createEvent;
             if (nameEntry.Text != "") {
-                createEvent = mc.RequestCreateEvent(nameEntry.Text.ToLower());
+                createEvent = mc.RequestCreateEvent(nameEntry.Text.Trim().ToLower());
                 if (createEvent == CreateEventResult.FAIL_EVENT_EXISTS) {
                     // That event name is taken.
                     // TODO: Implement warning to notify user that new name is needed.

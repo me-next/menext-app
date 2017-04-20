@@ -62,6 +62,7 @@ namespace MeNext
             var logged = this.mainController.musicService.LoggedIn;
             loginSpotify.IsVisible = !logged;
             songButton.IsVisible = logged;
+            playlistButton.IsVisible = logged;
         }
     }
     /// <summary>
