@@ -15,7 +15,7 @@ namespace MeNext
         private MainController mainController;
 
         private Button loginSpotify;
-        //private Button playlistButton;
+        private Button playlistButton;
         private Button songButton;
 
         public LibraryView(MainController mainController)
@@ -35,16 +35,16 @@ namespace MeNext
                 Command = new Command(() => this.mainController.musicService.Login())
             });
 
-            //layout.Children.Add(playlistButton = new Button
-            //{
-            //    Text = "Playlists",
-            //    Command = new Command(() => this.mainController.musicService.Login())
-            //});
-
             layout.Children.Add(songButton = new Button
             {
                 Text = "Songs",
-                Command = new Command(() => Navigation.PushAsync(new SongLibraryView(mainController)))
+                Command = new Command<ResultItemData>((obj) => Navigation.PushAsync(new SongLibraryView(mainController)))
+            });
+
+            layout.Children.Add(playlistButton = new Button
+            {
+                Text = "Playlists",
+                Command = new Command(() => Navigation.PushAsync(new PlaylistLibraryView(mainController, this.Navigation)))
             });
 
 
@@ -76,6 +76,26 @@ namespace MeNext
 
             var resultsView = new ResultListView<ISong>(controller, new SongItemFactory(controller));
             resultsView.UpdateResultList(controller.musicService.UserLibrarySongs);
+
+            this.Content = new StackLayout
+            {
+                Padding = LayoutConsts.DEFAULT_PADDING,
+                Children = {
+                    resultsView
+                }
+            };
+
+        }
+    }
+
+    public class PlaylistLibraryView : ContentPage
+    {
+        public PlaylistLibraryView(MainController controller, INavigation nav)
+        {
+            this.Title = "Playlists";
+
+            var resultsView = new ResultListView<IPlaylist>(controller, new PlaylistItemFactory(controller, nav));
+            resultsView.UpdateResultList(controller.musicService.UserLibraryPlaylists);
 
             this.Content = new StackLayout
             {
