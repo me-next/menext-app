@@ -179,39 +179,25 @@ namespace MeNext
             }
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
+            // Event creation failed server side. Assumes duplicate event name was used.
             if (!string.IsNullOrEmpty(result.Error)) {
                 Debug.WriteLine("issue creating event with name: " + result.Error);
-                return CreateEventResult.FAIL_GENERIC;
+                this.EventName = result.AlternativeName;
+                return CreateEventResult.FAIL_EVENT_EXISTS;
             }
 
-            // Currently assumes only failure would be from name already being taken.
-            // Shouldn't be able to "RanToCompletion" with a blank Json.
             if (!task.IsFaulted) {
                 //if(task.Status.ToString == "StatusInternalServerError")
-<<<<<<< HEAD
-                var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
-                if (result?.Error != null) {
-                    this.EventName = result.AltID;
-                    return CreateEventResult.FAIL_EVENT_EXISTS;
-                } else if (result?.EventID != null) {
+                if (result?.EventID != null) {
                     this.Event = new Event(this, result.EventID, true);
                     this.Event.StartPolling();
                     this.EventName = result.EventID;
                     this.InformSomethingChanged();
                     return CreateEventResult.SUCCESS;
                 } else { return CreateEventResult.FAIL_GENERIC; }
-=======
-                this.Event = new Event(this, result.EventID, true);
-                this.Event.StartPolling();
-                this.EventName = result.EventID;
-                this.InformSomethingChanged();
-                return CreateEventResult.SUCCESS;
->>>>>>> 0d44da9... fixed error checking issue
             } else {
                 Debug.WriteLine("*** Failed to create event!" + task.Exception.ToString());
-                // Dirty fix? I wasn't sure how to pass the info that the event name is bad
-				this.EventName = (JsonConvert.DeserializeObject<CreateWithNameResponse>(json)).AltID;
-                return CreateEventResult.FAIL_EVENT_EXISTS;
+                return CreateEventResult.FAIL_GENERIC;
             }
         }
 
