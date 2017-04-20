@@ -43,6 +43,11 @@ namespace MeNext
         /// <param name="mc">the mainController</param>
         void JoinCommand(MainController mc)
         {
+            if (eventIDEntry.Text == null || eventIDEntry.Text == "") {
+                // Can't join an event w/ no name
+                return;
+            }
+
             var joinEvent = mc.RequestJoinEvent(eventIDEntry.Text.ToLower());
 
             Navigation.PopAsync();
