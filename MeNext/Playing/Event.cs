@@ -436,7 +436,11 @@ namespace MeNext
             });
 
             var json = task.Result;
-
+            Debug.WriteLine("Pull json: " + json);
+            if (json == null) {
+                this.controller.LeaveEvent();
+                return;
+            }
             // if there is no data, continue on
             // This is expected if change id is equal to ours
             if (json.Length == 0) {
@@ -451,6 +455,7 @@ namespace MeNext
             Debug.WriteLine("Pull json: " + json + ". " + json.Length);
 
             var result = JsonConvert.DeserializeObject<PullResponse>(json);
+
 
             // update ourself
             this.changeID = result.Change;

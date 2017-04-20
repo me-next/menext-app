@@ -200,14 +200,23 @@ namespace MeNext
         public EndEventResult RequestEndEvent()
         {
             Debug.Assert(this.InEvent);
+            Debug.WriteLine("going to end event!");
             this.Event.StopPolling();
 
+            var task = Task.Run(async () =>
+            {
+                return await Api.EndEvent(this.Event.Slug, this.UserKey);
+            });
+            var json = task.Result;
+            Debug.WriteLine("Json: " + json);
             // TODO Send stuff to server, wait for response, and use real response below
 
             if (this.Event.IsHost)
                 this.musicService.Playing = false;
             this.Event = null;
             this.EventName = "";
+
+            //Debug.WriteLine("done with ending event!");
             this.InformSomethingChanged();
             return EndEventResult.SUCCESS;
         }
@@ -221,8 +230,10 @@ namespace MeNext
             Debug.Assert(this.InEvent);
             this.Event.StopPolling();
 
+            Debug.WriteLine("going to leave event");
             // If we are the host, leaving the event is equivalent to ending it.
             if (this.Event.IsHost) {
+                Debug.WriteLine("host leave");
                 EndEventResult eer = RequestEndEvent();
                 if (eer == EndEventResult.FAIL_NETWORK)
                     return LeaveEventResult.FAIL_NETWORK;
@@ -234,12 +245,16 @@ namespace MeNext
                 return LeaveEventResult.SUCCESS;
             }
 
-            // TODO Send stuff to server, wait for response, and use real response below
-
+            // ask to leave the event
+            var task = Task.Run(async () =>
+            {
+                return await Api.LeaveEvent(this.Event.Slug, this.UserKey);
+            });
+            Debug.WriteLine("leave event result: " + task.Result);
 
             this.Event = null;
             this.EventName = "";
-
+            Debug.WriteLine("got thru OK");
             this.InformSomethingChanged();
             return LeaveEventResult.SUCCESS;
         }

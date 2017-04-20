@@ -280,6 +280,30 @@ namespace MeNext
         }
 
         /// <summary>
+        /// Try to leave the event
+        /// </summary>
+        /// <returns>Result of the request.</returns>
+        /// <param name="eid">Event ID.</param>
+        /// <param name="uid">User ID.</param>
+        public async Task<string> LeaveEvent(string eid, string uid)
+        {
+            var uri = new Uri(string.Format("/leaveParty/{0}/{1}", eid, uid));
+            return await FireRequest(uri);
+        }
+
+        /// <summary>
+        /// Try to end the event. 
+        /// </summary>
+        /// <returns>Result of end event request.</returns>
+        /// <param name="eid">event id.</param>
+        /// <param name="uid">user id.</param>
+        public async Task<string> EndEvent(string eid, string uid)
+        {
+            var uri = new Uri(string.Format("/removeParty/{0}/{1}", uid, eid));
+            return await FireRequest(uri);
+        }
+ 
+        /// <summary>
         /// Sends a request URI to the server. 
         /// </summary>
         /// <returns>The request.</returns>
