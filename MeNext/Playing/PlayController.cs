@@ -78,11 +78,8 @@ namespace MeNext
 
             // if we don't have a song, play from radio
             if (!currentPullData.HasSong) {
-                // TODO
-                //musicService.Stop();
+                musicService.Playing = false;
                 Debug.WriteLine("Submit a song from radio suggestions");
-
-                ISong radioSong;
 
                 var possibleSongs = musicService.GetRecommendations(this.manuallyPlayedSongs);
 
@@ -93,14 +90,12 @@ namespace MeNext
                     possibleSongs.Remove(song);
                 }
                 if (possibleSongs.Count > 0) {
-                    radioSong = possibleSongs[rnd.Next(possibleSongs.Count)];
-                } else {
-                    radioSong = this.musicService.GetSong("spotify:track:6KKzHfYj5Atv0nYk6tJgam");
+                    // If there's an available recommendation, play it
+                    var radioSong = possibleSongs[rnd.Next(possibleSongs.Count)];
+                    this.radioSongs.Add(radioSong);
+                    this.controller.Event.RequestAddToPlayNext(radioSong);
                 }
 
-                this.radioSongs.Add(radioSong);
-
-                this.controller.Event.RequestAddToPlayNext(radioSong);
                 return;
             }
 

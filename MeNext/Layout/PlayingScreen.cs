@@ -34,7 +34,8 @@ namespace MeNext
             playButton = new Button
             {
                 Image = "play_icon_50px.png",
-                Command = new Command(() => {
+                Command = new Command(() =>
+                {
                     if (mainController.musicService.Playing) {
                         mainController.Event.RequestPause();
                     } else {
@@ -96,7 +97,17 @@ namespace MeNext
                 // There is a song playing.
                 if (playing != null) {
                     var song = this.mainController.musicService.GetSong(playing);
+
+                    var artists = "";
+                    foreach (var artist in song.Artists) {
+                        artists += ", " + artist.Name;
+                    }
+                    if (artists.Length > 0) {
+                        artists = artists.Substring(2);
+                    }
+
                     this.songTitle.Text = song.Name;
+                    this.artistLabel.Text = artists;
                     this.albumTitle.Text = song.Album.Name;
                     //this.albumArt = (Image)song.Album.GetAlbumArt(artSize, artSize);
                     // TODO Other metadata
