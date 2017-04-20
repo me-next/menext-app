@@ -76,6 +76,7 @@
     <Compile Include="Layout\ResultList\SongMenuHandler.cs" />
     <Compile Include="Playing\Responses\CreateWithNameBadResult.cs" />
     <Compile Include="Playing\Responses\JoinEventResponse.cs" />
+    <Compile Include="Playing\Permissions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
