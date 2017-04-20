@@ -57,8 +57,6 @@ namespace MeNext
             }
         }
 
-        public string EventName { get; private set; }
-
         public Event Event { get; private set; }
 
         public NavigationPage NavPage { get; set; }
@@ -79,7 +77,6 @@ namespace MeNext
 
             // TODO Username?
             this.UserName = "bob";
-            this.EventName = "";
             Debug.WriteLine("User key: " + this.UserKey);
         }
 
@@ -143,7 +140,6 @@ namespace MeNext
 
             this.Event = new Event(this, result.EventID, true);
             this.Event.StartPolling();
-            this.EventName = result.EventID;
             this.InformSomethingChanged();
 
             return CreateEventResult.SUCCESS;
@@ -173,8 +169,8 @@ namespace MeNext
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
             // Event creation failed server side. Assumes duplicate event name was used.
             if (!string.IsNullOrEmpty(result.Error)) {
+                // TODO result.alternativeName
                 Debug.WriteLine("issue creating event with name: " + result.Error);
-                this.EventName = result.AlternativeName;
                 return CreateEventResult.FAIL_EVENT_EXISTS;
             }
 
@@ -183,7 +179,6 @@ namespace MeNext
                 if (result?.EventID != null) {
                     this.Event = new Event(this, result.EventID, true);
                     this.Event.StartPolling();
-                    this.EventName = result.EventID;
                     this.InformSomethingChanged();
                     return CreateEventResult.SUCCESS;
                 } else { return CreateEventResult.FAIL_GENERIC; }
@@ -207,7 +202,6 @@ namespace MeNext
             if (this.Event.IsHost)
                 this.musicService.Playing = false;
             this.Event = null;
-            this.EventName = "";
             this.InformSomethingChanged();
             return EndEventResult.SUCCESS;
         }
@@ -230,7 +224,6 @@ namespace MeNext
                     return LeaveEventResult.FAIL_GENERIC;
 
                 this.Event = null;
-                this.EventName = "";
                 return LeaveEventResult.SUCCESS;
             }
 
@@ -238,7 +231,6 @@ namespace MeNext
 
 
             this.Event = null;
-            this.EventName = "";
 
             this.InformSomethingChanged();
             return LeaveEventResult.SUCCESS;
