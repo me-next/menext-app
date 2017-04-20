@@ -112,6 +112,24 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        public async Task<string> AddTopPlayNext(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/addTopPlayNext/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
+        public async Task<string> RemovePlayNext(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/removePlayNext/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
+        public async Task<string> PlayNow(string eid, string uid, string sid)
+        {
+            var uri = new Uri(string.Format("/playNow/{0}/{1}/{2}", eid, uid, sid));
+            return await FireRequest(uri);
+        }
+
         /// <summary>
         /// Called when song finishes.
         /// </summary>
