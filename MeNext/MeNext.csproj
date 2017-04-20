@@ -77,6 +77,7 @@
     <Compile Include="Playing\Responses\CreateWithNameBadResult.cs" />
     <Compile Include="Playing\Responses\JoinEventResponse.cs" />
     <Compile Include="Playing\Permissions.cs" />
+    <Compile Include="Layout\ResultList\ResultFactories\PlaylistItemFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Layout\" />
