@@ -62,9 +62,28 @@ namespace MeNext
             };
 
             //TODO: add seeking/time slider
-            this.songTitle = new Label { Text = "", Margin = new Thickness(0, 30, 0, 0), HorizontalOptions = LayoutOptions.CenterAndExpand };
-            this.artistLabel = new Label { Text = "", HorizontalOptions = LayoutOptions.CenterAndExpand };
-            this.albumTitle = new Label { Text = "", Margin = new Thickness(0, 0, 0, 30), HorizontalOptions = LayoutOptions.CenterAndExpand };
+            this.songTitle = new Label
+            {
+                Text = "",
+                Margin = new Thickness(0, 30, 0, 0),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                FontSize = LayoutConsts.TITLE_FONT_SIZE,
+                FontAttributes = FontAttributes.Bold,
+                LineBreakMode = LineBreakMode.TailTruncation,
+            };
+            this.artistLabel = new Label
+            {
+                Text = "",
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                LineBreakMode = LineBreakMode.TailTruncation,
+            };
+            this.albumTitle = new Label
+            {
+                Text = "",
+                Margin = new Thickness(0, 0, 0, 30),
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                LineBreakMode = LineBreakMode.TailTruncation,
+            };
 
             //this.artSize = (int)(this.Width * 0.7);
             //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
@@ -113,7 +132,6 @@ namespace MeNext
                     // TODO Other metadata
                 } else {
                     this.songTitle.Text = "Nothing Playing";
-                    this.songTitle.Margin = new Thickness(0, 30, 0, 30);
                     this.artistLabel.Text = "";
                     this.albumTitle.Text = "";
                     //this.albumArt = new Image { HeightRequest = artSize, WidthRequest = artSize };
