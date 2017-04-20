@@ -83,6 +83,11 @@ namespace MeNext
                 var playController = new PlayController(this.controller.musicService, this.controller);
                 RegisterPullObserver(playController);
             }
+
+            if (this.IsHost) {
+                // TODO This should be server side
+                this.RequestVolume(50);
+            }
         }
 
         /// <summary>
@@ -125,6 +130,18 @@ namespace MeNext
             }
 
             Debug.WriteLine("Requested pause song");
+        }
+
+        /// <summary>
+        /// Requests the volume on a scale from 0-100
+        /// </summary>
+        /// <param name="vol">Vol.</param>
+        public void RequestVolume(int vol)
+        {
+            Task.Run(async () =>
+             {
+                 return await Api.SetVolume(this.Slug, this.controller.UserKey, vol);
+             });
         }
 
         /// <summary>
@@ -193,10 +210,13 @@ namespace MeNext
         /// <summary>
         /// Requests that we adjust the volume
         /// </summary>
-        /// <param name="vol">The volume on a scale from 0-1</param>
+        /// <param name="vol">The volume on a scale from 0-100</param>
         public void RequestVolume(double vol)
         {
-            // TODO
+            var task = Task.Run(async () =>
+            {
+                return await Api.SetVolume(this.Slug, this.controller.UserKey, (int) vol);
+            });
         }
 
         /// <summary>

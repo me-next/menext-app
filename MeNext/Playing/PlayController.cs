@@ -76,6 +76,9 @@ namespace MeNext
             previousPullData = currentPullData;
             currentPullData = playingInfo;
 
+            //Debug.WriteLine("Volume: " + currentPullData.Volume);
+            musicService.Volume = currentPullData.Volume / 100.0;
+
             // if we don't have a song, play from radio
             if (!currentPullData.HasSong) {
                 musicService.Playing = false;
