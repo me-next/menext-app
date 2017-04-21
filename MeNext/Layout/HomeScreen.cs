@@ -28,8 +28,7 @@ namespace MeNext
         private Button leaveEvent;
         private Label loginSpotifyWhy;
 
-        Label permissionsLabel;
-
+        private Label permissionsLabel;
 
         public HomeScreen(MainController mc, NavigationPage nav)
         {
@@ -94,7 +93,7 @@ namespace MeNext
                 IsVisible = false,
             });
 
-            // TODO: do this properly
+            // TODO: do this next part properly:
 
             var playPauseButt = new Button
             {
@@ -125,7 +124,6 @@ namespace MeNext
             nowButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayNext);
             layout.Children.Add(nowButt);
             buttons.Add(Permissions.PlayNext, nowButt);
-
 
             var volButt = new Button
             {
@@ -197,6 +195,7 @@ namespace MeNext
                     entry.Value.IsVisible = this.mc.Event.IsHost;
                 }
 
+                // TODO Do this part properly
                 // now try setting color for each one
                 SetButtonColorForField(Permissions.PlayNext);
                 SetButtonColorForField(Permissions.PlayPause);

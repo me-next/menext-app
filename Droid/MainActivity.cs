@@ -14,6 +14,7 @@ namespace MeNext.Droid
         public static MainController Controller;
 
         private SpotifyMusicServiceDroid sms;
+
         /// <summary>
         /// On create do this.
         /// </summary>
@@ -37,6 +38,9 @@ namespace MeNext.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App(Controller));
         }
+
+        // TODO: Forwarding these events to SMS should be done using a listener pattern
+
         /// <summary>
         /// On resuming the app
         /// </summary>
@@ -51,6 +55,7 @@ namespace MeNext.Droid
             base.OnActivityResult(requestCode, resultCode, data);
             this.sms.OnActivityResult(requestCode, resultCode, data);
         }
+
         /// <summary>
         /// On pausing the App.
         /// </summary>
@@ -59,6 +64,7 @@ namespace MeNext.Droid
             base.OnPause();
             this.sms.OnPause();
         }
+
         /// <summary>
         /// On fully closing the app.
         /// </summary>

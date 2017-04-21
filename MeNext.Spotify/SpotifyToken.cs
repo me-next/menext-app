@@ -36,6 +36,9 @@ namespace MeNext.Spotify
             this.http = new HttpClient();
         }
 
+        /// <summary>
+        /// Removes any access token info
+        /// </summary>
         public void NukeToken()
         {
             this.accessToken = null;
@@ -44,6 +47,12 @@ namespace MeNext.Spotify
             this.NotifyChanged();
         }
 
+        /// <summary>
+        /// Updates access token info
+        /// </summary>
+        /// <param name="accessToken">Access token.</param>
+        /// <param name="refreshToken">Refresh token.</param>
+        /// <param name="expiresIn">Expires in.</param>
         public void UpdateTokens(string accessToken, string refreshToken, long expiresIn)
         {
             if (this.accessToken == accessToken) {
@@ -58,12 +67,20 @@ namespace MeNext.Spotify
             this.NotifyChanged();
         }
 
+        /// <summary>
+        /// Updates access token info based on an oauth code, which we resolve using the swap server.
+        /// </summary>
+        /// <param name="code">Code.</param>
         public void UpdateTokens(string code)
         {
             var swap = this.GetSwap(code);
             this.UpdateTokens(swap.AccessToken, swap.RefreshTokenEncrypted, swap.ExpiresIn);
         }
 
+        /// <summary>
+        /// Udates the access token when refreshing is handles externally (i.e. iOS).
+        /// </summary>
+        /// <param name="accessToken">Access token.</param>
         public void UpdateAccessToken(string accessToken)
         {
             this.UpdateTokens(accessToken, null, 0);
@@ -104,6 +121,10 @@ namespace MeNext.Spotify
             }
         }
 
+        /// <summary>
+        /// Gets the access token. Null if we don't have one. We handle refreshing it if it's expired.
+        /// </summary>
+        /// <value>The access token.</value>
         public string AccessToken
         {
             get
@@ -113,7 +134,8 @@ namespace MeNext.Spotify
             }
         }
 
-        public RefreshSwapResult GetSwap(string code)
+        // Gets the result from trying to swap oauth for access and refresh tokens
+        private RefreshSwapResult GetSwap(string code)
         {
             var task = Task.Run(async () =>
             {
@@ -128,7 +150,8 @@ namespace MeNext.Spotify
             return swapResult;
         }
 
-        public RefreshSwapResult GetRefresh()
+        // Gets the result from trying to refresh
+        private RefreshSwapResult GetRefresh()
         {
             var task = Task.Run(async () =>
             {
@@ -143,7 +166,7 @@ namespace MeNext.Spotify
             return refreshResult;
         }
 
-        public async Task<string> PostJsonFullUri(string fullUri, HttpContent content)
+        private async Task<string> PostJsonFullUri(string fullUri, HttpContent content)
         {
             Debug.WriteLine("::Getting URI: {0}", fullUri);
 

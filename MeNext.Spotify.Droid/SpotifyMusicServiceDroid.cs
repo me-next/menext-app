@@ -13,6 +13,9 @@ namespace MeNext.Spotify.Droid
     //
     // Playback library: 24-noconnect-2.20b
     // https://github.com/spotify/android-sdk/releases
+    /// <summary>
+    /// Handles the Spotify music service on Android
+    /// </summary>
     public class SpotifyMusicServiceDroid : SpotifyMusicService
     {
         private PlayerListener listener;
@@ -43,6 +46,9 @@ namespace MeNext.Spotify.Droid
         {
             this.lastPlayerAccessToken = accessToken;
         }
+
+        // These guys pass on app status info from beyond
+        // TODO Use a listener interface instead
 
         public void OnResume()
         {
@@ -231,7 +237,7 @@ namespace MeNext.Spotify.Droid
 
         public override void SetIsHost(bool isHost)
         {
-            // TODO: Do something?
+            // TODO: Remote
         }
     }
 }

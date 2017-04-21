@@ -11,11 +11,11 @@ namespace MeNext
     // https://github.com/xamarin/xamarin-forms-samples/blob/master/UserInterface/ListView/BindingContextChanged/BindingContextChanged/CustomCell.cs
 
     /// <summary>
-    /// Represents a single row within a results list. It currently special cases ISong for the suggestion button which,
-    /// while not great OO practice, is necessary for performance reasons because this cell is cached.
+    /// Represents a single row within a results list.
     /// </summary>
     public class ResultListCell : ViewCell, IUIChangeListener
     {
+        // Icons we use for the buttons
         public const string MENU_ICON = "⋮";
         public const string SUGGESTIONS_ADD = "+";
         public const string VOTE_YES = "\ud83d\ude00";
@@ -33,6 +33,10 @@ namespace MeNext
 
         private MainController controller;
 
+        /// <summary>
+        /// Creates a new list cell
+        /// </summary>
+        /// <param name="controller">The main controller.</param>
         public ResultListCell(MainController controller)
         {
             this.controller = controller;
@@ -71,22 +75,28 @@ namespace MeNext
                 Command = new Command(async (obj) =>
                 {
                     if (this.resultItem.MenuHandler == null) {
+                        // No menu to show
                         return;
                     }
+                    // Produce a menu
                     var menu = this.resultItem.MenuHandler.ProduceMenu(this.resultItem);
                     if (menu.Count == 0) {
+                        // No elements in the menu
                         return;
                     }
+                    // Compile the menu items' text
                     var commands = new List<string>();
                     foreach (var item in menu) {
                         commands.Add(item.Title);
                     }
+                    // Show the menu
                     var action = await controller.NavPage.DisplayActionSheet(
                         "Menu: " + this.resultItem.Title,
                         "Cancel",
                         null,
                         commands.ToArray()
                     );
+                    // Figure out which action was selected and execute the correspeonding command
                     foreach (var item in menu) {
                         if (item.Title == action && item.Command.CanExecute(this.resultItem)) {
                             item.Command.Execute(this.resultItem);
@@ -157,7 +167,8 @@ namespace MeNext
         }
 
         /// <summary>
-        /// This is called when the backing data for the cell changes
+        /// This is called when the backing data for the cell changes because, remember, one cell is reused to
+        /// represent multiple elements.
         /// </summary>
         protected override void OnBindingContextChanged()
         {
@@ -221,6 +232,7 @@ namespace MeNext
             // Update the icon
             this.suggestButton.Text = GetSuggestIcon(resultItem.Suggest);
         }
+
         /// <summary>
         /// Handles a press of the suggestion button.
         /// </summary>
@@ -246,6 +258,7 @@ namespace MeNext
                     break;
             }
         }
+
         /// <summary>
         /// Gets the suggestion button icon.
         /// </summary>

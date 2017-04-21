@@ -6,7 +6,10 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
-    public class PlaylistItemFactory : ResultItemFactory<IPlaylist>
+    /// <summary>
+    /// Creates a ResultItemData to correspond with a playlist for use within a UI list
+    /// </summary>
+    public class PlaylistItemFactory : IResultItemFactory<IPlaylist>
     {
         public const string BULLET = "\u2022";
         private MainController controller;
@@ -31,6 +34,9 @@ namespace MeNext
         }
     }
 
+    /// <summary>
+    /// Represents a view containing songs which we navigate to from a playlist
+    /// </summary>
     public class PlaylistSongsView : ContentPage
     {
         public PlaylistSongsView(MainController controller, IPlaylist from)

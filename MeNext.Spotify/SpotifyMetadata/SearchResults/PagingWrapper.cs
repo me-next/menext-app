@@ -29,12 +29,13 @@ namespace MeNext.Spotify
         /// <param name="isWrapped">If set to <c>true</c> is wrapped.</param>
         internal PagingWrapper(string firstUrl, WebApi webApi, bool isWrapped)
         {
-            // TODO: When this is the case, have first access to a param block and fill in the real data
+            // When this is the case, first access to a param blocks and fills in the real data
             this.webApi = webApi;
             this.isWrapped = isWrapped;
 
             this.delayedLoad = firstUrl;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.Spotify.PagingWrapper`2"/> class.
         /// </summary>

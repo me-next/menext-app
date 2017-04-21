@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MeNext.MusicService;
 using MeNext.Spotify;
 using Newtonsoft.Json;
-//using SpotifyAPI.Web.Models;
 
 namespace MeNext.Spotify
 {
@@ -16,7 +15,7 @@ namespace MeNext.Spotify
     {
         private const int MAX_RESULTS_PER_QUERY = 50;
         private const string ENDPOINT_MULTIPLE = "tracks";
-        // Important metadata for song
+
         private MetadataFactory factory;
         private readonly string uri;
         private string name;
@@ -155,6 +154,8 @@ namespace MeNext.Spotify
 
             return result;
         }
+
+        // Make it so same uid implies ==
 
         public override int GetHashCode()
         {

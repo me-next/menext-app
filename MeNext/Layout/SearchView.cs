@@ -65,10 +65,8 @@ namespace MeNext
 
             if (results == null || results.Items == null || results.Items.Count == 0) {
                 resultsLabel.Text = "No Results.";
-                //model.SetAll(noSongs);
                 this.songList.UpdateResultList(new SimpleResultList<ISong>(new List<ISong>()));
             } else {
-                //model.SetAll(results.Items);
                 this.songList.UpdateResultList(results);
             }
 

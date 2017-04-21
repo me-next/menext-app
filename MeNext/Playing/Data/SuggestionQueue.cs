@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Represents a suggestion queue
+    /// </summary>
     public class SuggestionQueue
     {
         public List<SongResponse> Songs { get; private set; }
@@ -36,6 +39,8 @@ namespace MeNext
             // Remove songs which were once present but alas, no longer are
             Songs.RemoveAll((oldSong) => queueSongs.Find((newSong) => oldSong.ID == newSong.ID) == null);
         }
+
+        // TODO Test this
         /// <summary>
         /// Sorts the suggestion queue.
         /// Sorts based on the selected option of popularity, newest first, or oldest first
@@ -58,6 +63,7 @@ namespace MeNext
             }
         }
     }
+
     /// <summary>
     /// Options for sorting
     /// </summary>

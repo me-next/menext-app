@@ -4,6 +4,8 @@ using MeNext.MusicService;
 
 namespace MeNext.Spotify.iOS
 {
+    // TODO: This should be somewhere agnostic
+
     /// <summary>
     /// Represents a simple list of items with no paging
     /// </summary>

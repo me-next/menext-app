@@ -10,6 +10,7 @@ namespace MeNext.MusicService
     public class ResultListWrapper<T> : IEnumerable<T>
     {
         private IResultList<T> resultList;
+
         /// <summary>
         /// Initializes a new instance of the class from a given IResultList.
         /// </summary>
@@ -18,6 +19,7 @@ namespace MeNext.MusicService
         {
             this.resultList = resultList;
         }
+
         /// <summary>
         /// Gets a result list enumerator of itself.
         /// </summary>
@@ -26,6 +28,7 @@ namespace MeNext.MusicService
         {
             return new ResultListEnumerator<T>(this.resultList);
         }
+
         /// <summary>
         /// Fulfilling inheritance contract.
         /// Gets enumerator.
