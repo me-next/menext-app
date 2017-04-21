@@ -15,7 +15,7 @@ using Xamarin.Forms.Platform.iOS;
 namespace MeNext.iOS
 {
     /// <summary>
-    /// This class handles interfacing with the media remote control (ex when you swipe up). It needs to be a native
+    /// This class handles interfacing with the media remote control (e.g. when you swipe up). It needs to be a native
     /// view, hence being a renderer.
     /// </summary>
     public class NowPlayingRenderer : NavigationRenderer

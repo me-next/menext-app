@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// The result from the token swap server when we refresh or swap
+    /// </summary>
     public class RefreshSwapResult
     {
         [JsonProperty(PropertyName = "access_token")]

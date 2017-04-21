@@ -5,6 +5,9 @@ using System.ComponentModel;
 using Xamarin.Forms;
 namespace MeNext
 {
+    /// <summary>
+    /// The page used for hosting an event
+    /// </summary>
     public class HostEvent : ContentPage
     {
         public Entry nameEntry;
@@ -61,7 +64,7 @@ namespace MeNext
             }
             Navigation.PopAsync();
             if (createEvent == CreateEventResult.SUCCESS) {
-                mc.Event.RequestEventPermissions();
+                //mc.Event.RequestEventPermissions();
                 //Navigation.PopAsync();
                 //Navigation.PushAsync(new JoinedEvent(mc));
             }

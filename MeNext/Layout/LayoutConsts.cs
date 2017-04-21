@@ -9,6 +9,8 @@ namespace MeNext
     public class LayoutConsts
     {
         private const int EDGE = 5;
+
+        // We need to offset the top on iOS otherwise our content shows underneath the notification bar
         private const int IOS_TOP = 20;
 
         /// <summary>

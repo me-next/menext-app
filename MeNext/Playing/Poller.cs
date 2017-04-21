@@ -6,6 +6,9 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Handles polling the backend server
+    /// </summary>
     public class Poller
     {
         public MainController mainController;
@@ -23,8 +26,6 @@ namespace MeNext
         /// 
         /// Also see:
         /// http://stackoverflow.com/questions/17119075/do-you-have-to-put-task-run-in-a-method-to-make-it-async
-        /// 
-        /// 
         /// </summary>
         /// <returns>The forever.</returns>
         /// <param name="token">Token.</param>

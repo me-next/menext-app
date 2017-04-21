@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Xamarin.Forms;
 using System.Collections.Generic;
@@ -12,18 +12,21 @@ using System.Threading.Tasks;
 namespace MeNext
 {
     /// <summary>
-    /// This is a view which allows us to EITHER (1) display multiple lists of metadata with a title for each grouping
-    /// OR (2) display a single incomplete list whose values are loaded dynamically. One cannot have multiple
-    /// dynamically loaded lists.
+    /// This is a view which allows us to display an IResultList of items which automatically handles loading new
+    /// pages of results when the bottom of the page is hit.
     /// </summary>
     public class ResultListView<T> : ListView where T : IMetadata
     {
         private IResultList<T> resultList;
         private BetterObservableCollection<ResultItemData> resultCollection;
-        private ResultItemFactory<T> resultItemFactory;
+        private IResultItemFactory<T> resultItemFactory;
 
-
-        public ResultListView(MainController controller, ResultItemFactory<T> resultItemFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:MeNext.ResultListView`1"/> class.
+        /// </summary>
+        /// <param name="controller">The main controller.</param>
+        /// <param name="resultItemFactory">The factory for creating ResultItemData.</param>
+        public ResultListView(MainController controller, IResultItemFactory<T> resultItemFactory)
         {
             this.RowHeight = LayoutConsts.ROW_HEIGHT;
 
@@ -60,6 +63,10 @@ namespace MeNext
             {
                 await Task.Run(() =>
                 {
+                    // If the item being loaded is (probably) the last one
+                    // Note that in principle a list with multiple of the same item could start to load early, but this
+                    // would be unusual and isn't detrimental to the user experience if we happen to load an occassional
+                    // page early.
                     if (e.Item == resultCollection[resultCollection.Count - 1]) {
                         this.AddNextPage();
                     }
@@ -67,12 +74,17 @@ namespace MeNext
             };
         }
 
+        /// <summary>
+        /// Updates the result list with a new one
+        /// </summary>
+        /// <param name="resultList">The new result list</param>
+        /// <param name="jumpToTop">If set to <c>true</c> jump to top. Otherwise, leave the scroll position alone.</param>
         public void UpdateResultList(IResultList<T> resultList, bool jumpToTop = true)
         {
             this.resultList = resultList;
 
-            // TODO: Combine this into 1 op so we don't get a flicker
-            // Although it doesn't really seem to be noticable...
+            // It might be best to combine this into 1 op so we don't get a flicker, but none seems to be noticable,
+            // so w/e
             this.resultCollection.Clear();
             this.AddCurrentPage();
 
@@ -82,6 +94,9 @@ namespace MeNext
             }
         }
 
+        /// <summary>
+        /// Loads the next page of results
+        /// </summary>
         private void AddNextPage()
         {
             if (this.resultList.HasNextPage) {
@@ -90,6 +105,9 @@ namespace MeNext
             }
         }
 
+        /// <summary>
+        /// Loads the current page of results (assumption: the current page hasn't been loaded yet).
+        /// </summary>
         private void AddCurrentPage()
         {
             // Keep going until we find a page with > 0 elements or run out of pages
@@ -100,6 +118,7 @@ namespace MeNext
                     return;
                 }
             }
+
             // Add all the items in the page
             var wrappedItems = new List<ResultItemData>();
             foreach (var item in this.resultList.Items) {

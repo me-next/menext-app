@@ -2,15 +2,13 @@
 
 using Newtonsoft.Json;
 
-
 namespace MeNext
 {
+    /// <summary>
+    /// The result from joining an event
+    /// </summary>
     public class JoinEventResponse
     {
-        public JoinEventResponse()
-        {
-        }
-
         [JsonProperty(PropertyName = "error")]
         public string Error { get; set; }
     }

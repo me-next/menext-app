@@ -7,20 +7,25 @@ using MeNext.MusicService;
 
 namespace MeNext
 {
+    /// <summary>
+    /// The barest form of direct communication with the MeNext backend
+    /// </summary>
     public class API
     {
-        private const string BASE_URI = "https://api.spotify.com/v1";
-
-        private string ServerIP { get; set; }
+        private string ServerUrl { get; set; }
         private HttpClient Client { get; set; }
 
-        public API(string ip)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:MeNext.API"/> class.
+        /// </summary>
+        /// <param name="baseUrl">The base of URL of the MeNext server</param>
+        public API(string baseUrl)
         {
-            this.ServerIP = ip;
+            this.ServerUrl = baseUrl;
             this.Client = new HttpClient();
 
             // set the baseURI so that things are cleaner
-            var baseURI = new Uri(this.ServerIP);
+            var baseURI = new Uri(this.ServerUrl);
             this.Client.BaseAddress = baseURI;
         }
 
@@ -113,24 +118,52 @@ namespace MeNext
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Sets the volume.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> SetVolume(string eid, string uid, int vol)
         {
             var uri = new Uri(string.Format("/setVolume/{0}/{1}/{2}", eid, uid, vol));
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Adds to the top of the play next queue.
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> AddTopPlayNext(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/addTopPlayNext/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Removes a song from the play next queue
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> RemovePlayNext(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/removePlayNext/{0}/{1}/{2}", eid, uid, sid));
             return await FireRequest(uri);
         }
 
+        /// <summary>
+        /// Plays a song now
+        /// </summary>
+        /// <param name="eid">Event id.</param>
+        /// <param name="uid">User id.</param>
+        /// <param name="sid">Song id.</param>
+        /// <returns>The server response string.</returns>
         public async Task<string> PlayNow(string eid, string uid, string sid)
         {
             var uri = new Uri(string.Format("/playNow/{0}/{1}/{2}", eid, uid, sid));
@@ -138,7 +171,7 @@ namespace MeNext
         }
 
         /// <summary>
-        /// Called when song finishes.
+        /// Inform the server that a song has finished playing. Only call if you're the host.
         /// </summary>
         /// <param name="eid">Event id.</param>
         /// <param name="uid">User id.</param>
@@ -302,7 +335,7 @@ namespace MeNext
             var uri = new Uri(string.Format("/removeParty/{0}/{1}", uid, eid));
             return await FireRequest(uri);
         }
- 
+
         /// <summary>
         /// Sends a request URI to the server. 
         /// </summary>

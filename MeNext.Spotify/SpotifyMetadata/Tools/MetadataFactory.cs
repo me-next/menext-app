@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 
 namespace MeNext.Spotify
 {
+    /// <summary>
+    /// Handles obtaining and caching metadata
+    /// </summary>
     public class MetadataFactory
     {
         // TODO: Make the cache clean out old entries occassionally?
@@ -30,6 +33,10 @@ namespace MeNext.Spotify
             cache[data.UniqueId] = data;
         }
 
+        /// <summary>
+        /// Submits a chunk of our metadata to the cache.
+        /// </summary>
+        /// <param name="data">The metadata.</param>
         public void CacheSubmit(IMetadataResult data)
         {
             var meta = data.ToMetadata(this.webApi, this);

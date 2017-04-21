@@ -7,7 +7,7 @@ using Xamarin.Forms;
 namespace MeNext
 {
     /// <summary>
-    /// Testing screen.
+    /// Testing screen. Not used atm.
     /// </summary>
     public class TestingScreen : ContentPage
     {

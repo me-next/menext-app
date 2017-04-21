@@ -5,6 +5,9 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Handles producing the menu for songs in a result list
+    /// </summary>
     public class SongMenuHandler : IMenuHandler
     {
         private MainController controller;
@@ -16,6 +19,10 @@ namespace MeNext
         //private MenuCommand menuRemoveSuggest;
         private MenuCommand menuRemoveUpNext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:MeNext.SongMenuHandler"/> class.
+        /// </summary>
+        /// <param name="controller">The main controller.</param>
         public SongMenuHandler(MainController controller)
         {
             this.controller = controller;
@@ -52,7 +59,6 @@ namespace MeNext
                 Title = "Play Now",
                 Command = new Command<ResultItemData>((obj) =>
                 {
-                    // TODO Atomize this operation
                     this.controller.Event.RequestPlayNow((ISong) obj.Item);
                 })
             };

@@ -11,14 +11,6 @@ using Newtonsoft.Json;
 namespace MeNext
 {
     /// <summary>
-    /// Pull update observer gets data from pulls.
-    /// </summary>
-    public interface IPullUpdateObserver
-    {
-        void OnNewPullData(PullResponse data);
-    }
-
-    /// <summary>
     /// The main controller the UI interfaces with to communicate with the backend and music player
     /// </summary>
     public class MainController : IMusicServiceListener
@@ -57,8 +49,14 @@ namespace MeNext
             }
         }
 
+        /// <summary>
+        /// The current event (or null if there is none)
+        /// </summary>
         public Event Event { get; private set; }
 
+        /// <summary>
+        /// The navigation page which we use for full app navigations
+        /// </summary>
         public NavigationPage NavPage { get; set; }
 
         /// <summary>
@@ -71,6 +69,7 @@ namespace MeNext
 
             this.musicService.AddStatusListener(this);
 
+            // TODO Config file?
             this.Api = new API("http://menext.danielcentore.com:8080");
 
             this.UserKey = RandomString(6);
@@ -264,7 +263,6 @@ namespace MeNext
         /// </summary>
         public void InformSomethingChanged()
         {
-
             Device.BeginInvokeOnMainThread(() =>
             {
                 // We use a copy so listeners we call can create objects which register new listeners
@@ -301,9 +299,18 @@ namespace MeNext
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        // Called by the music service if something has changed on their end
         public void MusicServiceChange()
         {
             this.InformSomethingChanged();
         }
+    }
+
+    /// <summary>
+    /// Pull update observer gets data from pulls.
+    /// </summary>
+    public interface IPullUpdateObserver
+    {
+        void OnNewPullData(PullResponse data);
     }
 }

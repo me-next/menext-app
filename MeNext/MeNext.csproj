@@ -64,7 +64,7 @@
     <Compile Include="Layout\ResultList\ResultItemData.cs" />
     <Compile Include="Layout\ResultList\ResultListCell.cs" />
     <Compile Include="Layout\ResultList\BetterObservableCollection.cs" />
-    <Compile Include="Layout\ResultList\ResultItemFactory.cs" />
+    <Compile Include="Layout\ResultList\IResultItemFactory.cs" />
     <Compile Include="Layout\ResultList\ResultFactories\SongItemFactory.cs" />
     <Compile Include="Layout\ResultList\ResultListView.cs" />
     <Compile Include="Playing\Event.cs" />
