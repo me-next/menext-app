@@ -16,7 +16,7 @@ namespace MeNext
 
         //TODO: make album art work
         private Image albumArt;
-        private readonly double artSize;
+        //private readonly double artSize;
 
         private Button playButton;
         private Button prevButton;
@@ -39,6 +39,10 @@ namespace MeNext
             {
                 mainController.Event.RequestVolume(volumeSlider.Value);
             };
+
+            //TODO: make sliders pretty and distinguishable
+            //var volIconLow = new Image { Source = "volume_low", HorizontalOptions = LayoutOptions.Start };
+            //var volIconHigh = new Image { Source = "volume_high", HorizontalOptions = LayoutOptions.End };
 
             // Buttons to manipulate the playing music queue.
             this.prevButton = new Button
@@ -77,11 +81,11 @@ namespace MeNext
                     nextButton
                 }
             };
+            Debug.WriteLine("buttons width = " + buttons.Width);
 
             this.songTitle = new Label
             {
                 Text = "",
-                //Margin = new Thickness(0, 30, 0, 0),
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 FontSize = LayoutConsts.TITLE_FONT_SIZE,
                 FontAttributes = FontAttributes.Bold,
@@ -98,14 +102,12 @@ namespace MeNext
             this.albumTitle = new Label
             {
                 Text = "",
-                //Margin = new Thickness(0, 0, 0, 30),
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 FontAttributes = FontAttributes.Italic,
                 LineBreakMode = LineBreakMode.TailTruncation,
                 HorizontalTextAlignment = TextAlignment.Center
             };
 
-            //this.artSize = (this.Width * 0.7);
             this.albumArt = new Image { Source = "album_art_placeholder.jpg" };
 
             this.playSlider = new Slider();
@@ -115,18 +117,19 @@ namespace MeNext
                 //TODO: seek when moved and update with playtime
                 Debug.WriteLine(playSlider.Value); 
             };
+            Debug.WriteLine("art width = " + albumArt.Width);
 
             this.Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 Children = {
                     this.albumArt,
-                    this.playSlider,
+                    //this.playSlider,
                     this.songTitle,
                     this.artistLabel,
                     this.albumTitle,
                     buttons,
-                    volumeSlider,
+                    this.volumeSlider,
                 }
             };
 

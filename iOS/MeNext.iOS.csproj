@@ -170,6 +170,11 @@
     <BundleResource Include="Resources\album_art_placeholder.jpg" />
     <BundleResource Include="Resources\album_art_placeholder%402x.jpg" />
     <BundleResource Include="Resources\album_art_placeholder%403x.jpg" />
+    <BundleResource Include="Resources\menext_logo.png" />
+    <BundleResource Include="Resources\menext_logo%402x.png" />
+    <BundleResource Include="Resources\menext_logo%403x.png" />
+    <BundleResource Include="Resources\volume_high.png" />
+    <BundleResource Include="Resources\volume_low.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.3.193\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

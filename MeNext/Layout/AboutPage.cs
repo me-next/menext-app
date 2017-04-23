@@ -16,13 +16,14 @@ namespace MeNext
 
             var closeButton = new Button
             {
-                Text = "Close",
-                Margin = new Thickness(0, 15, 0, 15),
+                Text = "Back",
             };
-            closeButton.Clicked += (sender, e) => 
+            closeButton.Clicked += (sender, e) =>
             {
                 homeScreen.Content = prevView;
             };
+
+            var logoImage = new Image { Source = "menext_logo.png", };
 
             var titleLabel = new Label 
             { 
@@ -57,12 +58,16 @@ namespace MeNext
                 HorizontalTextAlignment = TextAlignment.Center
             };
 
+            //TODO: Newtonsoft json parser
+            //TODO: uses GPL v3
+
             Content = new StackLayout
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Children = {
                     closeButton,
+                    logoImage,
                     titleLabel,
                     schoolLabel,
                     gitLabel,

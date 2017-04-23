@@ -159,6 +159,10 @@
     <AndroidResource Include="Resources\drawable\previous_icon_50px.png" />
     <AndroidResource Include="Resources\drawable\album_art_placeholder.jpg" />
     <AndroidResource Include="Resources\drawable-hdpi\album_art_placeholder.jpg" />
+    <AndroidResource Include="Resources\drawable\menext_logo.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\menext_logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\album_art_placeholder.jpg" />
+    <AndroidResource Include="Resources\drawable-xhdpi\menext_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Playing\" />
