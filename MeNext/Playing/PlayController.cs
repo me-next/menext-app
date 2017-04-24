@@ -21,6 +21,9 @@ namespace MeNext
         private List<ISong> manuallyPlayedSongs = new List<ISong>();
         private List<ISong> radioSongs = new List<ISong>();
 
+        private PlayingResponse previousPullData;
+        private PlayingResponse currentPullData;
+
         public PlayController(IMusicService musicService, MainController controller)
         {
             this.controller = controller;
@@ -28,41 +31,6 @@ namespace MeNext
             this.currentPullData = new PlayingResponse();
             this.previousPullData = new PlayingResponse();
         }
-
-        /// <summary>
-        /// Updates the actual playing status based on the information in the latest status message
-        /// </summary>
-        /// <param name="message">Message.</param>
-        //public void UpdateActualPlaying(StatusMessage message)
-        //{
-        /*
-        PreviousMessage = CurrentMessage;
-        CurrentMessage = message;
-
-        if (CurrentMessage.CurrentSong != null) {
-            var song = musicService.GetSong(CurrentMessage.CurrentSong);
-
-            // Check if a seek has occurred or a new song is playing
-            if (PreviousMessage == null
-                || PreviousMessage.SongStartTime != CurrentMessage.SongStartTime
-                || PreviousMessage.CurrentSong != CurrentMessage.CurrentSong) {
-                var positionMs = CurrentMessage.ServerTime - CurrentMessage.SongStartTime;
-                positionMs = Math.Max(0, positionMs);
-                double positionSec = positionMs / 1000.0 + CurrentMessage.SongStartPos;
-
-                musicService.PlaySong(song, positionSec);
-            }
-        }
-
-        // Update playing status
-        musicService.Playing = CurrentMessage.Playing;
-        */
-
-        // TODO: Update volume
-        //}
-
-        private PlayingResponse previousPullData;
-        private PlayingResponse currentPullData;
 
         public void OnNewPullData(PullResponse data)
         {
@@ -115,5 +83,37 @@ namespace MeNext
             }
             musicService.Playing = currentPullData.Playing;
         }
+
+        /// <summary>
+        /// Updates the actual playing status based on the information in the latest status message
+        /// </summary>
+        /// <param name="message">Message.</param>
+        //public void UpdateActualPlaying(StatusMessage message)
+        //{
+        /*
+        PreviousMessage = CurrentMessage;
+        CurrentMessage = message;
+
+        if (CurrentMessage.CurrentSong != null) {
+            var song = musicService.GetSong(CurrentMessage.CurrentSong);
+
+            // Check if a seek has occurred or a new song is playing
+            if (PreviousMessage == null
+                || PreviousMessage.SongStartTime != CurrentMessage.SongStartTime
+                || PreviousMessage.CurrentSong != CurrentMessage.CurrentSong) {
+                var positionMs = CurrentMessage.ServerTime - CurrentMessage.SongStartTime;
+                positionMs = Math.Max(0, positionMs);
+                double positionSec = positionMs / 1000.0 + CurrentMessage.SongStartPos;
+
+                musicService.PlaySong(song, positionSec);
+            }
+        }
+
+        // Update playing status
+        musicService.Playing = CurrentMessage.Playing;
+        */
+
+        // TODO: Ulume
+        //}
     }
 }

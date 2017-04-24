@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace MeNext.MusicService
 {
+    /// <summary>
+    /// Allows us to wrap a normal list (i.e. no paging) in an IResultList with a single page.
+    /// </summary>
     public class SimpleResultList<T> : IResultList<T>
     {
         // TODO: This should be an IEnumerable

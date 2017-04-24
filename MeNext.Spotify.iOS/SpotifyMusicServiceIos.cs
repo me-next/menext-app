@@ -56,8 +56,6 @@ namespace MeNext.Spotify.iOS
             }
         }
 
-        // =========================== //
-
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="T:MeNext.Spotify.iOS.SpotifyMusicServiceIos"/> is playing.
         /// </summary>

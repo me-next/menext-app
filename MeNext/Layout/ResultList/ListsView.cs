@@ -9,21 +9,24 @@ using System.Diagnostics;
 
 namespace MeNext
 {
+    /// <summary>
+    /// A UI element used for displaying multiple groups of items in a single, scrollable list. This is most notably
+    /// used in the queue view for keeping the play next and suggestions queues scrollable in tandem.
+    /// </summary>
     public class ListsView<T> : ListView where T : IMetadata
     {
         private List<ResultsGroup<T>> allGroups;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:MeNext.QueuesView`1"/> class. This constructor is for
-        /// multiple lists of elements, represented by GroupWrappers.
+        /// Initializes a new instance of the <see cref="T:MeNext.QueuesView`1"/> class.
         /// </summary>
         /// <param name="controller">The main controller</param>
-        /// <param name="groups">The list of GroupWrappers</param>
+        /// <param name="groups">The list of lists of elements</param>
         public ListsView(MainController controller, params ResultsGroup<T>[] groups)
         {
             this.RowHeight = LayoutConsts.ROW_HEIGHT;
             this.IsGroupingEnabled = true;
-            this.GroupDisplayBinding = new Binding("Title");
+            this.GroupDisplayBinding = new Binding("Title");   // Uses reflection
 
             this.allGroups = new List<ResultsGroup<T>>(groups);
             this.ItemsSource = this.allGroups;
@@ -47,6 +50,7 @@ namespace MeNext
                 }
             };
 
+            // Creating a new cell
             this.ItemTemplate = new DataTemplate(() =>
             {
                 return new ResultListCell(controller);
@@ -71,8 +75,5 @@ namespace MeNext
                 group.SetAll(wrappedItems);
             }
         }
-
     }
-
-
 }

@@ -71,6 +71,12 @@ namespace MeNext.iOS
             });
         }
 
+        // Unfortunately needs to be static, unless you can figure out some way to make the renderer get an object ref
+        // on creation?
+        /// <summary>
+        /// Called when a remote control event is recv'd.
+        /// </summary>
+        /// <param name="theEvent">The event.</param>
         public static void RemoteControlReceived(UIEvent theEvent)
         {
             var evt = currentDelegate.mainController.Event;

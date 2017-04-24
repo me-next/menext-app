@@ -8,7 +8,7 @@ using MeNext.MusicService;
 namespace MeNext
 {
     /// <summary>
-    /// Represents the Queue tab which contains the Suggestion and Play next queues
+    /// Represents the tab which shows the user their spotify library
     /// </summary>
     public class LibraryView : ContentPage, IUIChangeListener
     {
@@ -47,23 +47,24 @@ namespace MeNext
                 Command = new Command(() => Navigation.PushAsync(new PlaylistLibraryView(mainController, this.Navigation)))
             });
 
-
             Content = layout;
 
             this.mainController.Event.RegisterUiListener(this);
             this.SomethingChanged();
         }
+
         /// <summary>
-        /// User's Spotify account's login status has changed.
-        /// Update UI based on if song can be added or if login is needed.
+        /// Update if user's Spotify account's login status has changed.
         /// </summary>
         public void SomethingChanged()
         {
             var logged = this.mainController.musicService.LoggedIn;
             loginSpotify.IsVisible = !logged;
             songButton.IsVisible = logged;
+            playlistButton.IsVisible = logged;
         }
     }
+
     /// <summary>
     /// Content page that contains a view of a song library.
     /// Displays a ResultListView that contains the user's library's songs.
@@ -88,6 +89,10 @@ namespace MeNext
         }
     }
 
+    /// <summary>
+    /// Content page that contains a view of a playlist library.
+    /// Displays a ResultListView that contains the user's library playlists.
+    /// </summary>
     public class PlaylistLibraryView : ContentPage
     {
         public PlaylistLibraryView(MainController controller, INavigation nav)

@@ -44,6 +44,7 @@ namespace MeNext
             };
         }
 
+        // Called when we have new data from the server
         public void OnNewPullData(PullResponse data)
         {
             // Get play next song uids

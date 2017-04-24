@@ -113,6 +113,8 @@ namespace MeNext.Spotify
             return result;
         }
 
+        // Make it so same uid implies ==
+
         public override int GetHashCode()
         {
             return this.UniqueId.GetHashCode();

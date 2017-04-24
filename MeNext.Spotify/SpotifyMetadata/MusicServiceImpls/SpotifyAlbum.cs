@@ -17,6 +17,7 @@ namespace MeNext.Spotify
         private string uri;
         private List<string> songUids;
         private string name;
+
         /// <summary>
         /// Initializes a new instance of the Spotify album class.
         /// </summary>
@@ -115,6 +116,8 @@ namespace MeNext.Spotify
 
             return result;
         }
+
+        // Make it so same uid implies ==
 
         public override int GetHashCode()
         {

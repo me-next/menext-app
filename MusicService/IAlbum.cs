@@ -18,15 +18,6 @@ namespace MeNext.MusicService
         }
 
         /// <summary>
-        /// Gets the album's unique identifier.
-        /// </summary>
-        /// <value>The unique identifier.</value>
-        string UniqueId
-        {
-            get;
-        }
-
-        /// <summary>
         /// Gets the list of all songs in the album.
         /// </summary>
         /// <value>The songs.</value>

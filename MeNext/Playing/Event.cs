@@ -8,24 +8,27 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Represents an in-progress event.
+    /// </summary>
     public class Event
     {
         private List<IUIChangeListener> listeners = new List<IUIChangeListener>();
 
         /// <summary>
-        /// Are we the host for the current event? Assumes there is an active event.
+        /// Are we the host for the current event?
         /// </summary>
         /// <value><c>true</c> if is host; otherwise, <c>false</c>.</value>
         public bool IsHost { get; private set; }
 
         /// <summary>
-        /// The current event's slug. Assumes there is an active event.
+        /// The current event's slug.
         /// </summary>
         /// <value>The event slug.</value>
         public string Slug { get; private set; }
 
         /// <summary>
-        /// The change identifier.
+        /// The change id from the post recent pull
         /// </summary>
         private UInt64 changeID;
 
@@ -39,6 +42,9 @@ namespace MeNext
         /// </summary>
         public PullResponse LatestPull { get; private set; }
 
+        /// <summary>
+        /// The suggestion queue
+        /// </summary>
         public SuggestionQueue SuggestionQueue { get; private set; }
 
         /// <summary>
@@ -57,6 +63,9 @@ namespace MeNext
             }
         }
 
+        /// <summary>
+        /// Whether or not we are currently playing music
+        /// </summary>
         public bool Playing
         {
             get
@@ -68,6 +77,12 @@ namespace MeNext
             }
         }
 
+        /// <summary>
+        /// Creates a new event representation
+        /// </summary>
+        /// <param name="controller">The main controller.</param>
+        /// <param name="eventSlug">The event slug.</param>
+        /// <param name="isHost">If set to <c>true</c>, we are the host.</param>
         public Event(MainController controller, string eventSlug, bool isHost)
         {
             this.PullObservers = new List<IPullUpdateObserver>();
@@ -282,6 +297,10 @@ namespace MeNext
             });
         }
 
+        /// <summary>
+        /// Requests that we add a song to the top of the up next queue
+        /// </summary>
+        /// <param name="song">Song.</param>
         public void RequestAddTopOfPlayNext(ISong song)
         {
             Task.Run(async () =>
@@ -290,6 +309,10 @@ namespace MeNext
             });
         }
 
+        /// <summary>
+        /// Requests that we remove a song from the up next queue
+        /// </summary>
+        /// <param name="song">Song.</param>
         public void RequestRemovePlayNext(ISong song)
         {
             Task.Run(async () =>
@@ -298,6 +321,10 @@ namespace MeNext
             });
         }
 
+        /// <summary>
+        /// Requests that we play a song now
+        /// </summary>
+        /// <param name="song">Song.</param>
         public void RequestPlayNow(ISong song)
         {
             Task.Run(async () =>
@@ -355,32 +382,7 @@ namespace MeNext
         }
 
         /// <summary>
-        /// Requests that the current event be given permissions
-        /// </summary>
-        /// <param name="permissions">integer where each bit is a bool for a parameter. 0-5</param>
-        /// Assumes that the Event begins with Play Next and Suggest Allowed but everything else not allowed.
-        public void RequestEventPermissions()
-        {
-            // set the permissions for the Event
-            // 1 is Suggest
-            // 2 is Play Next
-            // 4 is Play Now
-            // 8 is Play Volume
-            // 16 is Play Skip
-            // TODO
-        }
-
-        /// <summary>
-        /// Requests that a user be given permissions.
-        /// </summary>
-        /// <param name="username">Username.</param>
-        public void RequestUserPermissions(string username /* TODO: permissions structure */)
-        {
-            // TODO
-        }
-
-        /// <summary>
-        /// Checks if the user can perform an action. Distinct from the party permissions.
+        /// Checks if the user can perform an action. Distinct from the event permissions.
         /// </summary>
         /// <returns><c>true</c>, if the user has permission for the action <c>false</c> otherwise.</returns>
         /// <param name="which">Which permission to check.</param>
@@ -392,7 +394,7 @@ namespace MeNext
         /// <summary>
         /// Try to set the permission
         /// </summary>
-        /// <param name="which">Which.</param>
+        /// <param name="which">Which permission.</param>
         /// <param name="value">If set to <c>true</c> value.</param>
         public void RequestSetPermission(string which, bool value)
         {
@@ -436,7 +438,12 @@ namespace MeNext
             });
 
             var json = task.Result;
-
+            if (json == null) {
+                // if got null json, then we had an error with executing the pull
+                // request to leave event
+                this.controller.LeaveEvent();
+                return;
+            }
             // if there is no data, continue on
             // This is expected if change id is equal to ours
             if (json.Length == 0) {
@@ -451,6 +458,7 @@ namespace MeNext
             Debug.WriteLine("Pull json: " + json + ". " + json.Length);
 
             var result = JsonConvert.DeserializeObject<PullResponse>(json);
+
 
             // update ourself
             this.changeID = result.Change;

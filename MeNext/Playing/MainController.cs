@@ -11,14 +11,6 @@ using Newtonsoft.Json;
 namespace MeNext
 {
     /// <summary>
-    /// Pull update observer gets data from pulls.
-    /// </summary>
-    public interface IPullUpdateObserver
-    {
-        void OnNewPullData(PullResponse data);
-    }
-
-    /// <summary>
     /// The main controller the UI interfaces with to communicate with the backend and music player
     /// </summary>
     public class MainController : IMusicServiceListener
@@ -57,10 +49,14 @@ namespace MeNext
             }
         }
 
-        public string EventName { get; private set; }
-
+        /// <summary>
+        /// The current event (or null if there is none)
+        /// </summary>
         public Event Event { get; private set; }
 
+        /// <summary>
+        /// The navigation page which we use for full app navigations
+        /// </summary>
         public NavigationPage NavPage { get; set; }
 
         /// <summary>
@@ -73,13 +69,13 @@ namespace MeNext
 
             this.musicService.AddStatusListener(this);
 
+            // TODO Config file?
             this.Api = new API("http://menext.danielcentore.com:8080");
 
             this.UserKey = RandomString(6);
 
             // TODO Username?
             this.UserName = "bob";
-            this.EventName = "";
             Debug.WriteLine("User key: " + this.UserKey);
         }
 
@@ -143,7 +139,6 @@ namespace MeNext
 
             this.Event = new Event(this, result.EventID, true);
             this.Event.StartPolling();
-            this.EventName = result.EventID;
             this.InformSomethingChanged();
 
             return CreateEventResult.SUCCESS;
@@ -173,8 +168,8 @@ namespace MeNext
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
             // Event creation failed server side. Assumes duplicate event name was used.
             if (!string.IsNullOrEmpty(result.Error)) {
+                // TODO result.alternativeName
                 Debug.WriteLine("issue creating event with name: " + result.Error);
-                this.EventName = result.AlternativeName;
                 return CreateEventResult.FAIL_EVENT_EXISTS;
             }
 
@@ -183,7 +178,6 @@ namespace MeNext
                 if (result?.EventID != null) {
                     this.Event = new Event(this, result.EventID, true);
                     this.Event.StartPolling();
-                    this.EventName = result.EventID;
                     this.InformSomethingChanged();
                     return CreateEventResult.SUCCESS;
                 } else { return CreateEventResult.FAIL_GENERIC; }
@@ -200,14 +194,21 @@ namespace MeNext
         public EndEventResult RequestEndEvent()
         {
             Debug.Assert(this.InEvent);
+            Debug.WriteLine("going to end event!");
             this.Event.StopPolling();
 
+            var task = Task.Run(async () =>
+            {
+                return await Api.EndEvent(this.Event.Slug, this.UserKey);
+            });
+            var json = task.Result;
+            Debug.WriteLine("Json: " + json);
             // TODO Send stuff to server, wait for response, and use real response below
 
             if (this.Event.IsHost)
                 this.musicService.Playing = false;
             this.Event = null;
-            this.EventName = "";
+
             this.InformSomethingChanged();
             return EndEventResult.SUCCESS;
         }
@@ -221,8 +222,10 @@ namespace MeNext
             Debug.Assert(this.InEvent);
             this.Event.StopPolling();
 
+            Debug.WriteLine("going to leave event");
             // If we are the host, leaving the event is equivalent to ending it.
             if (this.Event.IsHost) {
+                Debug.WriteLine("host leave");
                 EndEventResult eer = RequestEndEvent();
                 if (eer == EndEventResult.FAIL_NETWORK)
                     return LeaveEventResult.FAIL_NETWORK;
@@ -230,15 +233,17 @@ namespace MeNext
                     return LeaveEventResult.FAIL_GENERIC;
 
                 this.Event = null;
-                this.EventName = "";
                 return LeaveEventResult.SUCCESS;
             }
 
-            // TODO Send stuff to server, wait for response, and use real response below
-
+            // ask to leave the event
+            var task = Task.Run(async () =>
+            {
+                return await Api.LeaveEvent(this.Event.Slug, this.UserKey);
+            });
+            Debug.WriteLine("leave event result: " + task.Result);
 
             this.Event = null;
-            this.EventName = "";
 
             this.InformSomethingChanged();
             return LeaveEventResult.SUCCESS;
@@ -258,14 +263,14 @@ namespace MeNext
         /// </summary>
         public void InformSomethingChanged()
         {
-            if (!this.InEvent) {
-                this.musicService.SetIsHost(false);
-            }
-
             Device.BeginInvokeOnMainThread(() =>
             {
                 // We use a copy so listeners we call can create objects which register new listeners
                 var copy = new List<IUIChangeListener>(listeners);
+
+                if (!this.InEvent) {
+                    this.musicService.SetIsHost(false);
+                }
 
                 foreach (var listener in copy) {
                     listener.SomethingChanged();
@@ -294,9 +299,18 @@ namespace MeNext
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        // Called by the music service if something has changed on their end
         public void MusicServiceChange()
         {
             this.InformSomethingChanged();
         }
+    }
+
+    /// <summary>
+    /// Pull update observer gets data from pulls.
+    /// </summary>
+    public interface IPullUpdateObserver
+    {
+        void OnNewPullData(PullResponse data);
     }
 }

@@ -10,10 +10,22 @@ namespace MeNext
     /// </summary>
     public class ResultItemData
     {
+        /// <summary>
+        /// The raw metadata item we are representing.
+        /// </summary>
+        /// <value>The item.</value>
         public IMetadata Item { get; private set; }
 
         // Title is accessed reflexively in ListsView (ie do not rename it)
+        /// <summary>
+        /// The main title which is big in the list element
+        /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// The subtitle which is small in the list element
+        /// </summary>
+        /// <value>The subtitle.</value>
         public string Subtitle { get; set; }
 
         /// <summary>
@@ -22,17 +34,28 @@ namespace MeNext
         /// </summary>
         public SuggestSetting Suggest { get; set; }
 
+        /// <summary>
+        /// The command which is executed when we tap on the item. Set to null to do nothing.
+        /// </summary>
+        /// <value>The tap command.</value>
+        public Command<ResultItemData> TapCommand { get; set; }
 
-        public Command<ResultItemData> TapCommand { get; set; }    // TODO
-
+        /// <summary>
+        /// The factory which is used to produce a menu for this cell when the menu button is tapped. Set to null to
+        /// not show a menu button.
+        /// </summary>
         public IMenuHandler MenuHandler { get; set; }
 
+        /// <summary>
+        /// Create a new ResultItemData which wraps a chunk of metadata.
+        /// </summary>
+        /// <param name="item">Item.</param>
         public ResultItemData(IMetadata item)
         {
             this.Item = item;
 
-            this.Title = null;
-            this.Subtitle = null;
+            this.Title = "";
+            this.Subtitle = "";
             this.Suggest = SuggestSetting.DISABLE_SUGGEST;
             this.TapCommand = null;
             this.MenuHandler = null;

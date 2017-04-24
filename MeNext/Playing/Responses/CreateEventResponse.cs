@@ -4,12 +4,11 @@ using Newtonsoft.Json;
 
 namespace MeNext
 {
+    /// <summary>
+    /// The response from creating an event
+    /// </summary>
     public class CreateEventResponse
     {
-        public CreateEventResponse()
-        {
-        }
-
         [JsonProperty(PropertyName = "pid")]
         public string EventID { get; set; }
 

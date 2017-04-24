@@ -6,7 +6,10 @@ using Xamarin.Forms;
 
 namespace MeNext
 {
-    public class SongItemFactory : ResultItemFactory<ISong>
+    /// <summary>
+    /// Creates a ResultItemData to correspond with a song for use within a UI list
+    /// </summary>
+    public class SongItemFactory : IResultItemFactory<ISong>
     {
         public const string BULLET = "\u2022";
         private MainController controller;

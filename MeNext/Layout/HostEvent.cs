@@ -5,8 +5,11 @@ using System.ComponentModel;
 using Xamarin.Forms;
 namespace MeNext
 {
+    /// <summary>
+    /// The page used for hosting an event
+    /// </summary>
     public class HostEvent : ContentPage
-    {  
+    {
         public Entry nameEntry;
 
         public HostEvent(MainController mc)
@@ -19,7 +22,7 @@ namespace MeNext
 
             nameEntry = new Entry { Placeholder = "Event Name", Text = "" };
             layout.Children.Add(nameEntry);
-       
+
             var hostCommand = new Command<MainController>(HostCommand);
             layout.Children.Add(new Button
             {
@@ -41,16 +44,19 @@ namespace MeNext
         {
             CreateEventResult createEvent;
             if (nameEntry.Text != "") {
-                createEvent = mc.RequestCreateEvent(nameEntry.Text.ToLower());
+                createEvent = mc.RequestCreateEvent(nameEntry.Text.Trim().ToLower());
                 if (createEvent == CreateEventResult.FAIL_EVENT_EXISTS) {
                     // That event name is taken.
                     // TODO: Implement warning to notify user that new name is needed.
                     // Right now it just changes the entry's text to implicate the new name.
-                    nameEntry.Text = mc.EventName.ToString();
+                    nameEntry.Text = "";
+                    nameEntry.Placeholder = "Try another name.";
                     return;
                 } else if (createEvent == CreateEventResult.FAIL_GENERIC) {
                     nameEntry.Text = "";
-                    nameEntry.Placeholder = "Host name failed for unknown reason. Try again.";
+                    // TODO This should be generic error, but right now try another name is also generic
+                    nameEntry.Placeholder = "Try another name.";
+                    //nameEntry.Placeholder = "Host name failed for unknown reason. Try again.";
                     return;
                 }
             } else {
@@ -58,7 +64,7 @@ namespace MeNext
             }
             Navigation.PopAsync();
             if (createEvent == CreateEventResult.SUCCESS) {
-                mc.Event.RequestEventPermissions();
+                //mc.Event.RequestEventPermissions();
                 //Navigation.PopAsync();
                 //Navigation.PushAsync(new JoinedEvent(mc));
             }

@@ -31,6 +31,7 @@ namespace MeNext
         private Label permissionsLabel;
         private AboutPage aboutPage;
 
+
         public HomeScreen(MainController mc, NavigationPage nav)
         {
             this.mc = mc;
@@ -94,7 +95,7 @@ namespace MeNext
                 IsVisible = false,
             });
 
-            // TODO: do this properly
+            // TODO: do this next part properly:
 
             var playPauseButt = new Button
             {
@@ -125,7 +126,6 @@ namespace MeNext
             nowButt.Clicked += (sender, e) => TogglePermission(Permissions.PlayNext);
             layout.Children.Add(nowButt);
             buttons.Add(Permissions.PlayNext, nowButt);
-
 
             var volButt = new Button
             {
@@ -203,12 +203,13 @@ namespace MeNext
 
             // set visible only if host
             // can call event directly b/c we are 
+            permissionsLabel.IsVisible = (this.mc.InEvent && this.mc.Event.IsHost);
             if (this.mc.InEvent) {
-                permissionsLabel.IsVisible = this.mc.Event.IsHost;
                 foreach (KeyValuePair<string, Button> entry in this.buttons) {
                     entry.Value.IsVisible = this.mc.Event.IsHost;
                 }
 
+                // TODO Do this part properly
                 // now try setting color for each one
                 SetButtonColorForField(Permissions.PlayNext);
                 SetButtonColorForField(Permissions.PlayPause);
@@ -221,7 +222,6 @@ namespace MeNext
                     entry.Value.IsVisible = false;
                 }
             }
-
 
             this.joinEvent.IsVisible = !this.mc.InEvent;
             this.hostEvent.IsVisible = !this.mc.InEvent && mc.musicService.LoggedIn;  // TODO Check premium too

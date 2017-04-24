@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace MeNext
 {
+    /// <summary>
+    /// Represents the event permissions
+    /// </summary>
     public class Permissions : IPullUpdateObserver
     {
         // TODO This should be an enum
@@ -29,7 +32,8 @@ namespace MeNext
         }
 
         /// <summary>
-        /// Checks if REGULULAR USERS have a permission. Use Event.ThisHasPermission(..) to check if YOU have a permission.
+        /// Checks if REGULULAR USERS have a permission. Use Event.ThisHasPermission(..) to check if YOU have permission
+        /// to do something.
         /// </summary>
         /// <returns><c>true</c>, if permission is had by regular users, <c>false</c> otherwise.</returns>
         /// <param name="which">The permission (consts in this class)</param>

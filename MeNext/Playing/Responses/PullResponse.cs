@@ -23,10 +23,11 @@ namespace MeNext
 
         [JsonProperty(PropertyName = "permissions")]
         public Dictionary<string, bool> Permissions;
-      
+
         [JsonProperty(PropertyName = "error")]
         public String Error;
     }
+
     /// <summary>
     /// Parses a song json response.
     /// </summary>
@@ -44,6 +45,7 @@ namespace MeNext
         [JsonProperty(PropertyName = "posAdded")]
         public int PosAdded;
     }
+
     /// <summary>
     /// Parses a queue json response
     /// </summary>
@@ -52,6 +54,7 @@ namespace MeNext
         [JsonProperty(PropertyName = "songs")]
         public SongResponse[] Songs;
     }
+
     /// <summary>
     /// Parses a playing json response
     /// </summary>

@@ -8,10 +8,9 @@ namespace MeNext
     /// </summary>
     public class StartPollMessage
     {
+        public string EventSlug { get; set; }
 
-        string EventSlug { get; set; }
-
-        string UserKey { get; set; }
+        public string UserKey { get; set; }
 
         public StartPollMessage(string EventSlug, string UserKey)
         {
