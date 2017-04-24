@@ -45,6 +45,13 @@ namespace MeNext
             };
             var gitLabel = new Label { Text = "https://github.com/me-next", HorizontalTextAlignment = TextAlignment.Center };
 
+            var licenseCredit = new Label
+            {
+                Text = "Uses GPL v3\n(view license on the github page)",
+                Margin = new Thickness(0, 0, 0, 10),
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+
             var softwareCredit = new Label 
             { 
                 Text = "Multiplatform app created with Xamarin Studio Community.\nhttps://www.xamarin.com/",
@@ -55,11 +62,16 @@ namespace MeNext
             var iconCredit = new Label 
             {
                 Text = "Icons found via\nhttps://icons8.com/web-app/",
+                Margin = new Thickness(0, 0, 0, 10),
                 HorizontalTextAlignment = TextAlignment.Center
             };
 
-            //TODO: Newtonsoft json parser
-            //TODO: uses GPL v3
+            var jsonCredit = new Label
+            {
+                Text = "Uses Newtonsoft Json Parser\nhttp://www.newtonsoft.com/json",
+                Margin = new Thickness(0, 0, 0, 10),
+                HorizontalTextAlignment = TextAlignment.Center
+            };
 
             Content = new StackLayout
             {
@@ -73,8 +85,9 @@ namespace MeNext
                     gitLabel,
                     namesLabel,
                     softwareCredit,
+                    licenseCredit,
                     iconCredit,
-
+                    jsonCredit
                 }
             };
         }
