@@ -28,8 +28,7 @@ namespace MeNext
         private Button leaveEvent;
         private Label loginSpotifyWhy;
 
-        Label permissionsLabel;
-
+        private Label permissionsLabel;
         private AboutPage aboutPage;
 
         public HomeScreen(MainController mc, NavigationPage nav)
