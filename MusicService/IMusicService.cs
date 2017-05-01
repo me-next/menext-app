@@ -18,6 +18,15 @@ namespace MeNext.MusicService
         }
 
         /// <summary>
+        /// Checks if the login service is available (i.e. all requirements for logging in are satisfied).
+        /// </summary>
+        /// <value><c>true</c> if login available; otherwise, <c>false</c>.</value>
+        bool LoginAvailable
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this <see cref="T:com.danielcentore.MusicService.IMusicService"/> can
         /// play music
         /// </summary>
