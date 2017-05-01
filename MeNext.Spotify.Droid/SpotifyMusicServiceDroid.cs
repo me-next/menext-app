@@ -172,6 +172,15 @@ namespace MeNext.Spotify.Droid
             }
         }
 
+        public override bool LoginAvailable
+        {
+            get
+            {
+                // Always available in Android, since it only uses the web view option.
+                return true;
+            }
+        }
+
         public override void Login()
         {
             this.listener.OpenLoginWindow();

@@ -186,6 +186,18 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        public override bool LoginAvailable
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return SpotifyAuth.HasSpotifyApp;
+#endif
+            }
+        }
+
         /// <summary>
         /// Login to spotify.
         /// </summary>

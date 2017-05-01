@@ -35,6 +35,14 @@ namespace MeNext.Spotify.iOS
             }
         }
 
+        public static bool HasSpotifyApp
+        {
+            get
+            {
+                return SPTAuth.SupportsApplicationAuthentication;
+            }
+        }
+
         public StreamingDelegate CreateStreamingDelegate()
         {
             Debug.WriteLine("Creating streaming delegate", "auth");
