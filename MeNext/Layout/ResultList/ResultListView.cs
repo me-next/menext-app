@@ -2,11 +2,7 @@ using System;
 
 using Xamarin.Forms;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-
 using MeNext.MusicService;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MeNext
@@ -67,6 +63,7 @@ namespace MeNext
                     // Note that in principle a list with multiple of the same item could start to load early, but this
                     // would be unusual and isn't detrimental to the user experience if we happen to load an occassional
                     // page early.
+                    // TODO Actually test that
                     if (e.Item == resultCollection[resultCollection.Count - 1]) {
                         this.AddNextPage();
                     }
