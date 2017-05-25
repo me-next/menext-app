@@ -30,6 +30,11 @@
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>Keystore/menext_debug_key.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>menext</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>menext_debug_key</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>menext</AndroidSigningKeyPass>
 <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
