@@ -87,8 +87,7 @@ namespace MeNext
         public bool OhShit<T>(Result<T> result)
         {
             if (result.HasError) {
-                NavPage.DisplayAlert(result.ErrorMsg, result.ErrorDetails, "Okie doke");
-                // TODO Do something with the details
+                NavPage.DisplayAlert("\ud83d\ude35 " + result.ErrorMsg + " \ud83d\ude35", result.ErrorDetails, "Okie doke");
                 return true;
             } else {
                 return false;

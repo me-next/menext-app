@@ -350,8 +350,8 @@ namespace MeNext
                 result = await response.Content.ReadAsStringAsync();
             } else {
                 return Result<string>.Bad(
-                    "BAD SERVER STATUS CODE: " + response.StatusCode,
-                    "URI: " + uri.AbsoluteUri
+                    "Network Error",
+                    String.Format("StatusCode[{0}] URI[{1}]", response.StatusCode, uri.AbsoluteUri)
                 );
             }
 
