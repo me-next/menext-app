@@ -9,16 +9,6 @@ namespace MeNext.MusicService
     public interface IResultList<Type>
     {
         /// <summary>
-        /// Gets the type of error (if any) for this request.
-        /// If this is not SUCCESS, generally one shouldn't do anything with the rest of this object.
-        /// </summary>
-        /// <value>The error.</value>
-        PageErrorType Error
-        {
-            get;
-        }
-
-        /// <summary>
         /// Gets the list of items in this page.
         /// </summary>
         /// <value>The items.</value>

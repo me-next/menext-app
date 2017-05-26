@@ -29,19 +29,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IAlbum.cs" />
-    <Compile Include="IArtist.cs" />
-    <Compile Include="IImage.cs" />
     <Compile Include="IMusicService.cs" />
-    <Compile Include="IPlaylist.cs" />
-    <Compile Include="IResultList.cs" />
-    <Compile Include="ISong.cs" />
     <Compile Include="IMusicServiceListener.cs" />
-    <Compile Include="PageErrorType.cs" />
-    <Compile Include="IMetadata.cs" />
-    <Compile Include="ResultListEnumerator.cs" />
-    <Compile Include="ResultListWrapper.cs" />
-    <Compile Include="SimpleResultList.cs" />
+    <Compile Include="Metadata\IAlbum.cs" />
+    <Compile Include="Metadata\IArtist.cs" />
+    <Compile Include="Metadata\IImage.cs" />
+    <Compile Include="Metadata\IMetadata.cs" />
+    <Compile Include="Metadata\IPlaylist.cs" />
+    <Compile Include="Metadata\ISong.cs" />
+    <Compile Include="Results\IResultList.cs" />
+    <Compile Include="Results\ResultListEnumerator.cs" />
+    <Compile Include="Results\ResultListWrapper.cs" />
+    <Compile Include="Results\SimpleResultList.cs" />
+    <Compile Include="ErrorHandling\Result.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Metadata\" />
+    <Folder Include="Results\" />
+    <Folder Include="ErrorHandling\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
