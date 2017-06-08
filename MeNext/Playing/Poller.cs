@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Xamarin.Forms;
+using System.Net.Http;
 
 namespace MeNext
 {
@@ -39,6 +40,7 @@ namespace MeNext
                     token.ThrowIfCancellationRequested();
 
                     mainController.Event.Poll();
+
 
                     await Task.Delay(MS_PER_POLL);
                 }

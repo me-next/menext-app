@@ -22,20 +22,6 @@ namespace MeNext.MusicService
 
         /// <summary>
         /// Fulfilling inheritance contract.
-        /// If there is any error for the request it will return the type of error.
-        /// If this isn't SUCCESS, then one shouldn't do anything with the rest of this object.
-        /// </summary>
-        /// <value>The error.</value>
-        public PageErrorType Error
-        {
-            get
-            {
-                return PageErrorType.SUCCESS;
-            }
-        }
-
-        /// <summary>
-        /// Fulfilling inheritance contract.
         /// Returns the index of the first item in this page.
         /// </summary>
         /// <value>The first result.</value>

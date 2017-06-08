@@ -12,7 +12,6 @@ namespace MeNext.Spotify.iOS
     public class SpotifySimpleResultList<K> : IResultList<K>
     {
         private List<K> items;
-        private PageErrorType error;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MeNext.Spotify.iOS.SpotifySimpleResultList`1"/> class when
@@ -22,7 +21,6 @@ namespace MeNext.Spotify.iOS
         public SpotifySimpleResultList(List<K> items)
         {
             this.items = items;
-            this.error = PageErrorType.SUCCESS;
         }
 
         /// <summary>
@@ -30,18 +28,9 @@ namespace MeNext.Spotify.iOS
         /// the operation has failed.
         /// </summary>
         /// <param name="error">Error.</param>
-        public SpotifySimpleResultList(PageErrorType error)
+        public SpotifySimpleResultList()
         {
             this.items = null;
-            this.error = error;
-        }
-
-        public PageErrorType Error
-        {
-            get
-            {
-                return this.error;
-            }
         }
 
         /// <summary>

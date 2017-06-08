@@ -437,13 +437,16 @@ namespace MeNext
                 return await Api.Pull(this.controller.UserKey, this.Slug, this.changeID);
             });
 
-            var json = task.Result;
-            if (json == null) {
+            var r = task.Result;
+            if (r.HasError) {
                 // if got null json, then we had an error with executing the pull
                 // request to leave event
+                // TODO: Handle more gracefully
                 this.controller.LeaveEvent();
                 return;
             }
+            var json = r.Wrapped;
+
             // if there is no data, continue on
             // This is expected if change id is equal to ours
             if (json.Length == 0) {

@@ -95,14 +95,6 @@ namespace MeNext.Spotify
             }
         }
 
-        public PageErrorType Error
-        {
-            get
-            {
-                return PageErrorType.SUCCESS;
-            }
-        }
-
         public int FirstResult
         {
             get

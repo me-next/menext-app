@@ -69,14 +69,29 @@ namespace MeNext
 
             this.musicService.AddStatusListener(this);
 
-            // TODO Config file?
-            this.Api = new API("http://menext.danielcentore.com:8080");
+            this.Api = new API(MeNextConsts.SERVER_URL);
 
             this.UserKey = RandomString(6);
 
             // TODO Username?
             this.UserName = "bob";
             Debug.WriteLine("User key: " + this.UserKey);
+        }
+
+        /// <summary>
+        /// Checks if a result succeeded or failed. If it failed, shows an err msg
+        /// </summary>
+        /// <returns><c>true</c>, if result succeeded, <c>false</c> otherwise.</returns>
+        /// <param name="result">Result.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public bool OhShit<T>(Result<T> result)
+        {
+            if (result.HasError) {
+                NavPage.DisplayAlert("\ud83d\ude35 " + result.ErrorMsg + " \ud83d\ude35", result.ErrorDetails, "Okie doke");
+                return true;
+            } else {
+                return false;
+            }
         }
 
         /// <summary>
@@ -87,19 +102,14 @@ namespace MeNext
         public JoinEventResult RequestJoinEvent(string slug)
         {
             Debug.Assert(!this.InEvent);
-
             Debug.WriteLine("Requesting to join an event...");
+
             var task = Task.Run(async () =>
-             {
-                 return await Api.JoinParty(slug, this.UserKey, this.UserName);
-             });
-
-            var json = task.Result;
-
-            Debug.WriteLine("Got json: " + task.Result);
-
-            if (task.IsFaulted || json == null) {
-                Debug.WriteLine("*** Failed to join event!");
+            {
+                return await Api.JoinParty(slug, this.UserKey, this.UserName);
+            });
+            var r = task.Result;
+            if (OhShit(r)) {
                 return JoinEventResult.FAIL_GENERIC;
             }
 
@@ -123,13 +133,11 @@ namespace MeNext
             {
                 return await Api.CreateParty(this.UserKey, this.UserName);
             });
-            var json = task.Result;
-            Debug.WriteLine("Json: " + json);
-
-            if (task.IsFaulted || json == null) {
-                Debug.WriteLine("*** Failed to create event!");
+            var r = task.Result;
+            if (OhShit(r)) {
                 return CreateEventResult.FAIL_GENERIC;
             }
+            var json = r.Wrapped;
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
             if (!string.IsNullOrEmpty(result.Error)) {
@@ -157,13 +165,11 @@ namespace MeNext
             {
                 return await Api.CreateParty(this.UserKey, this.UserName, eventName);
             });
-            var json = task.Result;
-            Debug.WriteLine("Json: " + json);
-
-            if (task.IsFaulted || json == null) {
-                Debug.WriteLine("*** Failed to create event!");
+            var r = task.Result;
+            if (OhShit(r)) {
                 return CreateEventResult.FAIL_GENERIC;
             }
+            var json = r.Wrapped;
 
             var result = JsonConvert.DeserializeObject<CreateEventResponse>(json);
             // Event creation failed server side. Assumes duplicate event name was used.
@@ -201,12 +207,15 @@ namespace MeNext
             {
                 return await Api.EndEvent(this.Event.Slug, this.UserKey);
             });
-            var json = task.Result;
-            Debug.WriteLine("Json: " + json);
+            var r = task.Result;
+            if (OhShit(r)) {
+                return EndEventResult.FAIL_GENERIC;
+            }
             // TODO Send stuff to server, wait for response, and use real response below
 
-            if (this.Event.IsHost)
+            if (this.Event.IsHost) {
                 this.musicService.Playing = false;
+            }
             this.Event = null;
 
             this.InformSomethingChanged();
@@ -241,7 +250,10 @@ namespace MeNext
             {
                 return await Api.LeaveEvent(this.Event.Slug, this.UserKey);
             });
-            Debug.WriteLine("leave event result: " + task.Result);
+            var r = task.Result;
+            if (OhShit(r)) {
+                return LeaveEventResult.FAIL_GENERIC;
+            }
 
             this.Event = null;
 
