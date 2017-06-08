@@ -343,19 +343,26 @@ namespace MeNext
         /// <param name="uri">URI.</param>
         private async Task<Result<string>> FireRequest(Uri uri)
         {
-            var result = "";
+            try {
+                var result = "";
 
-            var response = await Client.GetAsync(uri);
-            if (response.IsSuccessStatusCode) {
-                result = await response.Content.ReadAsStringAsync();
-            } else {
+                var response = await Client.GetAsync(uri);
+                if (response.IsSuccessStatusCode) {
+                    result = await response.Content.ReadAsStringAsync();
+                } else {
+                    return Result<string>.Bad(
+                        "Network Error",
+                        String.Format("StatusCode[{0}] URI[{1}]", response.StatusCode, uri.AbsoluteUri)
+                    );
+                }
+
+                return Result<string>.Good(result);
+            } catch (Exception e) {
                 return Result<string>.Bad(
                     "Network Error",
-                    String.Format("StatusCode[{0}] URI[{1}]", response.StatusCode, uri.AbsoluteUri)
+                    e.Message + "\n" + e.StackTrace
                 );
             }
-
-            return Result<string>.Good(result);
         }
     };
 }
