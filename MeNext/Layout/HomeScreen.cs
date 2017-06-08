@@ -134,15 +134,15 @@ namespace MeNext
             layout.Children.Add(nowButt);
             buttons.Add(Permissions.PlayNext, nowButt);
 
-            var volButt = new Button
-            {
-                Text = "Control volume",
-                BackgroundColor = Color.Green,
-                TextColor = Color.White,
-            };
-            volButt.Clicked += (sender, e) => TogglePermission(Permissions.Volume);
-            layout.Children.Add(volButt);
-            buttons.Add(Permissions.Volume, volButt);
+            //var volButt = new Button
+            //{
+            //    Text = "Control volume",
+            //    BackgroundColor = Color.Green,
+            //    TextColor = Color.White,
+            //};
+            //volButt.Clicked += (sender, e) => TogglePermission(Permissions.Volume);
+            //layout.Children.Add(volButt);
+            //buttons.Add(Permissions.Volume, volButt);
 
             Content = layout;
 
@@ -209,7 +209,7 @@ namespace MeNext
                 SetButtonColorForField(Permissions.PlayNext);
                 SetButtonColorForField(Permissions.PlayPause);
                 SetButtonColorForField(Permissions.Skip);
-                SetButtonColorForField(Permissions.Volume);
+                //SetButtonColorForField(Permissions.Volume);
 
             } else {
                 // if not in event, hide buttons

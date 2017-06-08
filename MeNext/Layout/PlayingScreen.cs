@@ -22,7 +22,7 @@ namespace MeNext
 
 
         private readonly MainController mainController;
-        private Slider volumeSlider;
+        //private Slider volumeSlider;
         private int lastVolumePull;
 
         public PlayingScreen(MainController mainController)
@@ -32,11 +32,11 @@ namespace MeNext
             this.Title = "Now Playing";
             NavigationPage.SetHasNavigationBar(this, false);
 
-            volumeSlider = new Slider(0, 100, 50);
-            volumeSlider.ValueChanged += (sender, e) =>
-            {
-                mainController.Event.RequestVolume(volumeSlider.Value);
-            };
+            //volumeSlider = new Slider(0, 100, 50);
+            //volumeSlider.ValueChanged += (sender, e) =>
+            //{
+            //    mainController.Event.RequestVolume(volumeSlider.Value);
+            //};
 
             // Buttons to manipulate the playing music queue.
             this.prevButton = new Button
@@ -111,7 +111,7 @@ namespace MeNext
                     this.artistLabel,
                     this.albumTitle,
                     buttons,
-                    volumeSlider,
+                    //volumeSlider,
                 }
             };
 
@@ -132,7 +132,7 @@ namespace MeNext
                 var skip = mainController.Event.ThisHasPermission(Permissions.Skip);
                 this.prevButton.IsVisible = skip;
                 this.nextButton.IsVisible = skip;
-                this.volumeSlider.IsVisible = mainController.Event.ThisHasPermission(Permissions.Volume);
+                //this.volumeSlider.IsVisible = mainController.Event.ThisHasPermission(Permissions.Volume);
 
                 // Update metadata
                 var playing = this.mainController.Event?.LatestPull?.Playing?.CurrentSongID;
@@ -169,11 +169,11 @@ namespace MeNext
 
                 // Adjust playback stuff
                 if (mainController.Event?.LatestPull?.Playing != null) {
-                    var nominalVolume = mainController.Event.LatestPull.Playing.Volume;
-                    if (nominalVolume != this.lastVolumePull) {
-                        this.volumeSlider.Value = nominalVolume;
-                        this.lastVolumePull = nominalVolume;
-                    }
+                    //var nominalVolume = mainController.Event.LatestPull.Playing.Volume;
+                    //if (nominalVolume != this.lastVolumePull) {
+                    //    this.volumeSlider.Value = nominalVolume;
+                    //    this.lastVolumePull = nominalVolume;
+                    //}
                 }
             });
         }
