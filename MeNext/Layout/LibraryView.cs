@@ -17,6 +17,7 @@ namespace MeNext
         private Button loginSpotify;
         private Button playlistButton;
         private Button songButton;
+        private Label loginSpotifyNo;
 
         public LibraryView(MainController mainController)
         {
@@ -28,6 +29,12 @@ namespace MeNext
             {
                 Padding = LayoutConsts.DEFAULT_PADDING,
             };
+
+            layout.Children.Add(loginSpotifyNo = new Label
+            {
+                Text = HomeScreen.SPOTIFY_NO,
+                HorizontalTextAlignment = TextAlignment.Center
+            });
 
             layout.Children.Add(loginSpotify = new Button
             {
@@ -59,7 +66,8 @@ namespace MeNext
         public void SomethingChanged()
         {
             var logged = this.mainController.musicService.LoggedIn;
-            loginSpotify.IsVisible = !logged;
+            loginSpotify.IsVisible = !logged && this.mainController.musicService.LoginAvailable;
+            loginSpotifyNo.IsVisible = !logged && !this.mainController.musicService.LoginAvailable;
             songButton.IsVisible = logged;
             playlistButton.IsVisible = logged;
         }

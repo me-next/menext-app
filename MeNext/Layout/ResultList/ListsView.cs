@@ -42,7 +42,6 @@ namespace MeNext
 
             // Tapping item
             this.ItemTapped += (sender, e) =>
-
             {
                 var data = e.Item as ResultItemData;
                 if (data.TapCommand != null && data.TapCommand.CanExecute(data)) {

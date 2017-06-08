@@ -13,6 +13,8 @@ namespace MeNext
     /// </summary>
     public class HomeScreen : ContentPage, IUIChangeListener
     {
+        public const string SPOTIFY_NO = "Install the Spotify app in order to login to Spotify.";
+
         public const string SPOTIFY_WHY = "Logging in with Spotify Premium allows you to host events, where the " +
             "music comes out of your speakers. Otherwise, you must join someone else's event.";
 
@@ -26,6 +28,7 @@ namespace MeNext
         private Button loginSpotify;
         private Button logoutSpotify;
         private Button leaveEvent;
+        private Label loginSpotifyNo;
         private Label loginSpotifyWhy;
 
         private Label permissionsLabel;
@@ -79,6 +82,12 @@ namespace MeNext
             layout.Children.Add(loginSpotifyWhy = new Label
             {
                 Text = SPOTIFY_WHY,
+                HorizontalTextAlignment = TextAlignment.Center
+            });
+
+            layout.Children.Add(loginSpotifyNo = new Label
+            {
+                Text = SPOTIFY_NO,
                 HorizontalTextAlignment = TextAlignment.Center
             });
 
@@ -226,9 +235,10 @@ namespace MeNext
             this.joinEvent.IsVisible = !this.mc.InEvent;
             this.hostEvent.IsVisible = !this.mc.InEvent && mc.musicService.LoggedIn;  // TODO Check premium too
             this.leaveEvent.IsVisible = this.mc.InEvent;
-            this.loginSpotify.IsVisible = !mc.musicService.LoggedIn;
-            this.loginSpotifyWhy.IsVisible = this.loginSpotify.IsVisible;
-            this.logoutSpotify.IsVisible = mc.musicService.LoggedIn;
+            this.loginSpotify.IsVisible = !mc.musicService.LoggedIn && mc.musicService.LoginAvailable;
+            this.logoutSpotify.IsVisible = mc.musicService.LoggedIn && !this.mc.InEvent;
+            this.loginSpotifyNo.IsVisible = !mc.musicService.LoggedIn && !mc.musicService.LoginAvailable && !this.mc.InEvent;
+            this.loginSpotifyWhy.IsVisible = !mc.musicService.LoggedIn && !this.mc.InEvent;
         }
     }
 }
