@@ -28,7 +28,7 @@ namespace MeNext
             permissions.Add(PlayNext, true);
             permissions.Add(PlayPause, true);
             permissions.Add(Skip, true);
-            permissions.Add(Volume, true);
+            //permissions.Add(Volume, true);
         }
 
         /// <summary>

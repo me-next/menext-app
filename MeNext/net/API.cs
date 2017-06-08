@@ -125,11 +125,11 @@ namespace MeNext
         /// <param name="uid">User id.</param>
         /// <param name="sid">Song id.</param>
         /// <returns>The server response string.</returns>
-        public async Task<Result<string>> SetVolume(string eid, string uid, int vol)
-        {
-            var uri = new Uri(string.Format("/setVolume/{0}/{1}/{2}", eid, uid, vol));
-            return await FireRequest(uri);
-        }
+        //public async Task<Result<string>> SetVolume(string eid, string uid, int vol)
+        //{
+        //    var uri = new Uri(string.Format("/setVolume/{0}/{1}/{2}", eid, uid, vol));
+        //    return await FireRequest(uri);
+        //}
 
         /// <summary>
         /// Adds to the top of the play next queue.

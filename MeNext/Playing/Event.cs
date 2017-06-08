@@ -105,10 +105,10 @@ namespace MeNext
                 RegisterPullObserver(playController);
             }
 
-            if (this.IsHost) {
-                // TODO This should be server side
-                this.RequestVolume(50);
-            }
+            //if (this.IsHost) {
+            //    // TODO This should be server side
+            //    this.RequestVolume(50);
+            //}
 
             // create permissions and have it listen for updates
             this.Permissions = new Permissions();
@@ -161,13 +161,13 @@ namespace MeNext
         /// Requests the volume on a scale from 0-100
         /// </summary>
         /// <param name="vol">Vol.</param>
-        public void RequestVolume(int vol)
-        {
-            Task.Run(async () =>
-             {
-                 return await Api.SetVolume(this.Slug, this.controller.UserKey, vol);
-             });
-        }
+        //public void RequestVolume(int vol)
+        //{
+        //    Task.Run(async () =>
+        //     {
+        //         return await Api.SetVolume(this.Slug, this.controller.UserKey, vol);
+        //     });
+        //}
 
         /// <summary>
         /// Requests that we skip the current song
@@ -236,13 +236,13 @@ namespace MeNext
         /// Requests that we adjust the volume
         /// </summary>
         /// <param name="vol">The volume on a scale from 0-100</param>
-        public void RequestVolume(double vol)
-        {
-            var task = Task.Run(async () =>
-            {
-                return await Api.SetVolume(this.Slug, this.controller.UserKey, (int) vol);
-            });
-        }
+        //public void RequestVolume(double vol)
+        //{
+        //    var task = Task.Run(async () =>
+        //    {
+        //        return await Api.SetVolume(this.Slug, this.controller.UserKey, (int) vol);
+        //    });
+        //}
 
         /// <summary>
         /// Requests that we seek to a position within the song.
