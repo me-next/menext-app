@@ -10,6 +10,8 @@ namespace MeNext.Spotify.iOS
     public class StreamingPlaybackDelegate : SPTAudioStreamingPlaybackDelegate
     {
         private SpotifyMusicServiceIos service;
+        private string currentTrackUri;
+        private double lastPosition;
 
         public StreamingPlaybackDelegate(SpotifyMusicServiceIos service)
         {
@@ -23,36 +25,8 @@ namespace MeNext.Spotify.iOS
         /// <param name="trackUri">Track URI.</param>
         public override void AudioStreamingDidStartPlayingTrack(SPTAudioStreamingController audioStreaming, string trackUri)
         {
-            if (trackUri != null) {
-                // Get playing song
-                var song = service.GetSong(trackUri);
-
-                // Process remote control
-                var artists = "";
-                foreach (var artist in song.Artists) {
-                    artists += ", " + artist.Name;
-                }
-                if (artists.Length > 0) {
-                    artists = artists.Substring(2);
-                }
-
-                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo
-                {
-                    AlbumTitle = song.Album.Name,
-                    AlbumTrackNumber = song.TrackNumber,
-                    Artist = artists,
-                    // Artwork = ..., TODO
-                    ElapsedPlaybackTime = 0,
-                    ExternalContentIdentifier = song.UniqueId,
-                    MediaType = MPNowPlayingInfoMediaType.Audio,
-                    PlaybackDuration = song.Duration,
-                    PlaybackRate = 1,
-                    Title = song.Name,
-                };
-            } else {
-                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo();
-            }
-
+            currentTrackUri = trackUri;
+            updateRemote(0, true);
         }
 
         /// <summary>
@@ -76,6 +50,7 @@ namespace MeNext.Spotify.iOS
         /// <param name="position">Position.</param>
         public override void AudioStreamingDidChangePosition(SPTAudioStreamingController audioStreaming, double position)
         {
+            updateRemote(position, true);
             //Debug.WriteLine("Position: " + position);
             service.SomethingChanged();
         }
@@ -88,6 +63,43 @@ namespace MeNext.Spotify.iOS
             Debug.WriteLine("Playback changed: " + isPlaying, "playback");
 
             service.SomethingChanged();
+
+            updateRemote(lastPosition, false);
+        }
+
+        private void updateRemote(double pos, bool playing)
+        {
+            if (currentTrackUri == null) {
+                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo();
+                return;
+            }
+            lastPosition = pos;
+
+            // Get playing song
+            var song = service.GetSong(currentTrackUri);
+
+            // Process remote control
+            var artists = "";
+            foreach (var artist in song.Artists) {
+                artists += ", " + artist.Name;
+            }
+            if (artists.Length > 0) {
+                artists = artists.Substring(2);
+            }
+
+            MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = new MPNowPlayingInfo
+            {
+                AlbumTitle = song.Album.Name,
+                AlbumTrackNumber = song.TrackNumber,
+                Artist = artists,
+                // Artwork = ..., TODO
+                ElapsedPlaybackTime = pos,
+                ExternalContentIdentifier = song.UniqueId,
+                MediaType = MPNowPlayingInfoMediaType.Audio,
+                PlaybackDuration = song.Duration,
+                Title = song.Name,
+                PlaybackRate = (playing ? 1.0 : 0.0),
+            };
         }
     }
 }
