@@ -15,3 +15,5 @@ Xamarin is finicky. Try these things. Also try with one of the Xamarin sample pr
 2. Update nuget packages
 3. Re-clone
 4. Try cleaning again
+5. Make sure you can upload a dummy project from xcode
+6. Clean again?
